@@ -3,12 +3,14 @@ export interface Iuser extends Document {
   name?: string;
   email: string;
   password: string;
+  token?: string;
 }
 
 const userSchema: Schema = new Schema({
   name: { type: String },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  token: { type: String },
 });
 
 const User: Model<Iuser> = mongoose.model<Iuser>("User", userSchema);

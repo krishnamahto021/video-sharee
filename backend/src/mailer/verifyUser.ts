@@ -1,9 +1,14 @@
 import { Iuser } from "./../models/userModel";
 import { transporter } from "../config/nodemailer";
+import ejs from "ejs";
+import path from "path";
 
 export const verifyUserEmail = async (user: Iuser) => {
   try {
-    let emailHtml = "<h1> Hello </h1>";
+    let emailHtml = await ejs.renderFile(
+      path.join(__dirname, "../view/verifyUserEmail.ejs"),
+      { token: user.token }
+    );
     const options = {
       from: process.env.EMAIL,
       to: user.email,

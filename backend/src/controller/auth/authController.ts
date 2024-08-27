@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { sendResponse } from "../../utils/sendResponse";
 import { RequestHandler, Request } from "express";
 import User from "../../models/userModel";
+import crypto from "crypto";
 import {
   compareHashedPassword,
   hashPassword,
@@ -27,12 +28,12 @@ export const signUpUser: RequestHandler = async (req: RegisterReq, res) => {
     const newUser = await User.create({
       email,
       password: hashedPassword,
+      token: crypto.randomBytes(16).toString("hex"),
     });
     await verifyUserEmail(newUser);
     return sendResponse(res, 200, true, "user created successfully ");
   } catch (error) {
     console.error(error);
-
     return sendResponse(res, 500, false, "Something went wrong ");
   }
 };
@@ -55,6 +56,24 @@ export const signInUser: RequestHandler = async (req: RegisterReq, res) => {
     sendResponse(res, 200, true, "Logged in successfully", {
       user: { token: jwtToken },
     });
+  } catch (error) {
+    console.error(error);
+    return sendResponse(res, 500, false, "Something went wrong");
+  }
+};
+
+export const verifyUser: RequestHandler = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    if (!token) {
+      return sendResponse(res, 400, false, "No such validation token found");
+    }
+    const user = await User.findOne({ token });
+    if (!user) {
+      sendResponse(res, 400, false, "Validation failed");
+    }
+    sendResponse(res, 200, true, "Validation successfull");
   } catch (error) {
     console.error(error);
     return sendResponse(res, 500, false, "Something went wrong");
