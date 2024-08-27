@@ -8,6 +8,7 @@ import {
 } from "../../utils/passwordHelper";
 import jwt from "jsonwebtoken";
 import { generateJwtToken } from "../../utils/jwtToken";
+import { verifyUserEmail } from "../../mailer/verifyUser";
 dotenv.config();
 interface RegisterReq extends Request {
   body: {
@@ -23,10 +24,11 @@ export const signUpUser: RequestHandler = async (req: RegisterReq, res) => {
       return sendResponse(res, 409, true, "User already exists ");
     }
     const hashedPassword = await hashPassword(password);
-    await User.create({
+    const newUser = await User.create({
       email,
       password: hashedPassword,
     });
+    await verifyUserEmail(newUser);
     return sendResponse(res, 200, true, "user created successfully ");
   } catch (error) {
     console.error(error);
