@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
+import { signInUser } from "../../redux/reducers/auth/authReducer";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { AuthFormData } from "../../types";
 const SignIn: React.FC = () => {
+  const [formData, setFormData] = useState<AuthFormData>({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
+  };
+
+  const dispatch = useDispatch<AppDispatch>();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(signInUser(formData));
+  };
   return (
     <div className="w-screen h-screen flex items-center justify-center p-4 bg-bgOne">
-      <form className=" w-screen sm:w-1/2  p-5 z-10">
+      <form className=" w-screen sm:w-1/2  p-5 z-10" onSubmit={handleSubmit}>
         <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl  my-7">
           Login to Video Share
         </h1>
@@ -14,6 +36,8 @@ const SignIn: React.FC = () => {
             required
             className="w-full p-4 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] "
             placeholder="Enter your email or username"
+            value={formData.email}
+            onChange={handleChange}
           />
         </label>
         <label htmlFor="password">
@@ -24,6 +48,8 @@ const SignIn: React.FC = () => {
             required
             className="w-full p-4 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] "
             placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
           />
         </label>
         <p className="font-bold underline my-7 text-textTwo cursor-pointer">
