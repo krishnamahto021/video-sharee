@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { NavigateFunction } from "react-router-dom";
 import { toast } from "sonner";
 
 interface User {
@@ -22,6 +23,7 @@ interface SignUpPayload {
 interface SignInPayload {
   email: string;
   password: string;
+  navigate: NavigateFunction;
 }
 
 interface AuthResponse {
@@ -66,11 +68,13 @@ export const signInUser = createAsyncThunk<
   { rejectValue: string }
 >("auth/signInUser", async (payload, thunkApi) => {
   try {
-    const { data } = await axios.post<AuthResponse>(
-      "/api/v1/auth/sign-in",
-      payload
-    );
+    const { email, password, navigate } = payload;
+    const { data } = await axios.post<AuthResponse>("/api/v1/auth/sign-in", {
+      email,
+      password,
+    });
     if (data.success) {
+      navigate("/user/profile");
       return data.user || null;
     } else {
       return thunkApi.rejectWithValue(data.message);
@@ -87,22 +91,27 @@ export const signInUser = createAsyncThunk<
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    logOutUser: (state, action: PayloadAction<NavigateFunction>) => {
+      state.loggedInUser = null;
+      const navigate = action.payload;
+      localStorage.removeItem("loggedInUser");
+      toast.warning("We will miss you");
+      navigate("/sign-in");
+    },
+  },
   extraReducers: (builder) => {
-    builder
-      .addCase(
-        signInUser.fulfilled,
-        (state, action: PayloadAction<User | null>) => {
-          state.loggedInUser = action.payload;
-          if ("payload" in action) {
-            localStorage.setItem(
-              "loggedInUser",
-              JSON.stringify(action.payload)
-            );
-          }
+    builder.addCase(
+      signInUser.fulfilled,
+      (state, action: PayloadAction<User | null>) => {
+        state.loggedInUser = action.payload;
+        if ("payload" in action) {
+          localStorage.setItem("loggedInUser", JSON.stringify(action.payload));
         }
-      )
+      }
+    );
   },
 });
 
 export const authReducer = authSlice.reducer;
+export const { logOutUser } = authSlice.actions;

@@ -3,7 +3,7 @@ import { signInUser } from "../../redux/reducers/auth/authReducer";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { AuthFormData } from "../../types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const SignIn: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
@@ -19,9 +19,10 @@ const SignIn: React.FC = () => {
   };
 
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(signInUser(formData));
+    dispatch(signInUser({ ...formData, navigate }));
   };
   return (
     <div className="w-screen h-screen flex items-center justify-center p-4 bg-bgOne">
