@@ -1,12 +1,21 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db";
+import routes from "./routes";
 
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 8080;
 
 connectDB();
+
+// for parsing the data from request
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// router configuration
+app.use("/api/v1", routes);
+
 app.get("/", (req, res) => {
   res.send("Hello world");
 });
