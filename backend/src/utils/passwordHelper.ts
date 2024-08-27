@@ -10,3 +10,11 @@ export const hashPassword = async (
 
   return hashedPassword;
 };
+
+export const compareHashedPassword = async (
+  originalPassword: string,
+  dbPasssword: string
+): Promise<boolean> => {
+  const res = await bcrypt.compare(originalPassword, dbPasssword);
+  return res;
+};
