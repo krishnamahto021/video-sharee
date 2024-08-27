@@ -1,6 +1,6 @@
 import { Response } from "express";
 interface ResponseData {
-  [key: string]: string;
+  [key: string]: unknown;
 }
 
 export const sendResponse = (

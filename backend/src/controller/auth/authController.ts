@@ -1,11 +1,14 @@
-import { sendResponse } from "./../../utils/sendResponse";
+import dotenv from "dotenv";
+import { sendResponse } from "../../utils/sendResponse";
 import { RequestHandler, Request } from "express";
 import User from "../../models/userModel";
 import {
   compareHashedPassword,
   hashPassword,
 } from "../../utils/passwordHelper";
-
+import jwt from "jsonwebtoken";
+import { generateJwtToken } from "../../utils/jwtToken";
+dotenv.config();
 interface RegisterReq extends Request {
   body: {
     email: string;
@@ -46,10 +49,12 @@ export const signInUser: RequestHandler = async (req: RegisterReq, res) => {
     if (!matchedPassword) {
       return sendResponse(res, 400, false, "Password doesnot match");
     }
-    sendResponse(res, 200, true, "Logged in successfully");
+    const jwtToken = await generateJwtToken(user);
+    sendResponse(res, 200, true, "Logged in successfully", {
+      user: { token: jwtToken },
+    });
   } catch (error) {
     console.error(error);
-
     return sendResponse(res, 500, false, "Something went wrong");
   }
 };
