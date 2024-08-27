@@ -1,14 +1,15 @@
 import React from "react";
-import SignUp from "./pages/auth/SignUp";
-import SignIn from "./pages/auth/SignIn";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
+import { Toaster } from "sonner";
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      {/* <SignUp /> */}
-      <SignIn />
+      <Toaster position="top-right" richColors closeButton />
+      <RouterProvider router={router}></RouterProvider>
     </Provider>
   );
 };

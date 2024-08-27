@@ -3,6 +3,7 @@ import { signInUser } from "../../redux/reducers/auth/authReducer";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { AuthFormData } from "../../types";
+import { Link } from "react-router-dom";
 const SignIn: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
@@ -63,9 +64,12 @@ const SignIn: React.FC = () => {
         </button>
         <p className="mt-3">
           Not a member yet ?
-          <div className="font-bold underline mt-3 text-textTwo cursor-pointer ">
+          <Link
+            to={"/sign-up"}
+            className="font-bold underline mx-3 text-textTwo cursor-pointer "
+          >
             Sign up for free
-          </div>
+          </Link>
         </p>
       </form>
     </div>

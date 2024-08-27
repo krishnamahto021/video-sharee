@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { signUpUser } from "../../redux/reducers/auth/authReducer";
 import { AuthFormData } from "../../types";
+import { Link } from "react-router-dom";
 
 const SignUp: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
@@ -22,6 +23,10 @@ const SignUp: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(signUpUser(formData));
+    setFormData({
+      email: "",
+      password: "",
+    });
   };
   return (
     <div className="w-screen h-screen flex items-center justify-center p-4 bg-bgOne">
@@ -61,9 +66,12 @@ const SignUp: React.FC = () => {
         </button>
         <p className="mt-3">
           Already have an account?
-          <div className="font-bold underline mt-3 text-textTwo cursor-pointer ">
+          <Link
+            to={"/sign-in"}
+            className="font-bold underline  mx-3 text-textTwo cursor-pointer "
+          >
             Log in
-          </div>
+          </Link>
         </p>
       </form>
     </div>

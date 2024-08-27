@@ -48,12 +48,13 @@ export const signUpUser = createAsyncThunk<
       payload
     );
     if (data.success) {
-      console.log(data.message);
+      toast.success(data.message);
     } else {
-      console.log(data.message);
+      toast.success(data.message);
     }
   } catch (error: any) {
     const errMessage = error.response?.data?.message || "Something went wrong";
+    toast.error(errMessage);
     return thunkAPI.rejectWithValue(errMessage);
   }
 });
@@ -77,6 +78,7 @@ export const signInUser = createAsyncThunk<
   } catch (error: any) {
     const errorMessage =
       error.response?.data?.message || "Something went wrong";
+    toast.error(errorMessage);
     return thunkApi.rejectWithValue(errorMessage);
   }
 });
@@ -100,14 +102,6 @@ const authSlice = createSlice({
           }
         }
       )
-      .addCase(signUpUser.rejected, (state, action) => {
-        state.loggedInUser = null;
-        toast.error(action.payload);
-      })
-      .addCase(signInUser.rejected, (state, action) => {
-        state.loggedInUser = null;
-        toast.error(action.payload);
-      });
   },
 });
 
