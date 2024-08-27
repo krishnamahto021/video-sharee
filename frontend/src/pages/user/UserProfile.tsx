@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../components/Layout";
-import { useDispatch } from "react-redux";
-import { logOutUser } from "../../redux/reducers/auth/authReducer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  logOutUser,
+  selectLoggedInUser,
+} from "../../redux/reducers/auth/authReducer";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const loggedInUser = useSelector(selectLoggedInUser);
+  const [name, setName] = useState<string>("");
   return (
     <Layout>
       <section className="p-2 mt-7 sm:w-1/2">
@@ -17,7 +22,7 @@ const UserProfile: React.FC = () => {
             <input
               name="name"
               type="text"
-              value={"krishna"}
+              value={loggedInUser?.name || name}
               className="w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] bg-transparent "
             ></input>
           </div>
@@ -26,17 +31,7 @@ const UserProfile: React.FC = () => {
             <input
               name="email"
               type="email"
-              value={"krishna@gmail.com"}
-              className="w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] cursor-not-allowed"
-              disabled
-            ></input>
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="username">Username</label>
-            <input
-              name="username"
-              type="text"
-              value={"krishna021"}
+              value={loggedInUser?.email || "email"}
               className="w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] cursor-not-allowed"
               disabled
             ></input>

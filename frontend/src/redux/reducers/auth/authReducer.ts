@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { NavigateFunction } from "react-router-dom";
 import { toast } from "sonner";
+import { RootState } from "../../store";
 
 interface User {
   email: string;
@@ -115,3 +116,4 @@ const authSlice = createSlice({
 
 export const authReducer = authSlice.reducer;
 export const { logOutUser } = authSlice.actions;
+export const selectLoggedInUser = (state: RootState) => state.auth.loggedInUser;
