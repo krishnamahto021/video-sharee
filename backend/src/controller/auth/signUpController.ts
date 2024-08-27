@@ -1,6 +1,7 @@
 import { sendResponse } from "./../../utils/sendResponse";
 import { RequestHandler, Request } from "express";
 import User from "../../models/userModel";
+import { hashPassword } from "../../utils/passwordHelper";
 
 interface RegisterReq extends Request {
   body: {
@@ -15,9 +16,10 @@ export const createUser: RequestHandler = async (req: RegisterReq, res) => {
     if (existingUser) {
       return sendResponse(res, 409, true, "User already exists ");
     }
+    const hashedPassword = await hashPassword(password);
     await User.create({
       email,
-      password,
+      password: hashedPassword,
     });
     return sendResponse(res, 200, true, "user created successfully ");
   } catch (error) {
