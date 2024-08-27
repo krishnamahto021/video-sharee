@@ -1,7 +1,14 @@
 import React from "react";
+import SignUp from "./pages/auth/SignUp";
+import SignIn from "./pages/auth/SignIn";
 
 const App: React.FC = () => {
-  return <h1>hello world</h1>;
+  return (
+    <>
+      <SignUp />
+      {/* <SignIn /> */}
+    </>
+  );
 };
 
 export default App;
