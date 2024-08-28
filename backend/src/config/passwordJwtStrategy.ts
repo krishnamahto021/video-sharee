@@ -6,7 +6,24 @@ import {
   StrategyOptions,
 } from "passport-jwt";
 import User from "../models/userModel";
+import { Request, RequestHandler } from "express";
+import { Types } from "mongoose";
+
 dotenv.config();
+
+export interface AuthenticatedReq extends Request {
+  user: {
+    _id: Types.ObjectId;
+  };
+}
+
+export type AuthenticatedRequestHandler = RequestHandler<
+  any,
+  any,
+  any,
+  any,
+  AuthenticatedReq
+>;
 
 const opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -17,11 +34,10 @@ passport.use(
   new JWTStrategy(opts, async (jwtPayload, done) => {
     try {
       const user = await User.findById(jwtPayload._id).select("-password");
-      if (user) {
-        return done(null, user);
-      } else {
+      if (!user) {
         return done(null, false);
       }
+      return done(null, user);
     } catch (error) {
       console.error(`Error in authentication via JWT: ${error}`);
       return done(error);

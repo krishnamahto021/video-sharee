@@ -8,6 +8,7 @@ dotenv.config();
 const PORT = process.env.PORT || 8080;
 
 connectDB();
+app.use(passportJwtStrategy.initialize());
 
 // for parsing the data from request
 app.use(express.json());
