@@ -10,11 +10,17 @@ import {
 import jwt from "jsonwebtoken";
 import { generateJwtToken } from "../../utils/jwtToken";
 import { verifyUserEmail } from "../../mailer/verifyUser";
+import { resetPasswordEmail } from "../../mailer/resetPassword";
 dotenv.config();
 interface RegisterReq extends Request {
   body: {
     email: string;
     password: string;
+  };
+}
+interface ResetPasswordReq extends Request {
+  body: {
+    email: string;
   };
 }
 export const signUpUser: RequestHandler = async (req: RegisterReq, res) => {
@@ -79,3 +85,28 @@ export const verifyUser: RequestHandler = async (req, res) => {
     return sendResponse(res, 500, false, "Something went wrong");
   }
 };
+
+export const sendEmailForResetPassword: RequestHandler = async (
+  req: ResetPasswordReq,
+  res
+) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return sendResponse(res, 400, false, "Please provide your email");
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return sendResponse(res, 400, false, "Not a registered email");
+    }
+    await resetPasswordEmail(user);
+    sendResponse(res, 200, true, "Check your email to reset your password");
+  } catch (error) {
+    console.error(
+      `error in sending the reset password email from controller ${error}`
+    );
+    sendResponse(res, 500, false, "Internal server error");
+  }
+};
+
+

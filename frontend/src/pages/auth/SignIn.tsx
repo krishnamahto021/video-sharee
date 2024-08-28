@@ -54,9 +54,15 @@ const SignIn: React.FC = () => {
             onChange={handleChange}
           />
         </label>
-        <p className="font-bold underline my-7 text-textTwo cursor-pointer">
-          I forgot my password
+        <p className="my-3">
+          <Link
+            to={"/reset-password"}
+            className="font-bold underline mt-12 text-textTwo cursor-pointer"
+          >
+            I forgot my password
+          </Link>
         </p>
+
         <button
           type="submit"
           className="bg-bgFive  rounded-md p-2 text-white text-lg w-full hover:bg-opacity-90 duration-300 capitalize  "
