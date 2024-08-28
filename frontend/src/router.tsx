@@ -4,6 +4,7 @@ import SignIn from "./pages/auth/SignIn";
 import UserProfile from "./pages/user/UserProfile";
 import VerifyUser from "./pages/auth/VerifyUser";
 import ResetPasswordEmail from "./pages/auth/ResetPasswordEmail";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 export const router = createBrowserRouter([
   { path: "/", element: <SignUp /> },
@@ -12,4 +13,5 @@ export const router = createBrowserRouter([
   { path: "/user/profile", element: <UserProfile /> },
   { path: "/verify-user/:token", element: <VerifyUser /> },
   { path: "/reset-password", element: <ResetPasswordEmail /> },
+  { path: "/reset-password/:token", element: <ResetPassword /> },
 ]);
