@@ -100,14 +100,20 @@ const authSlice = createSlice({
       toast.warning("We will miss you");
       navigate("/sign-in");
     },
+    updateUser: (state, action: PayloadAction<string>) => {
+      if (state.loggedInUser) {
+        state.loggedInUser.name = action.payload;
+        toast.success("User name updated successfully");
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
       signInUser.fulfilled,
       (state, action: PayloadAction<User | null>) => {
         state.loggedInUser = action.payload;
-        if ("payload" in action) {
-          localStorage.setItem("loggedInUser", JSON.stringify(action.payload));
+        if (action.payload?.token) {
+          localStorage.setItem("token", action.payload.token);
         }
       }
     );
@@ -115,5 +121,5 @@ const authSlice = createSlice({
 });
 
 export const authReducer = authSlice.reducer;
-export const { logOutUser } = authSlice.actions;
+export const { logOutUser, updateUser } = authSlice.actions;
 export const selectLoggedInUser = (state: RootState) => state.auth.loggedInUser;

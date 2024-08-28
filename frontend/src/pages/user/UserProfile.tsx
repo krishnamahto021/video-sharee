@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   logOutUser,
   selectLoggedInUser,
+  updateUser,
 } from "../../redux/reducers/auth/authReducer";
 import { useNavigate } from "react-router-dom";
 import { FaPencilAlt, FaSave } from "react-icons/fa";
@@ -13,6 +14,7 @@ import { toast } from "sonner";
 interface AuthResponse {
   success: boolean;
   message: string;
+  data?: object;
 }
 
 const UserProfile: React.FC = () => {
@@ -35,7 +37,12 @@ const UserProfile: React.FC = () => {
         { name },
         configWithJWT
       );
+      console.log(data);
+
       if (data.success) {
+        if (data.data) {
+          dispatch(updateUser(name));
+        }
         toast.success(data.message);
       } else {
         toast.error(data.message);

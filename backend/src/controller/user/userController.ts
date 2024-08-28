@@ -17,7 +17,9 @@ export const updateUser: AuthenticatedRequestHandler = async (req, res) => {
       if (!user) {
         return sendResponse(res, 400, false, "User not updated");
       }
-      sendResponse(res, 200, true, "Successfully updated your details");
+      sendResponse(res, 200, true, "Successfully updated your details", {
+        name,
+      });
     }
   } catch (error) {
     sendResponse(res, 500, false, "Internal server error");
