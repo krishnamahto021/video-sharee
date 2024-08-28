@@ -109,4 +109,23 @@ export const sendEmailForResetPassword: RequestHandler = async (
   }
 };
 
-
+export const resetPassword: RequestHandler = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+    if (!token) {
+      return sendResponse(res, 400, false, "Not a valid token try again !");
+    }
+    const user = await User.findOne({ token });
+    if (!user) {
+      return sendResponse(res, 400, false, "Not a valid email");
+    }
+    user.password = user.password;
+    user.token = crypto.randomBytes(16).toString("hex");
+    await user.save();
+    sendResponse(res, 200, true, "Password reset successully ");
+  } catch (error) {
+    console.error(`Error in reseting the password`);
+    sendResponse(res, 500, false, "Internal server error");
+  }
+};
