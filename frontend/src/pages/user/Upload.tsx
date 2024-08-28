@@ -4,10 +4,12 @@ import { FaUpload } from "react-icons/fa";
 import axios from "axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
+
 interface AuthResponse {
   success: boolean;
   message: string;
 }
+
 const Upload: React.FC = () => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
@@ -17,19 +19,15 @@ const Upload: React.FC = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const { configWithJWT } = useConfig();
 
-  // Function to trigger the file input click
   const handleUploadClick = () => {
     fileRef.current?.click();
   };
 
-  // Function to handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Check if the selected file is a video
       if (file.type.startsWith("video/")) {
         setFileError(null);
-        // Create a URL for the selected video
         const videoUrl = URL.createObjectURL(file);
         setVideoSrc(videoUrl);
       } else {
@@ -42,7 +40,8 @@ const Upload: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!videoSrc) {
+    const file = fileRef.current?.files?.[0];
+    if (!file) {
       setUploadError("Please upload a video.");
       return;
     }
@@ -50,18 +49,18 @@ const Upload: React.FC = () => {
     const formData = new FormData();
     formData.append("title", title || "");
     formData.append("description", description || "");
-    const file = fileRef.current?.files?.[0];
-    if (file) {
-      formData.append("video", file);
-    } else {
-      setUploadError("No video file selected.");
-      return;
-    }
+    formData.append("file", file);
     try {
       const { data } = await axios.post<AuthResponse>(
         "/api/v1/aws/upload",
-        { formData },
-        configWithJWT
+        formData,
+        {
+          ...configWithJWT,
+          headers: {
+            ...configWithJWT.headers,
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       if (data.success) {
         toast.success(data.message);
@@ -69,8 +68,7 @@ const Upload: React.FC = () => {
         toast.error(data.message);
       }
     } catch (error: any) {
-      console.log(error);
-
+      console.error("Upload Error:", error); // Add this line for detailed error logs
       const errorMessage =
         error.response?.data?.message || "Something went wrong";
       toast.error(errorMessage);

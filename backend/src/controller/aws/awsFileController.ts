@@ -24,9 +24,8 @@ declare global {
 // File upload handler
 export const uploadFile: RequestHandler = async (req, res) => {
   try {
-    const file = req.file; // Assuming single file upload
-    const { name } = req.body;
-
+    const file = req.file;
+    const { title } = req.body;
     if (!file) {
       return sendResponse(res, 400, false, "Please select a file");
     }
