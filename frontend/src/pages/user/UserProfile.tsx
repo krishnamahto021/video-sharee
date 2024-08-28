@@ -37,7 +37,6 @@ const UserProfile: React.FC = () => {
         { name },
         configWithJWT
       );
-      console.log(data);
 
       if (data.success) {
         if (data.data) {

@@ -13,10 +13,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Link to={"/home"}>VideoShare</Link>
         </div>
         <div className="flex items-center gap-3 capitalize">
-          <Link to={"/upload-video"}>upload</Link>
-          <Link to={"/download-video"}>Download</Link>
-          <Link to={"/profile"}>
-            <FaUser  className=""/>
+          <Link to={"/user/upload-video"}>upload</Link>
+          <Link to={"/user/download-video"}>Download</Link>
+          <Link to={"/user/profile"}>
+            <FaUser className="" />
           </Link>
         </div>
       </nav>

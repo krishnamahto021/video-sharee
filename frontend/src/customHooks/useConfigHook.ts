@@ -4,7 +4,6 @@ import { ConfigWithJWT, ConfigWithoutJWT } from "../types";
 
 export const useConfig = () => {
   const loggedInUser = useSelector(selectLoggedInUser);
-
   const configWithJWT: ConfigWithJWT = {
     headers: {
       "Content-type": "application/json",

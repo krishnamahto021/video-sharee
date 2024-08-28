@@ -5,6 +5,7 @@ import UserProfile from "./pages/user/UserProfile";
 import VerifyUser from "./pages/auth/VerifyUser";
 import ResetPasswordEmail from "./pages/auth/ResetPasswordEmail";
 import ResetPassword from "./pages/auth/ResetPassword";
+import Upload from "./pages/user/Upload";
 
 export const router = createBrowserRouter([
   { path: "/", element: <SignUp /> },
@@ -14,4 +15,5 @@ export const router = createBrowserRouter([
   { path: "/verify-user/:token", element: <VerifyUser /> },
   { path: "/reset-password", element: <ResetPasswordEmail /> },
   { path: "/reset-password/:token", element: <ResetPassword /> },
+  { path: "/user/upload-video", element: <Upload /> },
 ]);
