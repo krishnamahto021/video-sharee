@@ -63,6 +63,9 @@ const Upload: React.FC = () => {
         }
       );
       if (data.success) {
+        setTitle("");
+        setDescription("");
+        setVideoSrc("");
         toast.success(data.message);
       } else {
         toast.error(data.message);

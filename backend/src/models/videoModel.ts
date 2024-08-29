@@ -10,9 +10,9 @@ export interface Ivideo extends Document {
 
 const videoSchema: Schema = new Schema(
   {
-    title: { type: String },
-    description: { type: String },
-    path: { type: String },
+    title: { type: String, default: "Title of the video " },
+    description: { type: String, default: "Default description of the video" },
+    path: { type: String, required: true },
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
