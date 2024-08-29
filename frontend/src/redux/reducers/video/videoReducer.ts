@@ -14,6 +14,7 @@ export interface IVideo {
 export interface VideoState {
   videos: IVideo[] | null;
   publicVideos: IVideo[] | null;
+  searchResults: IVideo[] | null;
 }
 
 // payload types
@@ -30,6 +31,7 @@ interface FileResponse {
 const initialState: VideoState = {
   videos: [],
   publicVideos: [],
+  searchResults: [],
 };
 
 // fetch videos for logged in user
@@ -74,6 +76,30 @@ export const fetchVideoForPublic = createAsyncThunk<
   }
 });
 
+export const getSearchResults = createAsyncThunk<
+  IVideo[],
+  string,
+  { rejectValue: string; state: RootState }
+>("video/search", async (query, thunkAPI) => {
+  try {
+    const { videos, publicVideos } = thunkAPI.getState().video;
+
+    // Combine both arrays
+    const combinedVideos = [...(publicVideos || []), ...(videos || [])];
+    // Filter combined videos based on query
+    const filteredVideos = combinedVideos.filter(
+      (video) =>
+        video.title?.toLowerCase().includes(query.toLowerCase()) ||
+        video.description?.toLowerCase().includes(query.toLowerCase())
+    );
+
+    return filteredVideos;
+  } catch (error: any) {
+    const errMessage = error.response?.data?.message || "Something went wrong";
+    return thunkAPI.rejectWithValue(errMessage);
+  }
+});
+
 // create video slice
 
 const videoSlice = createSlice({
@@ -90,9 +116,17 @@ const videoSlice = createSlice({
       )
       .addCase(fetchVideoForPublic.fulfilled, (state, action) => {
         state.publicVideos = action.payload;
-      });
+      })
+      .addCase(
+        getSearchResults.fulfilled,
+        (state, action: PayloadAction<IVideo[]>) => {
+          state.searchResults = action.payload;
+        }
+      );
   },
 });
 
 export const videoReducer = videoSlice.reducer;
 export const selectVideos = (state: RootState) => state.video.videos;
+export const selectSearchVideos = (state: RootState) =>
+  state.video.searchResults;

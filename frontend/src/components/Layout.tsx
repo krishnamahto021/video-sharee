@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa6";
+import { FaSearch } from "react-icons/fa";
 interface LayoutProps {
   children: ReactNode;
 }
@@ -12,9 +13,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div>
           <Link to={"/home"}>VideoShare</Link>
         </div>
-        <div className="flex items-center gap-3 capitalize">
+        <div className="flex items-center gap-3 md:gap-5 lg:gap-7 capitalize">
+          <Link to={"/search-video"}>
+            <FaSearch />
+          </Link>
           <Link to={"/user/upload-video"}>upload</Link>
-          <Link to={"/user/download-video"}>Download</Link>
           <Link to={"/user/profile"}>
             <FaUser className="" />
           </Link>
