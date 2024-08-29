@@ -29,7 +29,7 @@ export const updateUser: AuthenticatedRequestHandler = async (req, res) => {
   }
 };
 
-export const getLatestVideos: AuthenticatedRequestHandler = async (
+export const getLatestVideosForUser: AuthenticatedRequestHandler = async (
   req,
   res
 ) => {
@@ -39,8 +39,26 @@ export const getLatestVideos: AuthenticatedRequestHandler = async (
       if (!userId) {
         return sendResponse(res, 400, false, "Please sign in to continue");
       }
-      const videos = await Video.find({ uploadedBy: userId });
-      sendResponse(res, 200, true, "Fetched videos successfully", { videos });
+
+      // pagination parameters
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 7;
+      const skip = (page - 1) * limit;
+      const videos = await Video.find({ uploadedBy: userId })
+        .skip(skip)
+        .limit(limit);
+
+      // Get the total count of videos for pagination info
+      const totalVideos = await Video.countDocuments({ uploadedBy: userId });
+
+      sendResponse(res, 200, true, "Fetched videos successfully", {
+        videos,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(totalVideos / limit),
+          totalVideos,
+        },
+      });
     }
   } catch (error) {
     console.error(`Errror in getting videos ${error}`);

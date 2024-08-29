@@ -4,13 +4,28 @@ import { FaUpload } from "react-icons/fa";
 import axios from "axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
+import VideoPlayer from "../../components/VideoPlayer";
 
 interface AuthResponse {
   success: boolean;
   message: string;
 }
 
+interface Video {
+  url: string;
+}
+
 const Upload: React.FC = () => {
+  const [videos, setVideos] = useState<Video[]>([
+    {
+      url: "https://www.youtube.com/shorts/4Q9jXLLGLn4",
+    },
+    {
+      url: "https://www.example.com/static-video-2.mp4",
+    },
+    // Add more videos as needed
+  ]);
+
   const fileRef = useRef<HTMLInputElement>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const [title, setTitle] = useState<string>("");
@@ -71,7 +86,6 @@ const Upload: React.FC = () => {
         toast.error(data.message);
       }
     } catch (error: any) {
-      console.error("Upload Error:", error); // Add this line for detailed error logs
       const errorMessage =
         error.response?.data?.message || "Something went wrong";
       toast.error(errorMessage);
@@ -133,6 +147,16 @@ const Upload: React.FC = () => {
             </button>
           </div>
         </form>
+      </section>
+      <section className="uploadedVideos p-2 mt-7">
+        <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl  mb-7">
+          Uploaded Videos
+        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {videos.map((video, index) => (
+            <VideoPlayer key={index} url={video.url} />
+          ))}
+        </div>
       </section>
     </Layout>
   );
