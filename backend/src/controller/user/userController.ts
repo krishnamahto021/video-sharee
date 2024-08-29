@@ -45,8 +45,10 @@ export const getLatestVideosForUser: AuthenticatedRequestHandler = async (
       const limit = parseInt(req.query.limit as string) || 7;
       const skip = (page - 1) * limit;
       const videos = await Video.find({ uploadedBy: userId })
+        .sort({ createdAt: -1 })
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .populate("uploadedBy", "email");
 
       // Get the total count of videos for pagination info
       const totalVideos = await Video.countDocuments({ uploadedBy: userId });
