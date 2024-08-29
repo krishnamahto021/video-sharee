@@ -107,3 +107,21 @@ export const downloadVideo: RequestHandler = async (req, res) => {
     sendResponse(res, 500, false, "Internal server error");
   }
 };
+
+// get single video based on the id
+export const getVideo: RequestHandler = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    if (!videoId) {
+      return sendResponse(res, 400, false, "Not a valid video");
+    }
+    const video = await Video.findById(videoId);
+    if (!video) {
+      return sendResponse(res, 400, false, "Video not found");
+    }
+    sendResponse(res, 200, true, "Video found", { video });
+  } catch (error) {
+    console.error(`Error in generating download URL: ${error}`);
+    sendResponse(res, 500, false, "Internal server error");
+  }
+};

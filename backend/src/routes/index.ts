@@ -6,6 +6,7 @@ import awsRoute from "./awsRoutes";
 import {
   downloadVideo,
   fetch6LatestVideos,
+  getVideo,
 } from "../controller/aws/awsFileController";
 
 const router = express.Router();
@@ -24,5 +25,6 @@ router.use("/aws", passport.authenticate("jwt", { session: false }), awsRoute);
 router.get("/fetch-latest-6-videos", fetch6LatestVideos);
 
 router.get("/video/download/:videoId", downloadVideo);
+router.get("/video/:videoId", getVideo);
 
 export default router;

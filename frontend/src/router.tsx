@@ -8,11 +8,13 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Upload from "./pages/user/Upload";
 import Home from "./pages/Home";
 import SearchPage from "./pages/SearchPage";
+import SingleVideoPage from "./pages/SingleVideoPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <SignUp /> },
   { path: "/home", element: <Home /> },
   { path: "/search-video", element: <SearchPage /> },
+  { path: "/video/:videoId", element: <SingleVideoPage /> },
   { path: "/sign-up", element: <SignUp /> },
   { path: "/sign-in", element: <SignIn /> },
   { path: "/user/profile", element: <UserProfile /> },

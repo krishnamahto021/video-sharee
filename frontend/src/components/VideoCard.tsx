@@ -4,6 +4,7 @@ import ReactPlayer from "react-player";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { downloadVideo } from "../redux/reducers/video/videoReducer";
+import { Link } from "react-router-dom";
 
 interface VideoCardProps {
   _id: string;
@@ -35,14 +36,21 @@ const VideoCard: React.FC<VideoCardProps> = ({
             <p>{uploadedBy}</p>
           </div>
         </div>
-
-        <button
-          type="button"
-          className="bg-bgFour  rounded-md p-2 text-white text-lg  mt-5 hover:bg-opacity-90 duration-300 capitalize  w-full"
-          onClick={handleDownload}
-        >
-          Download
-        </button>
+        <div className="flex flex-col w-full">
+          <button
+            type="button"
+            className="bg-bgFour  rounded-md p-2 text-white text-lg  mt-5 hover:bg-opacity-90 duration-300 capitalize  w-full"
+            onClick={handleDownload}
+          >
+            Download
+          </button>
+          <Link
+            to={`/video/${_id}`}
+            className=" rounded-md p-2 text-textOne border-2 border-[#10162f] text-lg  w-full my-1 capitalize text-center"
+          >
+            See Video page
+          </Link>
+        </div>
       </div>
     </>
   );
