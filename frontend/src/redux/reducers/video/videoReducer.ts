@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ConfigWithJWT } from "./../../../types";
-import { toast } from "sonner";
 import axios from "axios";
 import { RootState } from "../../store";
 export interface IVideo {
@@ -14,6 +13,7 @@ export interface IVideo {
 
 export interface VideoState {
   videos: IVideo[] | null;
+  publicVideos: IVideo[] | null;
 }
 
 // payload types
@@ -29,6 +29,7 @@ interface FileResponse {
 
 const initialState: VideoState = {
   videos: [],
+  publicVideos: [],
 };
 
 // fetch videos for logged in user
@@ -49,8 +50,27 @@ export const fetchVideoForUser = createAsyncThunk<
     return thunkAPI.rejectWithValue(data.message);
   } catch (error: any) {
     const errMessage = error.response?.data?.message || "Something went wrong";
-    toast.error(errMessage);
     return thunkAPI.rejectWithValue(errMessage);
+  }
+});
+
+// fetch public videos
+export const fetchVideoForPublic = createAsyncThunk<
+  IVideo[],
+  void,
+  { rejectValue: string }
+>("/video/fetchVideoForPublic", async (_, thunkApi) => {
+  try {
+    const { data } = await axios.get<FileResponse>(
+      "/api/v1/fetch-latest-6-videos"
+    );
+    if (data.success) {
+      return data.videos || [];
+    }
+    return thunkApi.rejectWithValue(data.message);
+  } catch (error: any) {
+    const errMessage = error.response?.data?.message || "Something went wrong";
+    return thunkApi.rejectWithValue(errMessage);
   }
 });
 
@@ -61,12 +81,16 @@ const videoSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchVideoForUser.fulfilled,
-      (state, action: PayloadAction<IVideo[]>) => {
-        state.videos = action.payload;
-      }
-    );
+    builder
+      .addCase(
+        fetchVideoForUser.fulfilled,
+        (state, action: PayloadAction<IVideo[]>) => {
+          state.videos = action.payload;
+        }
+      )
+      .addCase(fetchVideoForPublic.fulfilled, (state, action) => {
+        state.publicVideos = action.payload;
+      });
   },
 });
 

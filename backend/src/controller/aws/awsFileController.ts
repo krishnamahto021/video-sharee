@@ -44,3 +44,21 @@ export const uploadFile: RequestHandler = async (req, res) => {
     sendResponse(res, 500, false, "Internal server error");
   }
 };
+
+export const fetch6LatestVideos: RequestHandler = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 6;
+    const offset = (page - 1) * limit;
+    const videos = await Video.find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .populate("uploadedBy", "email");
+    sendResponse(res, 200, true, "Fetched latest videos sucessfully", {
+      videos,
+    });
+  } catch (error) {
+    console.error(`Errror in fetching videos from the database`);
+    sendResponse(res, 500, false, "Internal server error");
+  }
+};

@@ -17,7 +17,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   return (
     <>
       <div className="border border-black rounded-sm  p-2 ">
-        <ReactPlayer url={path} light width={""} />
+        <ReactPlayer url={path} light width={""} playing controls />
         <div className="flex flex-col">
           <p className="text-lg">{title}</p>
           <p className="text-gray-800 text-sm">{description}</p>
