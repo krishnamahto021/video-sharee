@@ -3,6 +3,7 @@ import { ConfigWithJWT } from "./../../../types";
 import axios from "axios";
 import { RootState } from "../../store";
 export interface IVideo {
+  _id: string;
   path: string;
   title?: string;
   description?: string;
@@ -49,6 +50,7 @@ export const fetchVideoForUser = createAsyncThunk<
     if (data.success) {
       return data.videos || [];
     }
+
     return thunkAPI.rejectWithValue(data.message);
   } catch (error: any) {
     const errMessage = error.response?.data?.message || "Something went wrong";
@@ -94,6 +96,44 @@ export const getSearchResults = createAsyncThunk<
     );
 
     return filteredVideos;
+  } catch (error: any) {
+    const errMessage = error.response?.data?.message || "Something went wrong";
+    return thunkAPI.rejectWithValue(errMessage);
+  }
+});
+
+interface DownloadVideoPayload {
+  videoId: string;
+}
+// download video
+export const downloadVideo = createAsyncThunk<
+  void,
+  DownloadVideoPayload,
+  { rejectValue: string }
+>("video/download", async (payload, thunkAPI) => {
+  try {
+    const { videoId } = payload;
+    const response = await axios.get(`/api/v1/video/download/${videoId}`, {
+      responseType: "blob",
+    });
+    // Extract filename from the Content-Disposition header
+    const contentDisposition = response.headers["content-disposition"];
+    const filename = contentDisposition
+      ? contentDisposition.split("filename=")[1].replace(/['"]/g, "")
+      : "video.mp4";
+
+    // Create a blob from the response data
+    const blob = new Blob([response.data], {
+      type: response.headers["content-type"],
+    });
+
+    // Create a temporary anchor element to trigger the download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   } catch (error: any) {
     const errMessage = error.response?.data?.message || "Something went wrong";
     return thunkAPI.rejectWithValue(errMessage);

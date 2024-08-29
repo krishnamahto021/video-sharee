@@ -23,6 +23,7 @@ const Home: React.FC = () => {
         {publicVideos?.map((video, index) => (
           <VideoCard
             key={index}
+            _id={video._id}
             title={video.title}
             description={video.description}
             path={video.path}

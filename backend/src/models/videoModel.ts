@@ -6,6 +6,7 @@ export interface Ivideo extends Document {
   uploadedBy: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
+  key: string;
 }
 
 const videoSchema: Schema = new Schema(
@@ -13,6 +14,7 @@ const videoSchema: Schema = new Schema(
     title: { type: String, default: "Title of the video " },
     description: { type: String, default: "Default description of the video" },
     path: { type: String, required: true },
+    key: { type: String, required: true },
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

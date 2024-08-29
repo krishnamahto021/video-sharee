@@ -1,19 +1,28 @@
 import React from "react";
 import { FaChalkboardUser } from "react-icons/fa6";
 import ReactPlayer from "react-player";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { downloadVideo } from "../redux/reducers/video/videoReducer";
 
 interface VideoCardProps {
+  _id: string;
   title?: string;
   description?: string;
   path: string;
   uploadedBy: string;
 }
 const VideoCard: React.FC<VideoCardProps> = ({
+  _id,
   title,
   description,
   path,
   uploadedBy,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const handleDownload = () => {
+    dispatch(downloadVideo({ videoId: _id }));
+  };
   return (
     <>
       <div className="border border-black rounded-sm  p-2 ">
@@ -28,8 +37,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
 
         <button
-          type="submit"
+          type="button"
           className="bg-bgFour  rounded-md p-2 text-white text-lg  mt-5 hover:bg-opacity-90 duration-300 capitalize  w-full"
+          onClick={handleDownload}
         >
           Download
         </button>

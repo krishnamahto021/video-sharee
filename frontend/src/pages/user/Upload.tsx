@@ -154,6 +154,7 @@ const Upload: React.FC = () => {
         <div className="w-fit grid grid-cols-1 gap-2 sm:grid-cols-2 p-2 md:grid-cols-3 lg:grid-cols-4">
           {videos?.map((video, index) => (
             <VideoCard
+              _id={video._id}
               key={index}
               title={video.title}
               description={video.description}
