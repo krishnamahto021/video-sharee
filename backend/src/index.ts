@@ -12,21 +12,24 @@ const PORT = process.env.PORT || 8080;
 connectDB();
 app.use(passportJwtStrategy.initialize());
 
-// for parsing the data from request
+// For parsing the data from request
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// router configuration
+// Router configuration
 app.use("/api/v1", routes);
 
 /*---------------------DEPLOYMENT-----------------------*/
 
+// Get the directory name
 const __dirname1 = path.resolve();
+
 if ((process.env.NODE_ENV as string) === "production") {
-  console.log("hi");
+  console.log("Serving static files for production");
 
   // Adjust the path to go up one level from backend to reach the frontend folder
   app.use(express.static(path.join(__dirname1, "..", "frontend", "dist")));
+
   app.get("*", (req, res) => {
     res.sendFile(
       path.resolve(__dirname1, "..", "frontend", "dist", "index.html")
@@ -34,12 +37,12 @@ if ((process.env.NODE_ENV as string) === "production") {
   });
 } else {
   app.get("/", (req, res) => {
-    res.send("Running on development");
+    res.send("Running in development mode");
   });
 }
 
 /*---------------------DEPLOYMENT-----------------------*/
 
 app.listen(PORT, () => {
-  console.log(`Server is running on the port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
