@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { downloadVideo } from "../redux/reducers/video/videoReducer";
 import { Link } from "react-router-dom";
+import { FaShareAlt } from "react-icons/fa";
+import { toast } from "sonner";
 
 interface VideoCardProps {
   _id: string;
@@ -24,9 +26,24 @@ const VideoCard: React.FC<VideoCardProps> = ({
   const handleDownload = () => {
     dispatch(downloadVideo({ videoId: _id }));
   };
+
+  const handleShare = () => {
+    // TODO : replace localahost with the live link
+    const videoLink = `https://localhost:5173/video/${_id}`;
+    navigator.clipboard.writeText(videoLink).then(() => {
+      toast.success("Link copied to clipboard!");
+    });
+  };
+
   return (
     <>
-      <div className="border border-black rounded-sm  p-2 ">
+      <div className="border border-black rounded-sm  p-2 relative">
+        <div
+          className="absolute top-2 right-2 cursor-pointer"
+          onClick={handleShare}
+        >
+          <FaShareAlt size={20} className="text-green-700" />
+        </div>
         <ReactPlayer url={path} light width={""} playing controls />
         <div className="flex flex-col">
           <p className="text-lg">{title}</p>
