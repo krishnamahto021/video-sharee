@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db";
 import routes from "./routes";
 import passportJwtStrategy from "./config/passwordJwtStrategy";
-import path from "path";
+
 
 const app = express();
 dotenv.config();
@@ -18,30 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Router configuration
 app.use("/api/v1", routes);
-
-/*---------------------DEPLOYMENT-----------------------*/
-
-// Get the directory name
-const __dirname1 = path.resolve();
-
-if ((process.env.NODE_ENV as string) === "production") {
-  console.log("Serving static files for production");
-
-  // Adjust the path to the frontend's dist directory
-  app.use(express.static(path.join(__dirname1, "..", "frontend", "dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(
-      path.resolve(__dirname1, "..", "frontend", "dist", "index.html")
-    );
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("Running in development mode");
-  });
-}
-
-/*---------------------DEPLOYMENT-----------------------*/
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
