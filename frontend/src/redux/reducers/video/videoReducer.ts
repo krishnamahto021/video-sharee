@@ -152,7 +152,11 @@ export const downloadVideo = createAsyncThunk<
 const videoSlice = createSlice({
   name: "video",
   initialState,
-  reducers: {},
+  reducers: {
+    setVideos: (state, action: PayloadAction<IVideo>) => {
+      state.videos?.unshift(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -175,5 +179,9 @@ const videoSlice = createSlice({
 
 export const videoReducer = videoSlice.reducer;
 export const selectVideos = (state: RootState) => state.video.videos;
+export const { setVideos } = videoSlice.actions;
+export const selectPublicVideos = (state: RootState) =>
+  state.video.publicVideos;
+
 export const selectSearchVideos = (state: RootState) =>
   state.video.searchResults;

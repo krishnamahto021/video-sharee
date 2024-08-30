@@ -7,7 +7,9 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchVideoForUser,
+  IVideo,
   selectVideos,
+  setVideos,
 } from "../../redux/reducers/video/videoReducer";
 import { AppDispatch } from "../../redux/store";
 import VideoCard from "../../components/VideoCard";
@@ -19,6 +21,7 @@ import {
 interface AuthResponse {
   success: boolean;
   message: string;
+  video: IVideo;
 }
 
 const Upload: React.FC = () => {
@@ -83,6 +86,7 @@ const Upload: React.FC = () => {
         if (loggedInUser?.token) {
           dispatch(increaseUploadCount());
         }
+        dispatch(setVideos(data.video));
         toast.success(data.message);
       } else {
         toast.error(data.message);

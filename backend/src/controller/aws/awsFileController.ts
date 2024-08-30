@@ -37,9 +37,13 @@ export const uploadFile: RequestHandler = async (req, res) => {
             }
             return sendResponse(res, 200, true, "Video uploaded successfully", {
               video: {
+                _id: newVideo._id,
+                path: newVideo.path,
                 title: newVideo.title,
                 description: newVideo.description,
-                path: newVideo.path,
+                uploadedBy: {
+                  email: user?.email,
+                },
               },
             });
           }

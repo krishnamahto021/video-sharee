@@ -4,12 +4,12 @@ import VideoCard from "../components/VideoCard";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchVideoForPublic,
-  selectVideos,
+  selectPublicVideos,
 } from "../redux/reducers/video/videoReducer";
 import { AppDispatch } from "../redux/store";
 
 const Home: React.FC = () => {
-  const publicVideos = useSelector(selectVideos);
+  const publicVideos = useSelector(selectPublicVideos);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(fetchVideoForPublic());
@@ -20,6 +20,7 @@ const Home: React.FC = () => {
         Explore here
       </h1>
       <div className="w-fit grid grid-cols-1 gap-2 sm:grid-cols-2 p-2 md:grid-cols-3 lg:grid-cols-4">
+        {publicVideos?.length === 0 && <p>loading...</p>}
         {publicVideos?.map((video, index) => (
           <VideoCard
             key={index}

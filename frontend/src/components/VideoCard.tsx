@@ -52,7 +52,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
         >
           <FaShareAlt size={20} className="text-green-700" />
         </div>
-        <ReactPlayer url={path} light width={""} playing controls />
+        <ReactPlayer url={path} width={""}  controls />
         <div className="flex flex-col">
           <p className="text-lg">{title}</p>
           <p className="text-gray-800 text-sm">{description}</p>
