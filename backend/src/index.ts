@@ -27,7 +27,7 @@ const __dirname1 = path.resolve();
 if ((process.env.NODE_ENV as string) === "production") {
   console.log("Serving static files for production");
 
-  // Adjust the path to go up one level from backend to reach the frontend folder
+  // Adjust the path to the frontend's dist directory
   app.use(express.static(path.join(__dirname1, "..", "frontend", "dist")));
 
   app.get("*", (req, res) => {
