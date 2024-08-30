@@ -4,10 +4,7 @@
     {
       "src": "backend/package.json",
       "use": "@vercel/node",
-      "config": {
-        "buildCommand": "cd backend && npm install && npm run build",
-        "outputDirectory": "backend/dist"
-      }
+      "config": { "buildCommand": "npm run build" }
     },
     {
       "src": "frontend/package.json",
