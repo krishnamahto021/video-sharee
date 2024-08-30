@@ -75,6 +75,9 @@ export const signInUser = createAsyncThunk<
       password,
     });
     if (data.success) {
+      if (data.user) {
+        localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+      }
       navigate("/user/profile");
       return data.user || null;
     } else {
