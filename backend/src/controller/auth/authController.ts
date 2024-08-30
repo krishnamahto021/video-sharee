@@ -7,11 +7,9 @@ import {
   compareHashedPassword,
   hashPassword,
 } from "../../utils/passwordHelper";
-import jwt from "jsonwebtoken";
 import { generateJwtToken } from "../../utils/jwtToken";
 import { verifyUserEmail } from "../../mailer/verifyUser";
 import { resetPasswordEmail } from "../../mailer/resetPassword";
-import { name } from "ejs";
 dotenv.config();
 interface RegisterReq extends Request {
   body: {
@@ -60,9 +58,9 @@ export const signInUser: RequestHandler = async (req: RegisterReq, res) => {
       return sendResponse(res, 400, false, "Password doesnot match");
     }
     const jwtToken = await generateJwtToken(user);
-    const { name, uploadCount, downloadCount,_id } = user;
+    const { name, uploadCount, downloadCount, _id } = user;
     sendResponse(res, 200, true, "Logged in successfully", {
-      user: { token: jwtToken, name, email, uploadCount, downloadCount ,_id},
+      user: { token: jwtToken, name, email, uploadCount, downloadCount, _id },
     });
   } catch (error) {
     console.error(error);

@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import connectDB from "./config/db";
 import routes from "./routes";
 import passportJwtStrategy from "./config/passwordJwtStrategy";
+import path from "path";
+
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 8080;
@@ -17,9 +19,26 @@ app.use(express.urlencoded({ extended: true }));
 // router configuration
 app.use("/api/v1", routes);
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
+/*---------------------DEPLOYMENT-----------------------*/
+
+const __dirname1 = path.resolve();
+if ((process.env.NODE_ENV as string) === "production") {
+  console.log("hi");
+
+  // Adjust the path to go up one level from backend to reach the frontend folder
+  app.use(express.static(path.join(__dirname1, "..", "frontend", "dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname1, "..", "frontend", "dist", "index.html")
+    );
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Running on development");
+  });
+}
+
+/*---------------------DEPLOYMENT-----------------------*/
 
 app.listen(PORT, () => {
   console.log(`Server is running on the port ${PORT}`);

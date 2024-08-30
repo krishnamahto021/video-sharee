@@ -47,12 +47,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
     <>
       <div className="border border-black rounded-sm  p-2 relative">
         <div
-          className="absolute top-2 right-2 cursor-pointer"
+          className="absolute z-50 top right-2 cursor-pointer"
           onClick={handleShare}
         >
           <FaShareAlt size={20} className="text-green-700" />
         </div>
-        <ReactPlayer url={path} width={""}  controls />
+        <ReactPlayer url={path} width={""} controls />
         <div className="flex flex-col">
           <p className="text-lg">{title}</p>
           <p className="text-gray-800 text-sm">{description}</p>

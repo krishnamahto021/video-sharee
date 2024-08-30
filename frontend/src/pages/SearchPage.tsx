@@ -42,6 +42,7 @@ const SearchPage: React.FC = () => {
             description={video.description}
             path={video.path}
             uploadedBy={video.uploadedBy.email}
+            _id={video._id}
           />
         ))}
       </div>
