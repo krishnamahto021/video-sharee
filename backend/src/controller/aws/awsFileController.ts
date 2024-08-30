@@ -30,6 +30,11 @@ export const uploadFile: RequestHandler = async (req, res) => {
               path: req.file.location,
               key: req.file.key,
             });
+            const user = await User.findById(req.user._id);
+            if (user) {
+              user.uploadCount += 1;
+              await user.save();
+            }
             return sendResponse(res, 200, true, "Video uploaded successfully", {
               video: {
                 title: newVideo.title,
@@ -95,6 +100,15 @@ export const downloadVideo: RequestHandler = async (req, res) => {
       Key: video.key,
     };
 
+    // checks if there is user and if yes update the user download count by 1
+    const { userId } = req.query;
+    if (userId) {
+      const user = await User.findById(userId);
+      if (user) {
+        user.downloadCount += 1;
+        await user.save();
+      }
+    }
     const fileStream = s3.getObject(params).createReadStream();
     fileStream.pipe(res);
 

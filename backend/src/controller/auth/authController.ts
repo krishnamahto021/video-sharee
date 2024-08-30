@@ -60,9 +60,9 @@ export const signInUser: RequestHandler = async (req: RegisterReq, res) => {
       return sendResponse(res, 400, false, "Password doesnot match");
     }
     const jwtToken = await generateJwtToken(user);
-    const { name } = user;
+    const { name, uploadCount, downloadCount } = user;
     sendResponse(res, 200, true, "Logged in successfully", {
-      user: { token: jwtToken, name, email },
+      user: { token: jwtToken, name, email, uploadCount, downloadCount },
     });
   } catch (error) {
     console.error(error);

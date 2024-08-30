@@ -4,6 +4,8 @@ export interface Iuser extends Document {
   email: string;
   password: string;
   token?: string;
+  downloadCount: number;
+  uploadCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -14,6 +16,8 @@ const userSchema: Schema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     token: { type: String },
+    uploadCount: { type: Number, default: 0 },
+    downloadCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
