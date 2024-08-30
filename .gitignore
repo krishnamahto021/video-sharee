@@ -74,3 +74,4 @@ bower_components
 /frontend/.env
 /frontend/build
 /frontend/.cache
+.vercel

@@ -4,12 +4,14 @@
     {
       "src": "backend/package.json",
       "use": "@vercel/node",
-      "config": { "buildCommand": "npm run build" }
+      "config": { "buildCommand": "npm run build" },
+      "outputDirectory": "backend/dist"
     },
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "config": { "distDir": "dist" },
+      "outputDirectory": "frontend/dist"
     }
   ],
   "routes": [
