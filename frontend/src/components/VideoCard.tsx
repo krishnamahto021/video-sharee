@@ -1,12 +1,16 @@
 import React from "react";
 import { FaChalkboardUser } from "react-icons/fa6";
 import ReactPlayer from "react-player";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { downloadVideo } from "../redux/reducers/video/videoReducer";
 import { Link } from "react-router-dom";
 import { FaShareAlt } from "react-icons/fa";
 import { toast } from "sonner";
+import {
+  increaseDownloadCount,
+  selectLoggedInUser,
+} from "../redux/reducers/auth/authReducer";
 
 interface VideoCardProps {
   _id: string;
@@ -23,7 +27,11 @@ const VideoCard: React.FC<VideoCardProps> = ({
   uploadedBy,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const loggedInUser = useSelector(selectLoggedInUser);
   const handleDownload = () => {
+    if (loggedInUser?.token) {
+      dispatch(increaseDownloadCount());
+    }
     dispatch(downloadVideo({ videoId: _id }));
   };
 

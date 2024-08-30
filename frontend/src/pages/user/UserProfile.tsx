@@ -100,8 +100,18 @@ const UserProfile: React.FC = () => {
         </div>
         <h1 className="text-center font-semibold text-lg mt-7">Videos</h1>
         <div className="flex flex-col">
-          <div>Uploaded videos : 15</div>
-          <div>Downloaded videos : 16</div>
+          <div>
+            Uploaded videos :
+            <span className="text-gray-700 mx-2">
+              {loggedInUser?.uploadCount}
+            </span>
+          </div>
+          <div>
+            Downloaded videos :{" "}
+            <span className="text-gray-700 mx-2">
+              {loggedInUser?.downloadCount}
+            </span>
+          </div>
         </div>
         <div className="flex items-center justify-center">
           <button

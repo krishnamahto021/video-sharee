@@ -5,9 +5,12 @@ import { toast } from "sonner";
 import { RootState } from "../../store";
 
 interface User {
+  _id: string;
   email: string;
   name?: string;
   token: string;
+  uploadCount: number;
+  downloadCount: number;
 }
 
 export interface AuthState {
@@ -109,6 +112,19 @@ const authSlice = createSlice({
         toast.success("User name updated successfully");
       }
     },
+    increaseDownloadCount: (state) => {
+      const newDownload = (state.loggedInUser?.downloadCount || 0) + 1;
+      if (state.loggedInUser?.downloadCount) {
+        state.loggedInUser.downloadCount = newDownload;
+      }
+      console.log(state.loggedInUser?.downloadCount, newDownload);
+    },
+    increaseUploadCount: (state) => {
+      const newUpload = (state.loggedInUser?.uploadCount || 0) + 1;
+      if (state.loggedInUser?.uploadCount) {
+        state.loggedInUser.uploadCount = newUpload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -124,5 +140,10 @@ const authSlice = createSlice({
 });
 
 export const authReducer = authSlice.reducer;
-export const { logOutUser, updateUser } = authSlice.actions;
+export const {
+  logOutUser,
+  updateUser,
+  increaseDownloadCount,
+  increaseUploadCount,
+} = authSlice.actions;
 export const selectLoggedInUser = (state: RootState) => state.auth.loggedInUser;

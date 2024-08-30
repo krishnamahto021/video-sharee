@@ -113,9 +113,16 @@ export const downloadVideo = createAsyncThunk<
 >("video/download", async (payload, thunkAPI) => {
   try {
     const { videoId } = payload;
-    const response = await axios.get(`/api/v1/video/download/${videoId}`, {
-      responseType: "blob",
-    });
+    const state = thunkAPI.getState() as RootState;
+    const queryParams = state.auth.loggedInUser
+      ? `?userId=${encodeURIComponent(state.auth.loggedInUser._id)}`
+      : "";
+    const response = await axios.get(
+      `/api/v1/video/download/${videoId}${queryParams}`,
+      {
+        responseType: "blob",
+      }
+    );
     // Extract filename from the Content-Disposition header
     const contentDisposition = response.headers["content-disposition"];
     const filename = contentDisposition

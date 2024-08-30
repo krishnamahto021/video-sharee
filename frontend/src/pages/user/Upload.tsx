@@ -11,6 +11,10 @@ import {
 } from "../../redux/reducers/video/videoReducer";
 import { AppDispatch } from "../../redux/store";
 import VideoCard from "../../components/VideoCard";
+import {
+  increaseUploadCount,
+  selectLoggedInUser,
+} from "../../redux/reducers/auth/authReducer";
 
 interface AuthResponse {
   success: boolean;
@@ -27,7 +31,7 @@ const Upload: React.FC = () => {
   const [fileError, setFileError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const { configWithJWT } = useConfig();
-
+  const loggedInUser = useSelector(selectLoggedInUser);
   const handleUploadClick = () => {
     fileRef.current?.click();
   };
@@ -75,6 +79,10 @@ const Upload: React.FC = () => {
         setTitle("");
         setDescription("");
         setVideoSrc(null);
+        // update the download count of user by 1
+        if (loggedInUser?.token) {
+          dispatch(increaseUploadCount());
+        }
         toast.success(data.message);
       } else {
         toast.error(data.message);
