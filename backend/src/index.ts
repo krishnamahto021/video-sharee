@@ -23,6 +23,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Router configuration
+// test route
+app.get("/", (req, res) => {
+  res.send("hello test api");
+});
 app.use("/api/v1", routes);
 
 app.listen(PORT, () => {
