@@ -37,7 +37,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   const handleShare = () => {
     // TODO : replace localahost with the live link
-    const videoLink = `https://localhost:5173/video/${_id}`;
+    const videoLink = `https://video-sharee-flame.vercel.app/video/${_id}`;
     navigator.clipboard.writeText(videoLink).then(() => {
       toast.success("Link copied to clipboard!");
     });
