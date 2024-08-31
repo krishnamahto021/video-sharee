@@ -8,7 +8,7 @@ import {
 } from "../../redux/reducers/auth/authReducer";
 import { useNavigate } from "react-router-dom";
 import { FaPencilAlt, FaSave } from "react-icons/fa";
-import axios from "axios";
+import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
 interface AuthResponse {
@@ -32,7 +32,7 @@ const UserProfile: React.FC = () => {
 
   const handleSaveClick = async () => {
     try {
-      const { data } = await axios.post<AuthResponse>(
+      const { data } = await backendApi.post<AuthResponse>(
         "/api/v1/user/update-profile",
         { name },
         configWithJWT

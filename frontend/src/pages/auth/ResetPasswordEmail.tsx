@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import backendApi from "../../api/axios";
 import { toast } from "sonner";
 
 interface ResetPasswordEmail {
@@ -16,7 +16,7 @@ const ResetPasswordEmail: React.FC = () => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { data } = await axios.post<ResetPasswordEmail>(
+    const { data } = await backendApi.post<ResetPasswordEmail>(
       "/api/v1/auth/send-reset-password-email",
       {
         email,

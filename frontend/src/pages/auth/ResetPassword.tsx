@@ -1,6 +1,6 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import backendApi from "../../api/axios";
 import { toast } from "sonner";
 
 interface ResetPassword {
@@ -14,7 +14,7 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { data } = await axios.post<ResetPassword>(
+    const { data } = await backendApi.post<ResetPassword>(
       `/api/v1/auth/reset-password/${token}`,
       {
         password,

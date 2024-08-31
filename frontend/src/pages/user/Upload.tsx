@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/Layout";
 import { FaUpload } from "react-icons/fa";
-import axios from "axios";
+import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
@@ -67,7 +67,7 @@ const Upload: React.FC = () => {
     formData.append("description", description || "");
     formData.append("file", file);
     try {
-      const { data } = await axios.post<AuthResponse>(
+      const { data } = await backendApi.post<AuthResponse>(
         "/api/v1/aws/upload",
         formData,
         {

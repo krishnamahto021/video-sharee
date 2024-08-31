@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ConfigWithJWT } from "./../../../types";
-import axios from "axios";
+import backendApi from "../../../api/axios";
 import { RootState } from "../../store";
 export interface IVideo {
   _id: string;
@@ -43,7 +43,7 @@ export const fetchVideoForUser = createAsyncThunk<
 >("/video/fetchVideoForUser", async (payload, thunkAPI) => {
   try {
     const { configWithJwt } = payload;
-    const { data } = await axios.get<FileResponse>(
+    const { data } = await backendApi.get<FileResponse>(
       `/api/v1/user/get-latest-videos`,
       configWithJwt
     );
@@ -65,7 +65,7 @@ export const fetchVideoForPublic = createAsyncThunk<
   { rejectValue: string }
 >("/video/fetchVideoForPublic", async (_, thunkApi) => {
   try {
-    const { data } = await axios.get<FileResponse>(
+    const { data } = await backendApi.get<FileResponse>(
       "/api/v1/fetch-latest-6-videos"
     );
     if (data.success) {
@@ -117,7 +117,7 @@ export const downloadVideo = createAsyncThunk<
     const queryParams = state.auth.loggedInUser
       ? `?userId=${encodeURIComponent(state.auth.loggedInUser._id)}`
       : "";
-    const response = await axios.get(
+    const response = await backendApi.get(
       `/api/v1/video/download/${videoId}${queryParams}`,
       {
         responseType: "blob",

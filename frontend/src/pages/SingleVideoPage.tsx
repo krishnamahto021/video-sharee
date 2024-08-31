@@ -1,4 +1,4 @@
-import axios from "axios";
+import backendApi from "../api/axios";
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Link, useParams } from "react-router-dom";
@@ -23,7 +23,7 @@ const SingleVideoPage: React.FC = () => {
   useEffect(() => {
     const fetchVideo = async () => {
       try {
-        const response = await axios.get(`/api/v1/video/${videoId}`);
+        const response = await backendApi.get(`/api/v1/video/${videoId}`);
         if (response.data.success) {
           setVideo(response.data.video);
         } else {

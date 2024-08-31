@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import backendApi from "../../api/axios";
 import { toast } from "sonner";
 
 const VerifyUser: React.FC = () => {
@@ -10,7 +10,9 @@ const VerifyUser: React.FC = () => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const { data } = await axios.get(`/api/v1/auth/verify-user/${token}`);
+        const { data } = await backendApi.get(
+          `/api/v1/auth/verify-user/${token}`
+        );
         if (data.success) {
           toast.success(data.message);
         } else {

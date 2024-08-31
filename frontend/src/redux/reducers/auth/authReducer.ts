@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import backendApi from "../../../api/axios";
 import { NavigateFunction } from "react-router-dom";
 import { toast } from "sonner";
 import { RootState } from "../../store";
@@ -49,7 +49,7 @@ export const signUpUser = createAsyncThunk<
   { rejectValue: string }
 >("auth/signUpUser", async (payload, thunkAPI) => {
   try {
-    const { data } = await axios.post<AuthResponse>(
+    const { data } = await backendApi.post<AuthResponse>(
       "/api/v1/auth/sign-up",
       payload
     );
@@ -73,10 +73,13 @@ export const signInUser = createAsyncThunk<
 >("auth/signInUser", async (payload, thunkApi) => {
   try {
     const { email, password, navigate } = payload;
-    const { data } = await axios.post<AuthResponse>("/api/v1/auth/sign-in", {
-      email,
-      password,
-    });
+    const { data } = await backendApi.post<AuthResponse>(
+      "/api/v1/auth/sign-in",
+      {
+        email,
+        password,
+      }
+    );
     if (data.success) {
       if (data.user) {
         localStorage.setItem("loggedInUser", JSON.stringify(data.user));
