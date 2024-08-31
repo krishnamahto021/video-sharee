@@ -12,8 +12,8 @@ const PORT = process.env.PORT || 8080;
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    // "https://video-sharee-api-pi.vercel.app/",
-    "https://video-sharee-flame.vercel.app/",
+    "https://video-sharee-api-pi.vercel.app/",
+    "https://video-sharee-flame.vercel.app",
   ],
   optionsSuccessStatus: 200,
 };
