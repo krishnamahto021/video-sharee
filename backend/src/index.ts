@@ -10,7 +10,11 @@ dotenv.config();
 const PORT = process.env.PORT || 8080;
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://video-sharee-api.vercel.app/"],
+  origin: [
+    "http://localhost:5173",
+    "https://video-sharee-api.vercel.app/",
+    "https://video-sharee-2.onrender.com",
+  ],
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
