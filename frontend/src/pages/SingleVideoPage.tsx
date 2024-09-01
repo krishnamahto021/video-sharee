@@ -20,6 +20,7 @@ const SingleVideoPage: React.FC = () => {
   const [video, setVideo] = useState<Video | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -47,26 +48,43 @@ const SingleVideoPage: React.FC = () => {
 
   return (
     <Layout>
-      <div className="container p-7 mt-16">
-        {video ? (
-          <div>
-            <div className="relative pb-[56.25%] h-0">
-              {/* Aspect ratio 16:9 */}
-              <ReactPlayer
-                url={video.path}
-                controls
-                width="100%"
-                height="100%"
-                className="absolute top-0 left-0"
-              />
-            </div>
-            <div className="mt-4">
-              <h1 className="text-2xl font-bold">{video.title}</h1>
-              <p className="mt-2 text-lg">{video.description}</p>
-            </div>
+      <div className="relative w-full  mt-3">
+        {/* Video Player */}
+        {video && !isPlaying && (
+          <div
+            className="absolute top-0 left-0 w-[100%]  h-full bg-gradient-to-r from-black flex flex-col justify-center items-start p-8 "
+            style={{ zIndex: 5 }}
+          >
+            <h1 className="text-3xl font-bold text-white mb-4">
+              {video.title}
+            </h1>
+            <p className="text-lg text-white">{video.description}</p>
+            <button
+              className="bg-white text-black px-4 py-2 rounded mt-4"
+              onClick={() => setIsPlaying(true)}
+            >
+              Play
+            </button>
           </div>
-        ) : (
-          <div>No video found</div>
+        )}
+
+        {/* Video Player */}
+        {video && (
+          <div
+            className={`relative pb-[56.25%] h-0 ${
+              isPlaying ? "absolute top-0 left-0 w-full h-full" : "pt-1/2"
+            }`}
+            style={{ zIndex: isPlaying ? 0 : 1 }}
+          >
+            <ReactPlayer
+              url={video.path}
+              controls
+              width="100%"
+              height="100%"
+              className="absolute top-0 left-0"
+              playing={isPlaying}
+            />
+          </div>
         )}
       </div>
     </Layout>
