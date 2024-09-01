@@ -1,7 +1,8 @@
 import backendApi from "../api/axios";
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Layout from "../components/Layout";
 
 interface Video {
   _id: string;
@@ -45,22 +46,20 @@ const SingleVideoPage: React.FC = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="min-h-screen bg-bgOne text-textOne flex flex-col items-center justify-center">
-      <nav className="flex items-center bg-bgOne p-4 justify-center border-b-black border-b-[1px] fixed top-0 z-50 w-full text-5xl">
-        <Link to={"/home"}>VideoShare</Link>
-      </nav>
-
+    <Layout>
       <div className="container p-7 mt-16">
         {video ? (
-          <div className="relative pb-[56.25%] h-0">
-            {/* Aspect ratio 16:9 */}
-            <ReactPlayer
-              url={video.path}
-              controls
-              width="100%"
-              height="100%"
-              className="absolute top-0 left-0"
-            />
+          <div>
+            <div className="relative pb-[56.25%] h-0">
+              {/* Aspect ratio 16:9 */}
+              <ReactPlayer
+                url={video.path}
+                controls
+                width="100%"
+                height="100%"
+                className="absolute top-0 left-0"
+              />
+            </div>
             <div className="mt-4">
               <h1 className="text-2xl font-bold">{video.title}</h1>
               <p className="mt-2 text-lg">{video.description}</p>
@@ -70,7 +69,7 @@ const SingleVideoPage: React.FC = () => {
           <div>No video found</div>
         )}
       </div>
-    </div>
+    </Layout>
   );
 };
 
