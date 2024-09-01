@@ -145,3 +145,54 @@ export const getVideo: RequestHandler = async (req, res) => {
     sendResponse(res, 500, false, "Internal server error");
   }
 };
+
+// update videos
+export const updateVideo: RequestHandler = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    const { title, description, isPrivate } = req.body;
+
+    if (!videoId) {
+      return sendResponse(res, 400, false, "Invalid video ID");
+    }
+
+    const video = await Video.findById(videoId);
+    if (!video) {
+      return sendResponse(res, 404, false, "Video not found");
+    }
+
+    if (title) video.title = title;
+    if (description) video.description = description;
+    if (typeof isPrivate === "boolean") video.isPrivate = isPrivate;
+
+    await video.save();
+
+    sendResponse(res, 200, true, "Video updated successfully", { video });
+  } catch (error) {
+    console.error(`Error in updating video: ${error}`);
+    sendResponse(res, 500, false, "Internal server error");
+  }
+};
+
+// delete video
+export const deleteVideo: RequestHandler = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+
+    if (!videoId) {
+      return sendResponse(res, 400, false, "Invalid video ID");
+    }
+
+    const video = await Video.findById(videoId);
+    if (!video) {
+      return sendResponse(res, 404, false, "Video not found");
+    }
+
+    await Video.findByIdAndDelete(videoId);
+
+    sendResponse(res, 200, true, "Video deleted successfully");
+  } catch (error) {
+    console.error(`Error in deleting video: ${error}`);
+    sendResponse(res, 500, false, "Internal server error");
+  }
+};
