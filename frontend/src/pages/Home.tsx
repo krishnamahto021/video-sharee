@@ -29,6 +29,7 @@ const Home: React.FC = () => {
             description={video.description}
             path={video.path}
             uploadedBy={video.uploadedBy.email}
+            isPrivate={video.isPrivate}
           />
         ))}
       </div>
