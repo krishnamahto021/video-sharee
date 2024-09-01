@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/Layout";
-import { FaUpload, FaLock, FaUnlock } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
 import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ const Upload: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [isPrivate, setIsPrivate] = useState<string>("false");
 
   const [fileError, setFileError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -57,8 +57,8 @@ const Upload: React.FC = () => {
     }
   };
 
-  const handleTogglePrivacy = () => {
-    setIsPrivate((prev) => !prev);
+  const handlePrivacyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setIsPrivate(event.target.value);
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -74,7 +74,7 @@ const Upload: React.FC = () => {
     formData.append("title", title || "");
     formData.append("description", description || "");
     formData.append("file", file);
-    formData.append("isPrivate", isPrivate.toString());
+    formData.append("isPrivate", isPrivate);
     try {
       const { data } = await backendApi.post<AuthResponse>(
         "/api/v1/aws/upload",
@@ -120,19 +120,22 @@ const Upload: React.FC = () => {
               className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
               onSubmit={handleSubmit}
             >
-              <div className="flex items-center justify-center mb-4">
-                <input
-                  type="file"
-                  hidden
-                  ref={fileRef}
-                  accept="video/*"
-                  onChange={handleFileChange}
-                />
-                <FaUpload
-                  className="text-6xl cursor-pointer hover:scale-110 duration-300"
-                  onClick={handleUploadClick}
-                />
+              <div className="mb-4">
+                <div className="flex items-center justify-center p-6 border-dotted border-2 border-gray-300 rounded-lg w-full">
+                  <input
+                    type="file"
+                    hidden
+                    ref={fileRef}
+                    accept="video/*"
+                    onChange={handleFileChange}
+                  />
+                  <FaUpload
+                    className="text-9xl cursor-pointer hover:scale-110 duration-300"
+                    onClick={handleUploadClick}
+                  />
+                </div>
               </div>
+
               {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
               {videoSrc && (
                 <div className="mt-4 flex flex-col items-center">
@@ -168,25 +171,18 @@ const Upload: React.FC = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne resize-none"
               />
-              <div className="flex items-center justify-between mt-4">
-                <button
-                  type="button"
-                  className="flex items-center gap-2 text-lg"
-                  onClick={handleTogglePrivacy}
-                >
-                  {isPrivate ? (
-                    <>
-                      <FaLock className="text-red-500" />
-                      <span>Private</span>
-                    </>
-                  ) : (
-                    <>
-                      <FaUnlock className="text-green-500" />
-                      <span>Public</span>
-                    </>
-                  )}
-                </button>
-              </div>
+              <label htmlFor="privacy" className="text-textOne font-semibold">
+                Privacy
+              </label>
+              <select
+                name="privacy"
+                value={isPrivate}
+                onChange={handlePrivacyChange}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
+              >
+                <option value="false">Public</option>
+                <option value="true">Private</option>
+              </select>
               {uploadError && (
                 <p className="text-red-500 mt-2">{uploadError}</p>
               )}
@@ -205,7 +201,7 @@ const Upload: React.FC = () => {
             <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
               Uploaded Videos
             </h1>
-            <div className="w-fit grid grid-cols-1 gap-4  p-2 lg:grid-cols-3 ">
+            <div className="w-fit grid grid-cols-1 gap-4 p-2 lg:grid-cols-3">
               {videos?.map((video, index) => (
                 <VideoCard
                   _id={video._id}
