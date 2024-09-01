@@ -7,6 +7,7 @@ export interface Ivideo extends Document {
   createdAt: Date;
   updatedAt: Date;
   key: string;
+  isPrivate: boolean;
 }
 
 const videoSchema: Schema = new Schema(
@@ -20,6 +21,7 @@ const videoSchema: Schema = new Schema(
       ref: "User",
       required: true,
     },
+    isPrivate: { type: Boolean, default: false},
   },
   { timestamps: true }
 );

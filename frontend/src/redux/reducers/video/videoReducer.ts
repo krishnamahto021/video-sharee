@@ -10,6 +10,7 @@ export interface IVideo {
   uploadedBy: {
     email: string;
   };
+  isPrivate: boolean;
 }
 
 export interface VideoState {

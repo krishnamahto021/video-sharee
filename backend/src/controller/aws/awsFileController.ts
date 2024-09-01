@@ -14,7 +14,7 @@ const s3 = new AWS.S3({
 export const uploadFile: RequestHandler = async (req, res) => {
   try {
     if (req.file) {
-      const { title, description } = req.body;
+      const { title, description, isPrivate } = req.body;
       let baseName;
       if (!title) {
         const extension = path.extname(req.file.originalname);
@@ -29,6 +29,7 @@ export const uploadFile: RequestHandler = async (req, res) => {
               uploadedBy: req.user._id,
               path: req.file.location,
               key: req.file.key,
+              isPrivate,
             });
             const user = await User.findById(req.user._id);
             if (user) {
@@ -44,6 +45,7 @@ export const uploadFile: RequestHandler = async (req, res) => {
                 uploadedBy: {
                   email: user?.email,
                 },
+                isPrivate: newVideo.isPrivate,
               },
             });
           }
@@ -69,7 +71,7 @@ export const fetch6LatestVideos: RequestHandler = async (req, res) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 6;
     const offset = (page - 1) * limit;
-    const videos = await Video.find()
+    const videos = await Video.find({ isPrivate: false })
       .sort({ createdAt: -1 })
       .limit(limit)
       .populate("uploadedBy", "email");

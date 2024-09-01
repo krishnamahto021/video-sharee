@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/Layout";
-import { FaUpload } from "react-icons/fa";
+import { FaUpload, FaLock, FaUnlock } from "react-icons/fa";
 import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
@@ -31,10 +31,13 @@ const Upload: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
+
   const [fileError, setFileError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const { configWithJWT } = useConfig();
   const loggedInUser = useSelector(selectLoggedInUser);
+
   const handleUploadClick = () => {
     fileRef.current?.click();
   };
@@ -53,6 +56,10 @@ const Upload: React.FC = () => {
     }
   };
 
+  const handleTogglePrivacy = () => {
+    setIsPrivate((prev) => !prev);
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -66,6 +73,7 @@ const Upload: React.FC = () => {
     formData.append("title", title || "");
     formData.append("description", description || "");
     formData.append("file", file);
+    formData.append("isPrivate", isPrivate.toString());
     try {
       const { data } = await backendApi.post<AuthResponse>(
         "/api/v1/aws/upload",
@@ -82,7 +90,6 @@ const Upload: React.FC = () => {
         setTitle("");
         setDescription("");
         setVideoSrc(null);
-        // update the download count of user by 1
         if (loggedInUser?.token) {
           dispatch(increaseUploadCount());
         }
@@ -147,6 +154,25 @@ const Upload: React.FC = () => {
             onChange={(e) => setDescription(e.target.value)}
             className="w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] bg-transparent resize-none"
           />
+          <div className="flex items-center justify-between mt-4">
+            <button
+              type="button"
+              className="flex items-center gap-2 text-lg"
+              onClick={handleTogglePrivacy}
+            >
+              {isPrivate ? (
+                <>
+                  <FaLock className="text-red-500" />
+                  <span>Private</span>
+                </>
+              ) : (
+                <>
+                  <FaUnlock className="text-green-500" />
+                  <span>Public</span>
+                </>
+              )}
+            </button>
+          </div>
           {uploadError && <p className="text-red-500 mt-2">{uploadError}</p>}
           <div className="flex items-center justify-center">
             <button
@@ -172,6 +198,7 @@ const Upload: React.FC = () => {
               description={video.description}
               path={video.path}
               uploadedBy={video.uploadedBy.email}
+              isPrivate={video.isPrivate}
             />
           ))}
         </div>
