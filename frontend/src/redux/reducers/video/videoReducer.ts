@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ConfigWithJWT } from "./../../../types";
+import { ConfigWithJWT } from "../../../types";
 import backendApi from "../../../api/axios";
 import { RootState } from "../../store";
+
+// Video interface
 export interface IVideo {
   _id: string;
   path: string;
@@ -13,13 +15,16 @@ export interface IVideo {
   isPrivate: boolean;
 }
 
+// State interface
 export interface VideoState {
   videos: IVideo[] | null;
   publicVideos: IVideo[] | null;
   searchResults: IVideo[] | null;
+  isLoading: boolean;
+  error: string | null;
 }
 
-// payload types
+// Payload types
 interface FileFetchPayload {
   configWithJwt: ConfigWithJWT;
 }
@@ -34,9 +39,11 @@ const initialState: VideoState = {
   videos: [],
   publicVideos: [],
   searchResults: [],
+  isLoading: false,
+  error: null,
 };
 
-// fetch videos for logged in user
+// Fetch videos for logged in user
 export const fetchVideoForUser = createAsyncThunk<
   IVideo[],
   FileFetchPayload,
@@ -51,7 +58,6 @@ export const fetchVideoForUser = createAsyncThunk<
     if (data.success) {
       return data.videos || [];
     }
-
     return thunkAPI.rejectWithValue(data.message);
   } catch (error: any) {
     const errMessage = error.response?.data?.message || "Something went wrong";
@@ -59,12 +65,12 @@ export const fetchVideoForUser = createAsyncThunk<
   }
 });
 
-// fetch public videos
+// Fetch public videos
 export const fetchVideoForPublic = createAsyncThunk<
   IVideo[],
   void,
   { rejectValue: string }
->("/video/fetchVideoForPublic", async (_, thunkApi) => {
+>("/video/fetchVideoForPublic", async (_, thunkAPI) => {
   try {
     const { data } = await backendApi.get<FileResponse>(
       "/api/v1/fetch-latest-6-videos"
@@ -72,13 +78,14 @@ export const fetchVideoForPublic = createAsyncThunk<
     if (data.success) {
       return data.videos || [];
     }
-    return thunkApi.rejectWithValue(data.message);
+    return thunkAPI.rejectWithValue(data.message);
   } catch (error: any) {
     const errMessage = error.response?.data?.message || "Something went wrong";
-    return thunkApi.rejectWithValue(errMessage);
+    return thunkAPI.rejectWithValue(errMessage);
   }
 });
 
+// Get search results
 export const getSearchResults = createAsyncThunk<
   IVideo[],
   string,
@@ -86,16 +93,12 @@ export const getSearchResults = createAsyncThunk<
 >("video/search", async (query, thunkAPI) => {
   try {
     const { videos, publicVideos } = thunkAPI.getState().video;
-
-    // Combine both arrays
     const combinedVideos = [...(publicVideos || []), ...(videos || [])];
-    // Filter combined videos based on query
     const filteredVideos = combinedVideos.filter(
       (video) =>
         video.title?.toLowerCase().includes(query.toLowerCase()) ||
         video.description?.toLowerCase().includes(query.toLowerCase())
     );
-
     return filteredVideos;
   } catch (error: any) {
     const errMessage = error.response?.data?.message || "Something went wrong";
@@ -103,13 +106,10 @@ export const getSearchResults = createAsyncThunk<
   }
 });
 
-interface DownloadVideoPayload {
-  videoId: string;
-}
-// download video
+// Download video
 export const downloadVideo = createAsyncThunk<
   void,
-  DownloadVideoPayload,
+  { videoId: string },
   { rejectValue: string }
 >("video/download", async (payload, thunkAPI) => {
   try {
@@ -124,18 +124,13 @@ export const downloadVideo = createAsyncThunk<
         responseType: "blob",
       }
     );
-    // Extract filename from the Content-Disposition header
     const contentDisposition = response.headers["content-disposition"];
     const filename = contentDisposition
       ? contentDisposition.split("filename=")[1].replace(/['"]/g, "")
       : "video.mp4";
-
-    // Create a blob from the response data
     const blob = new Blob([response.data], {
       type: response.headers["content-type"],
     });
-
-    // Create a temporary anchor element to trigger the download
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.setAttribute("download", filename);
@@ -148,8 +143,6 @@ export const downloadVideo = createAsyncThunk<
   }
 });
 
-// create video slice
-
 const videoSlice = createSlice({
   name: "video",
   initialState,
@@ -160,14 +153,35 @@ const videoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchVideoForUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(
         fetchVideoForUser.fulfilled,
         (state, action: PayloadAction<IVideo[]>) => {
           state.videos = action.payload;
+          state.isLoading = false;
         }
       )
-      .addCase(fetchVideoForPublic.fulfilled, (state, action) => {
-        state.publicVideos = action.payload;
+      .addCase(fetchVideoForUser.rejected, (state, action) => {
+        state.error = action.payload as string; // Using 'as string' to match the expected type
+        state.isLoading = false;
+      })
+      .addCase(fetchVideoForPublic.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchVideoForPublic.fulfilled,
+        (state, action: PayloadAction<IVideo[]>) => {
+          state.publicVideos = action.payload;
+          state.isLoading = false;
+        }
+      )
+      .addCase(fetchVideoForPublic.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.isLoading = false;
       })
       .addCase(
         getSearchResults.fulfilled,
@@ -183,6 +197,7 @@ export const selectVideos = (state: RootState) => state.video.videos;
 export const { setVideos } = videoSlice.actions;
 export const selectPublicVideos = (state: RootState) =>
   state.video.publicVideos;
-
 export const selectSearchVideos = (state: RootState) =>
   state.video.searchResults;
+export const selectVideoLoading = (state: RootState) => state.video.isLoading;
+export const selectVideoError = (state: RootState) => state.video.error;
