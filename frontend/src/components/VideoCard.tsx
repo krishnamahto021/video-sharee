@@ -1,17 +1,28 @@
-import React from "react";
-import { FaChalkboardUser, FaLock, FaUnlock } from "react-icons/fa6";
+import React, { useState } from "react";
+import {
+  FaChalkboardUser,
+  FaLock,
+  FaPen,
+  FaTrash,
+  FaUnlock,
+} from "react-icons/fa6";
 import { FaShareAlt } from "react-icons/fa";
 
 import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../redux/store";
-import { downloadVideo } from "../redux/reducers/video/videoReducer";
+import {
+  downloadVideo,
+  updateVideo,
+  deleteVideo,
+} from "../redux/reducers/video/videoReducer";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import {
   increaseDownloadCount,
   selectLoggedInUser,
 } from "../redux/reducers/auth/authReducer";
+import { useConfig } from "../customHooks/useConfigHook";
 
 interface VideoCardProps {
   _id: string;
@@ -32,6 +43,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const loggedInUser = useSelector(selectLoggedInUser);
+  const { configWithJWT } = useConfig();
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedTitle, setUpdatedTitle] = useState(title || "");
+  const [updatedDescription, setUpdatedDescription] = useState(
+    description || ""
+  );
 
   const handleDownload = () => {
     if (loggedInUser?.token) {
@@ -45,6 +62,45 @@ const VideoCard: React.FC<VideoCardProps> = ({
     navigator.clipboard.writeText(videoLink).then(() => {
       toast.success("Link copied to clipboard!");
     });
+  };
+
+  const handleUpdate = async () => {
+    if (!updatedTitle || !updatedDescription) {
+      toast.error("Title and description cannot be empty.");
+      return;
+    }
+
+    const updateData = {
+      title: updatedTitle,
+      description: updatedDescription,
+    };
+    try {
+      await dispatch(
+        updateVideo({
+          videoId: _id,
+          updateData,
+          configWithJwt: configWithJWT,
+        })
+      ).unwrap();
+      toast.success("Video updated successfully!");
+      setIsEditing(false);
+    } catch (error) {
+      toast.error("Failed to update video: " + error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await dispatch(
+        deleteVideo({
+          videoId: _id,
+          configWithJwt: configWithJWT,
+        })
+      ).unwrap();
+      toast.success("Video deleted successfully!");
+    } catch (error) {
+      toast.error("Failed to delete video: " + error);
+    }
   };
 
   return (
@@ -76,8 +132,28 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
       {/* Video Details */}
       <div className="flex flex-col mb-4">
-        <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
-        <p className="text-gray-600 text-sm mb-2">{description}</p>
+        {isEditing ? (
+          <>
+            <input
+              type="text"
+              className="border border-gray-300 rounded-md p-2 mb-2 text-gray-800"
+              value={updatedTitle}
+              onChange={(e) => setUpdatedTitle(e.target.value)}
+              placeholder="Updated Title"
+            />
+            <textarea
+              className="border border-gray-300 rounded-md p-2 mb-2 text-gray-800"
+              value={updatedDescription}
+              onChange={(e) => setUpdatedDescription(e.target.value)}
+              placeholder="Updated Description"
+            />
+          </>
+        ) : (
+          <>
+            <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
+            <p className="text-gray-600 text-sm mb-2">{description}</p>
+          </>
+        )}
         <div className="flex items-center text-gray-500 text-sm">
           <FaChalkboardUser className="mr-2" />
           <span>{uploadedBy}</span>
@@ -99,6 +175,44 @@ const VideoCard: React.FC<VideoCardProps> = ({
         >
           See Video Page
         </Link>
+
+        {loggedInUser?.email === uploadedBy && (
+          <>
+            {isEditing ? (
+              <>
+                <button
+                  type="button"
+                  className="bg-green-500 text-white rounded-md p-3 text-lg hover:bg-green-600 transition duration-200"
+                  onClick={handleUpdate}
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-500 text-white rounded-md p-3 text-lg hover:bg-gray-600 transition duration-200"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                className="bg-yellow-500 text-white rounded-md p-3 text-lg hover:bg-yellow-600 transition duration-200"
+                onClick={() => setIsEditing(true)}
+              >
+                <FaPen className="inline-block mr-2" /> Update
+              </button>
+            )}
+            <button
+              type="button"
+              className="bg-red-500 text-white rounded-md p-3 text-lg hover:bg-red-600 transition duration-200"
+              onClick={handleDelete}
+            >
+              <FaTrash className="inline-block mr-2" /> Delete
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

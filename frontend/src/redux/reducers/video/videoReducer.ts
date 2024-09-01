@@ -35,6 +35,13 @@ interface FileResponse {
   videos?: IVideo[];
 }
 
+// handle single file
+interface SingleFileResponse {
+  success: boolean;
+  message: string;
+  video?: IVideo;
+}
+
 const initialState: VideoState = {
   videos: [],
   publicVideos: [],
@@ -143,6 +150,55 @@ export const downloadVideo = createAsyncThunk<
   }
 });
 
+// Update video details
+export const updateVideo = createAsyncThunk<
+  IVideo,
+  {
+    videoId: string;
+    updateData: Partial<IVideo>;
+    configWithJwt: ConfigWithJWT;
+  },
+  { rejectValue: string }
+>("video/update", async ({ videoId, updateData, configWithJwt }, thunkAPI) => {
+  try {
+    const { data } = await backendApi.put<SingleFileResponse>(
+      `/api/v1/aws/video/update/${videoId}`,
+      updateData,
+      configWithJwt
+    );
+
+    if (data.success && data.video) {
+      return data.video;
+    }
+    return thunkAPI.rejectWithValue(data.message);
+  } catch (error: any) {
+    const errMessage = error.response?.data?.message || "Something went wrong";
+    return thunkAPI.rejectWithValue(errMessage);
+  }
+});
+
+// Delete video
+export const deleteVideo = createAsyncThunk<
+  { videoId: string },
+  { videoId: string; configWithJwt: ConfigWithJWT },
+  { rejectValue: string }
+>("video/delete", async ({ videoId, configWithJwt }, thunkAPI) => {
+  try {
+    const { data } = await backendApi.delete<FileResponse>(
+      `/api/v1/aws/video/delete/${videoId}`,
+      configWithJwt
+    );
+
+    if (data.success) {
+      return { videoId };
+    }
+    return thunkAPI.rejectWithValue(data.message);
+  } catch (error: any) {
+    const errMessage = error.response?.data?.message || "Something went wrong";
+    return thunkAPI.rejectWithValue(errMessage);
+  }
+});
+
 const videoSlice = createSlice({
   name: "video",
   initialState,
@@ -187,6 +243,28 @@ const videoSlice = createSlice({
         getSearchResults.fulfilled,
         (state, action: PayloadAction<IVideo[]>) => {
           state.searchResults = action.payload;
+        }
+      )
+      // Update video
+      .addCase(
+        updateVideo.fulfilled,
+        (state, action: PayloadAction<IVideo>) => {
+          const index = state.videos?.findIndex(
+            (video) => video._id === action.payload._id
+          );
+          if (index !== undefined && index !== -1 && state.videos) {
+            state.videos[index] = action.payload;
+          }
+        }
+      )
+      // Delete video
+      .addCase(
+        deleteVideo.fulfilled,
+        (state, action: PayloadAction<{ videoId: string }>) => {
+          state.videos =
+            state.videos?.filter(
+              (video) => video._id !== action.payload.videoId
+            ) || null;
         }
       );
   },

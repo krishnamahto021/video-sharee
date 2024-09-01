@@ -114,8 +114,8 @@ const Upload: React.FC = () => {
     <Layout>
       <div className="flex">
         <Sidebar />
-        <main className="flex-1 p-4 mt-7 ml-0 md:ml-64">
-          <section className="flex flex-col items-center lg:w-1/2">
+        <main className="flex-1 p-4 mt-7  ml-0 md:ml-64">
+          <section className="flex flex-col items-center md:w-[50vw]  lg:w-[75vw]">
             <form
               className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
               onSubmit={handleSubmit}
