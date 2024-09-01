@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="min-h-screen bg-bgTwo flex flex-col">
       <nav className="flex items-center bg-bgFive p-4 justify-between md:text-lg border-b-black border-b-[1px] fixed top-0 z-50 w-full text-white">
         <div>
-          <NavLink to={"/"}>
+          <NavLink to={"/user/dashboard"}>
             <IoHomeOutline size={30} />
           </NavLink>
         </div>

@@ -5,7 +5,7 @@ import Sidebar from "../../components/Sidebar";
 const HelpPage: React.FC = () => {
   return (
     <Layout>
-      <div className="flex">
+      <div className=" flex w-full gap-2 pr-2">
         <Sidebar />
         <main className="flex-1 p-4 mt-7 ml-0 md:ml-64">
           <section className="p-4 mt-7 bg-white shadow-lg rounded-lg">
