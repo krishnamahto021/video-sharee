@@ -15,5 +15,5 @@ export const ProtectedRouteHome: React.FC<RouteProps> = ({ element }) => {
 export const ProtectedRoute: React.FC<RouteProps> = ({ element }) => {
   const loggedInUser = useSelector(selectLoggedInUser);
 
-  return loggedInUser?.token ? <Navigate to={"/user/profile"} /> : element;
+  return loggedInUser?.token ? <Navigate to={"/user/dashboard"} /> : element;
 };

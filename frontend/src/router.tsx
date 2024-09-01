@@ -13,6 +13,9 @@ import {
   ProtectedRoute,
   ProtectedRouteHome,
 } from "./components/ProtectedRoute";
+import MyVideos from "./pages/user/MyVideos";
+import HelpPage from "./pages/user/HelpPage";
+import Dashboard from "./pages/user/Dashboard";
 
 export const router = createBrowserRouter([
   // public routes
@@ -30,8 +33,20 @@ export const router = createBrowserRouter([
 
   // show these pages only when user is logged in
   {
+    path: "/user/dashboard",
+    element: <ProtectedRouteHome element={<Dashboard />} />,
+  },
+  {
     path: "/user/profile",
     element: <ProtectedRouteHome element={<UserProfile />} />,
+  },
+  {
+    path: "/user/videos",
+    element: <ProtectedRouteHome element={<MyVideos />} />,
+  },
+  {
+    path: "/user/help",
+    element: <ProtectedRouteHome element={<HelpPage />} />,
   },
 
   {

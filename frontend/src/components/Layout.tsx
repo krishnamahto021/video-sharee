@@ -35,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </main>
 
-      <footer className="bg-black text-center py-6 border-t-[1px] border-t-black">
+      <footer className="bg-black text-center py-6 border-t-[1px] border-t-black z-50">
         <div className="flex justify-center gap-6 mb-4 text-white">
           <a
             href="https://github.com/krishnamahto021"

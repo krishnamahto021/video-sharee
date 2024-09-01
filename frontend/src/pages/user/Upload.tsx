@@ -17,6 +17,7 @@ import {
   increaseUploadCount,
   selectLoggedInUser,
 } from "../../redux/reducers/auth/authReducer";
+import Sidebar from "../../components/Sidebar";
 
 interface AuthResponse {
   success: boolean;
@@ -107,109 +108,119 @@ const Upload: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchVideoForUser({ configWithJwt: configWithJWT }));
-  }, []);
+  }, [dispatch, configWithJWT]);
 
   return (
     <Layout>
-      <section className="p-4 mt-7 flex flex-col items-center md:w-1/2">
-        <form
-          className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
-          onSubmit={handleSubmit}
-        >
-          <div className="flex items-center justify-center mb-4">
-            <input
-              type="file"
-              hidden
-              ref={fileRef}
-              accept="video/*"
-              onChange={handleFileChange}
-            />
-            <FaUpload
-              className="text-6xl cursor-pointer hover:scale-110 duration-300"
-              onClick={handleUploadClick}
-            />
-          </div>
-          {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
-          {videoSrc && (
-            <div className="mt-4 flex flex-col items-center">
-              <video
-                src={videoSrc}
-                controls
-                className="w-32 h-32 object-cover rounded-md shadow-md"
-              />
-            </div>
-          )}
-          <label htmlFor="title" className="text-textOne font-semibold">
-            Title (Optional)
-          </label>
-          <input
-            name="title"
-            type="text"
-            placeholder="Enter title of your video"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
-          />
-          <label htmlFor="description" className="text-textOne font-semibold">
-            Description (Optional)
-          </label>
-          <textarea
-            rows={3}
-            name="description"
-            placeholder="Enter description of your video"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne resize-none"
-          />
-          <div className="flex items-center justify-between mt-4">
-            <button
-              type="button"
-              className="flex items-center gap-2 text-lg"
-              onClick={handleTogglePrivacy}
+      <div className="flex">
+        <Sidebar />
+        <main className="flex-1 p-4 mt-7 ml-0 md:ml-64">
+          <section className="flex flex-col items-center lg:w-1/2">
+            <form
+              className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
+              onSubmit={handleSubmit}
             >
-              {isPrivate ? (
-                <>
-                  <FaLock className="text-red-500" />
-                  <span>Private</span>
-                </>
-              ) : (
-                <>
-                  <FaUnlock className="text-green-500" />
-                  <span>Public</span>
-                </>
+              <div className="flex items-center justify-center mb-4">
+                <input
+                  type="file"
+                  hidden
+                  ref={fileRef}
+                  accept="video/*"
+                  onChange={handleFileChange}
+                />
+                <FaUpload
+                  className="text-6xl cursor-pointer hover:scale-110 duration-300"
+                  onClick={handleUploadClick}
+                />
+              </div>
+              {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
+              {videoSrc && (
+                <div className="mt-4 flex flex-col items-center">
+                  <video
+                    src={videoSrc}
+                    controls
+                    className="w-32 h-32 object-cover rounded-md shadow-md"
+                  />
+                </div>
               )}
-            </button>
-          </div>
-          {uploadError && <p className="text-red-500 mt-2">{uploadError}</p>}
-          <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-full"
-            >
-              Upload video
-            </button>
-          </div>
-        </form>
-      </section>
+              <label htmlFor="title" className="text-textOne font-semibold">
+                Title (Optional)
+              </label>
+              <input
+                name="title"
+                type="text"
+                placeholder="Enter title of your video"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
+              />
+              <label
+                htmlFor="description"
+                className="text-textOne font-semibold"
+              >
+                Description (Optional)
+              </label>
+              <textarea
+                rows={3}
+                name="description"
+                placeholder="Enter description of your video"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne resize-none"
+              />
+              <div className="flex items-center justify-between mt-4">
+                <button
+                  type="button"
+                  className="flex items-center gap-2 text-lg"
+                  onClick={handleTogglePrivacy}
+                >
+                  {isPrivate ? (
+                    <>
+                      <FaLock className="text-red-500" />
+                      <span>Private</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaUnlock className="text-green-500" />
+                      <span>Public</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              {uploadError && (
+                <p className="text-red-500 mt-2">{uploadError}</p>
+              )}
+              <div className="flex items-center justify-center">
+                <button
+                  type="submit"
+                  className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-full md:w-fit"
+                >
+                  Upload video
+                </button>
+              </div>
+            </form>
+          </section>
 
-      <section className="p-4 mt-7 ">
-        <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
-          Uploaded Videos
-        </h1>
-        <div className="w-fit grid grid-cols-1 gap-4 sm:grid-cols-2 p-2 md:grid-cols-3 lg:grid-cols-4">
-          {videos?.map((video, index) => (
-            <VideoCard
-              _id={video._id}
-              key={index}
-              title={video.title}
-              description={video.description}
-              path={video.path}
-              uploadedBy={video.uploadedBy.email}
-              isPrivate={video.isPrivate}
-            />
-          ))}
-        </div>
-      </section>
+          <section className="p-4 mt-7">
+            <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
+              Uploaded Videos
+            </h1>
+            <div className="w-fit grid grid-cols-1 gap-4  p-2 lg:grid-cols-3 ">
+              {videos?.map((video, index) => (
+                <VideoCard
+                  _id={video._id}
+                  key={index}
+                  title={video.title}
+                  description={video.description}
+                  path={video.path}
+                  uploadedBy={video.uploadedBy.email}
+                  isPrivate={video.isPrivate}
+                />
+              ))}
+            </div>
+          </section>
+        </main>
+      </div>
     </Layout>
   );
 };
