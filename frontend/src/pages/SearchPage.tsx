@@ -43,6 +43,7 @@ const SearchPage: React.FC = () => {
             path={video.path}
             uploadedBy={video.uploadedBy.email}
             _id={video._id}
+            isPrivate={video.isPrivate}
           />
         ))}
       </div>
