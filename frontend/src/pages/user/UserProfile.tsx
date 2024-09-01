@@ -11,6 +11,7 @@ import { FaPencilAlt, FaSave } from "react-icons/fa";
 import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
+
 interface AuthResponse {
   success: boolean;
   message: string;
@@ -57,12 +58,16 @@ const UserProfile: React.FC = () => {
 
   return (
     <Layout>
-      <section className="p-2 mt-7 sm:w-1/2">
-        <h1 className="text-center font-semibold text-lg">Personal Details</h1>
-        <div className="container flex flex-col gap-2">
+      <section className="p-4 mt-7 sm:w-1/2 mx-auto bg-white shadow-lg rounded-lg">
+        <h1 className="text-center font-semibold text-xl text-gray-700 mb-5">
+          Personal Details
+        </h1>
+        <div className="container flex flex-col gap-4">
           <div className="flex items-center">
             <div className="flex flex-col w-full">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name" className="font-medium text-gray-600">
+                Name
+              </label>
               <div className="relative">
                 <input
                   name="name"
@@ -70,53 +75,55 @@ const UserProfile: React.FC = () => {
                   placeholder="Enter your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className={`w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] bg-transparent `}
+                  className={`w-full p-3 focus:outline-none border rounded-md ${
+                    edit ? "border-blue-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-blue-500 bg-gray-100`}
                   disabled={!edit}
                 />
                 <button
                   type="button"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
                   onClick={() => (edit ? handleSaveClick() : handleEditClick())}
                 >
                   {edit ? (
-                    <FaSave className="text-green-600" />
+                    <FaSave className="text-green-600 hover:text-green-800 duration-200" />
                   ) : (
-                    <FaPencilAlt />
+                    <FaPencilAlt className="text-gray-600 hover:text-gray-800 duration-200" />
                   )}
                 </button>
               </div>
             </div>
           </div>
           <div className="flex flex-col">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" className="font-medium text-gray-600">
+              Email
+            </label>
             <input
               name="email"
               type="email"
               value={loggedInUser?.email || "email"}
-              className="w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] cursor-not-allowed"
+              className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
               disabled
             />
           </div>
         </div>
-        <h1 className="text-center font-semibold text-lg mt-7">Videos</h1>
-        <div className="flex flex-col">
-          <div>
-            Uploaded videos :
-            <span className="text-gray-700 mx-2">
-              {loggedInUser?.uploadCount}
-            </span>
+        <h1 className="text-center font-semibold text-xl text-gray-700 mt-10 mb-5">
+          Videos
+        </h1>
+        <div className="flex flex-col gap-2 text-gray-700">
+          <div className="flex justify-between">
+            <span>Uploaded videos:</span>
+            <span className="font-medium">{loggedInUser?.uploadCount}</span>
           </div>
-          <div>
-            Downloaded videos :{" "}
-            <span className="text-gray-700 mx-2">
-              {loggedInUser?.downloadCount}
-            </span>
+          <div className="flex justify-between">
+            <span>Downloaded videos:</span>
+            <span className="font-medium">{loggedInUser?.downloadCount}</span>
           </div>
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center mt-7">
           <button
-            type="submit"
-            className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize md:w-1/3"
+            type="button"
+            className="bg-red-500 rounded-md p-3 text-white text-lg hover:bg-red-600 duration-300 w-1/2"
             onClick={() => dispatch(logOutUser(navigate))}
           >
             Log out

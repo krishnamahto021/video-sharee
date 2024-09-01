@@ -3,15 +3,15 @@ export default {
   theme: {
     extend: {
       textColor: {
-        textOne: "#10162f",
-        textTwo: "#3a10e5",
+        textOne: "#1c1c1c", // Dark Gray-Black for primary text
+        textTwo: "#4d4d4d", // Medium Gray for secondary text
       },
       backgroundColor: {
-        bgOne: "#fff0e5",
-        bgTwo: "#d2d5db",
-        bgThree: "#d3d3d3",
-        bgFour: "#10162f",
-        bgFive: "#3a10e5",
+        bgOne: "#f0f0f0", // Light Gray for main backgrounds
+        bgTwo: "#e0e0e0", // Slightly darker gray for secondary backgrounds
+        bgThree: "#b3b3b3", // Medium Gray for accents or cards
+        bgFour: "#333333", // Dark Gray for headers or footers
+        bgFive: "#000000", // Pure Black for high-contrast elements
       },
     },
   },

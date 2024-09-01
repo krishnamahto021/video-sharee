@@ -1,11 +1,12 @@
 import React from "react";
 import { FaChalkboardUser, FaLock, FaUnlock } from "react-icons/fa6";
+import { FaShareAlt } from "react-icons/fa";
+
 import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { downloadVideo } from "../redux/reducers/video/videoReducer";
 import { Link } from "react-router-dom";
-import { FaShareAlt } from "react-icons/fa";
 import { toast } from "sonner";
 import {
   increaseDownloadCount,
@@ -27,7 +28,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   description,
   path,
   uploadedBy,
-  isPrivate, // Add this prop
+  isPrivate,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const loggedInUser = useSelector(selectLoggedInUser);
@@ -47,47 +48,56 @@ const VideoCard: React.FC<VideoCardProps> = ({
   };
 
   return (
-    <div className="border border-black rounded-sm p-2 relative">
+    <div className="border border-gray-300 rounded-lg shadow-lg p-4 bg-white relative hover:shadow-xl transition-shadow duration-300 ease-in-out">
       {/* Privacy Icon */}
-      <div className="absolute z-10 top-2 left-2">
+      <div className="absolute z-10 top-4 left-4">
         {isPrivate ? (
-          <FaLock size={20} className="text-red-600" />
+          <FaLock size={20} className="text-red-500" />
         ) : (
-          <FaUnlock size={20} className="text-green-600" />
+          <FaUnlock size={20} className="text-green-500" />
         )}
       </div>
 
+      {/* Share Icon */}
       <div
-        className="absolute z-10 top-2 right-2 cursor-pointer"
+        className="absolute z-10 top-4 right-4 cursor-pointer"
         onClick={handleShare}
       >
-        <FaShareAlt size={20} className="text-green-700" />
+        <FaShareAlt
+          size={20}
+          className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
+        />
       </div>
 
-      <ReactPlayer url={path} width={"100%"} controls />
+      {/* Video Player */}
+      <div className="rounded-lg overflow-hidden mb-4">
+        <ReactPlayer url={path} width={"100%"} controls />
+      </div>
 
-      <div className="flex flex-col">
-        <p className="text-lg">{title}</p>
-        <p className="text-gray-800 text-sm">{description}</p>
-        <div className="flex items-center w-fit text-gray-400 text-sm gap-4 justify-center mt-1">
-          <FaChalkboardUser />
-          <p>{uploadedBy}</p>
+      {/* Video Details */}
+      <div className="flex flex-col mb-4">
+        <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
+        <p className="text-gray-600 text-sm mb-2">{description}</p>
+        <div className="flex items-center text-gray-500 text-sm">
+          <FaChalkboardUser className="mr-2" />
+          <span>{uploadedBy}</span>
         </div>
       </div>
 
-      <div className="flex flex-col w-full">
+      {/* Actions */}
+      <div className="flex flex-col space-y-2">
         <button
           type="button"
-          className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-full"
+          className="bg-blue-500 text-white rounded-md p-3 text-lg hover:bg-blue-600 transition duration-200"
           onClick={handleDownload}
         >
           Download
         </button>
         <Link
           to={`/video/${_id}`}
-          className="rounded-md p-2 text-textOne border-2 border-[#10162f] text-lg w-full my-1 capitalize text-center"
+          className="border border-blue-500 text-blue-500 rounded-md p-3 text-lg text-center hover:bg-blue-500 hover:text-white transition duration-200"
         >
-          See Video page
+          See Video Page
         </Link>
       </div>
     </div>

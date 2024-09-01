@@ -111,9 +111,12 @@ const Upload: React.FC = () => {
 
   return (
     <Layout>
-      <section className="p-2 mt-7 flex flex-col items-center md:w-1/2">
-        <form className="container flex flex-col gap-2" onSubmit={handleSubmit}>
-          <div className="flex items-center justify-center">
+      <section className="p-4 mt-7 flex flex-col items-center md:w-1/2">
+        <form
+          className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex items-center justify-center mb-4">
             <input
               type="file"
               hidden
@@ -122,7 +125,7 @@ const Upload: React.FC = () => {
               onChange={handleFileChange}
             />
             <FaUpload
-              className="text-8xl cursor-pointer hover:scale-110 duration-300"
+              className="text-6xl cursor-pointer hover:scale-110 duration-300"
               onClick={handleUploadClick}
             />
           </div>
@@ -132,27 +135,31 @@ const Upload: React.FC = () => {
               <video
                 src={videoSrc}
                 controls
-                className="w-32 h-32 object-cover"
+                className="w-32 h-32 object-cover rounded-md shadow-md"
               />
             </div>
           )}
-          <label htmlFor="title">Title (Optional)</label>
+          <label htmlFor="title" className="text-textOne font-semibold">
+            Title (Optional)
+          </label>
           <input
             name="title"
             type="text"
             placeholder="Enter title of your video"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] bg-transparent"
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
           />
-          <label htmlFor="description">Description (Optional)</label>
+          <label htmlFor="description" className="text-textOne font-semibold">
+            Description (Optional)
+          </label>
           <textarea
             rows={3}
             name="description"
             placeholder="Enter description of your video"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] bg-transparent resize-none"
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne resize-none"
           />
           <div className="flex items-center justify-between mt-4">
             <button
@@ -177,7 +184,7 @@ const Upload: React.FC = () => {
           <div className="flex items-center justify-center">
             <button
               type="submit"
-              className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-fit"
+              className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-full"
             >
               Upload video
             </button>
@@ -185,11 +192,11 @@ const Upload: React.FC = () => {
         </form>
       </section>
 
-      <section className="p-2 mt-7 ">
+      <section className="p-4 mt-7 ">
         <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
           Uploaded Videos
         </h1>
-        <div className="w-fit grid grid-cols-1 gap-2 sm:grid-cols-2 p-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="w-fit grid grid-cols-1 gap-4 sm:grid-cols-2 p-2 md:grid-cols-3 lg:grid-cols-4">
           {videos?.map((video, index) => (
             <VideoCard
               _id={video._id}
