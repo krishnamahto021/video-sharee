@@ -16,11 +16,12 @@ import {
 import MyVideos from "./pages/user/MyVideos";
 import HelpPage from "./pages/user/HelpPage";
 import Dashboard from "./pages/user/Dashboard";
+import AllVideos from "./pages/AllVideos";
 
 export const router = createBrowserRouter([
   // public routes
   { path: "/", element: <Home /> },
-  { path: "/home", element: <Home /> },
+  { path: "/all-videos", element: <AllVideos /> },
   { path: "/search-video", element: <SearchPage /> },
   { path: "/video/:videoId", element: <SingleVideoPage /> },
   { path: "/verify-user/:token", element: <VerifyUser /> },

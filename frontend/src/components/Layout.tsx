@@ -20,7 +20,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </NavLink>
         </div>
         <div className="flex items-center gap-3 md:gap-5 lg:gap-7 capitalize">
-          <NavLink to={"/home"}>All videos</NavLink>
+          <NavLink to={"/all-videos"}>All videos</NavLink>
           <NavLink to={"/search-video"}>
             <FaSearch />
           </NavLink>

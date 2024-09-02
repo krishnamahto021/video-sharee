@@ -29,7 +29,7 @@ const MyVideos: React.FC = () => {
             <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
               My Uploaded Videos
             </h1>
-            <div className="flex flex-col gap-2">
+            <div className="grid gap-2 grid-cols-1 lg:grid-cols-3">
               {videos?.map((video, index) => (
                 <VideoCard
                   _id={video._id}

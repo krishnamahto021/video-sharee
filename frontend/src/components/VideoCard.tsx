@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import {
-  FaChalkboardUser,
   FaLock,
   FaPen,
   FaTrash,
   FaUnlock,
   FaDownload,
   FaPlay,
-} from "react-icons/fa6";
+} from "react-icons/fa";
 import { FaExternalLinkAlt, FaShareAlt } from "react-icons/fa";
 import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +23,7 @@ import {
   selectLoggedInUser,
 } from "../redux/reducers/auth/authReducer";
 import { useConfig } from "../customHooks/useConfigHook";
+import { FaChalkboardUser } from "react-icons/fa6";
 
 interface VideoCardProps {
   _id: string;
@@ -125,35 +125,39 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   return (
     <div
-      className="border border-gray-300 rounded-lg shadow-lg p-4 bg-white relative hover:shadow-xl transition-shadow duration-300 ease-in-out"
+      className="border border-gray-300 rounded-lg shadow-sm p-2 bg-white relative hover:shadow-md transition-shadow duration-300 ease-in-out m-2 w-full h-auto"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Privacy Icon */}
-      <div className="absolute z-10 top-4 left-4">
+      <div className="absolute z-10 top-2 left-2">
         {isPrivate ? (
-          <FaLock size={20} className="text-red-500" />
+          <FaLock size={16} className="text-red-500" />
         ) : (
-          <FaUnlock size={20} className="text-green-500" />
+          <FaUnlock size={16} className="text-green-500" />
         )}
       </div>
 
       {/* Share Icon */}
       <div
-        className="absolute z-10 top-4 right-4 cursor-pointer"
+        className="absolute z-10 top-2 right-2 cursor-pointer"
         onClick={handleShare}
       >
         <FaShareAlt
-          size={20}
+          size={16}
           className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
         />
       </div>
 
       {/* Video Player */}
-      <div className="rounded-lg overflow-hidden mb-4 relative">
+      <div
+        className="rounded-lg overflow-hidden mb-2 relative"
+        style={{ width: "100%", height: "180px" }}
+      >
         <ReactPlayer
           url={path}
           width={"100%"}
+          height={"100%"}
           controls={isPlaying}
           playing={isPlaying}
           onPause={() => handlePlayPause(false)}
@@ -162,25 +166,25 @@ const VideoCard: React.FC<VideoCardProps> = ({
         {!isPlaying && isHovered && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center transition-opacity duration-300">
             <FaPlay
-              size={50}
+              size={30}
               className="text-white cursor-pointer hover:text-gray-300 transition duration-200"
               onClick={() => handlePlayPause(true)}
             />
             {loading ? (
-              <p className="text-white cursor-pointer absolute bottom-4 left-4 hover:text-gray-300 transition duration-200">
+              <p className="text-white cursor-pointer absolute bottom-2 left-2 hover:text-gray-300 transition duration-200">
                 Downloading ....
               </p>
             ) : (
               <FaDownload
-                size={30}
-                className="text-white cursor-pointer absolute bottom-4 left-4 hover:text-gray-300 transition duration-200"
+                size={24}
+                className="text-white cursor-pointer absolute bottom-2 left-2 hover:text-gray-300 transition duration-200"
                 onClick={handleDownload}
               />
             )}
             <Link to={`/video/${_id}`}>
               <FaExternalLinkAlt
-                size={30}
-                className="text-white cursor-pointer absolute top-4 right-4 hover:text-gray-300 transition duration-200"
+                size={24}
+                className="text-white cursor-pointer absolute top-2 right-2 hover:text-gray-300 transition duration-200"
               />
             </Link>
           </div>
@@ -188,18 +192,18 @@ const VideoCard: React.FC<VideoCardProps> = ({
       </div>
 
       {/* Video Details */}
-      <div className="flex flex-col mb-4">
+      <div className="flex flex-col mb-2">
         {isEditing ? (
           <>
             <input
               type="text"
-              className="border border-gray-300 rounded-md p-2 mb-2 text-gray-800"
+              className="border border-gray-300 rounded-md p-1 mb-1 text-gray-800"
               value={updatedTitle}
               onChange={(e) => setUpdatedTitle(e.target.value)}
               placeholder="Updated Title"
             />
             <textarea
-              className="border border-gray-300 rounded-md p-2 mb-2 text-gray-800"
+              className="border border-gray-300 rounded-md p-1 mb-1 text-gray-800"
               value={updatedDescription}
               onChange={(e) => setUpdatedDescription(e.target.value)}
               placeholder="Updated Description"
@@ -207,32 +211,32 @@ const VideoCard: React.FC<VideoCardProps> = ({
           </>
         ) : (
           <>
-            <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
-            <p className="text-gray-600 text-sm mb-2">{description}</p>
+            <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+            <p className="text-gray-600 text-xs mb-1">{description}</p>
           </>
         )}
-        <div className="flex items-center text-gray-500 text-sm">
-          <FaChalkboardUser className="mr-2" />
+        <div className="flex items-center text-gray-500 text-xs">
+          <FaChalkboardUser className="mr-1" />
           <span>{uploadedBy}</span>
         </div>
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2 justify-end">
+      <div className="flex gap-1 justify-end">
         {isMyVideosPage && loggedInUser?.email === uploadedBy && (
           <>
             {isEditing ? (
               <>
                 <button
                   type="button"
-                  className="bg-green-500 text-white rounded-md p-3 text-lg hover:bg-green-600 transition duration-200"
+                  className="bg-green-500 text-white rounded-md p-2 text-sm hover:bg-green-600 transition duration-200"
                   onClick={handleUpdate}
                 >
                   Save
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-500 text-white rounded-md p-3 text-lg hover:bg-gray-600 transition duration-200"
+                  className="bg-gray-500 text-white rounded-md p-2 text-sm hover:bg-gray-600 transition duration-200"
                   onClick={() => setIsEditing(false)}
                 >
                   Cancel
@@ -241,18 +245,18 @@ const VideoCard: React.FC<VideoCardProps> = ({
             ) : (
               <button
                 type="button"
-                className="bg-yellow-500 text-white rounded-md p-3 text-lg hover:bg-yellow-600 transition duration-200"
+                className="bg-yellow-500 text-white rounded-md p-2 text-sm hover:bg-yellow-600 transition duration-200"
                 onClick={() => setIsEditing(true)}
               >
-                <FaPen className="inline-block mr-2" /> Update
+                <FaPen className="inline-block mr-1" /> Update
               </button>
             )}
             <button
               type="button"
-              className="bg-red-500 text-white rounded-md p-3 text-lg hover:bg-red-600 transition duration-200"
+              className="bg-red-500 text-white rounded-md p-2 text-sm hover:bg-red-600 transition duration-200"
               onClick={handleDelete}
             >
-              <FaTrash className="inline-block mr-2" /> Delete
+              <FaTrash className="inline-block mr-1" /> Delete
             </button>
           </>
         )}

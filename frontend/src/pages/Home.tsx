@@ -1,6 +1,7 @@
+// src/pages/Home.tsx
 import React, { useEffect } from "react";
 import Layout from "../components/Layout";
-import VideoCard from "../components/VideoCard";
+import VideoSlider from "../components/VideoSlider";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchVideoForPublic,
@@ -27,38 +28,25 @@ const Home: React.FC = () => {
     <Layout>
       <div className="flex">
         <Sidebar />
-        <main className="flex-1 p-4 mt-7 ml-0 md:ml-64">
+        <main className="flex-1 p-4 mt-7 w-[95vw]">
           <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
-            Explore here
+            Recently added
           </h1>
-          <div className="w-fit grid grid-cols-1 gap-2  lg:grid-cols-2">
-            {isLoading ? (
-              // Display skeleton loaders when data is loading
-              Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="p-4">
-                  <Skeleton height={200} width={150} />
-                  <Skeleton height={30} width={150} className="mt-2" />
-                </div>
-              ))
-            ) : error ? (
-              // Display error message if there is an error
-              <p className="text-red-500 text-center">Error: {error}</p>
-            ) : publicVideos?.length === 0 ? (
-              <p className="text-center">No videos available</p>
-            ) : (
-              publicVideos?.map((video, index) => (
-                <VideoCard
-                  key={index}
-                  _id={video._id}
-                  title={video.title}
-                  description={video.description}
-                  path={video.path}
-                  uploadedBy={video.uploadedBy.email}
-                  isPrivate={video.isPrivate}
-                />
-              ))
-            )}
-          </div>
+          {isLoading ? (
+            // Display skeleton loaders when data is loading
+            <div className="w-full flex justify-center">
+              <Skeleton height={300} width={800} />
+            </div>
+          ) : error ? (
+            // Display error message if there is an error
+            <p className="text-red-500 text-center">Error: {error}</p>
+          ) : publicVideos?.length === 0 ? (
+            <p className="text-center">No videos available</p>
+          ) : (
+            <div className="lg:ml-64">
+              <VideoSlider videos={publicVideos} />
+            </div>
+          )}
         </main>
       </div>
     </Layout>

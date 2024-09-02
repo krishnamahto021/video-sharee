@@ -14,11 +14,15 @@ const s3 = new AWS.S3({
 export const uploadFile: RequestHandler = async (req, res) => {
   try {
     if (req.file) {
-      const { title, description, isPrivate } = req.body;
+      let { title, description, isPrivate } = req.body;
+
       let baseName;
       if (!title) {
         const extension = path.extname(req.file.originalname);
         baseName = path.basename(req.file.originalname, extension);
+      }
+      if (!description) {
+        description = "default descritpion";
       }
       if (req.user instanceof User) {
         if ("location" in req.file) {

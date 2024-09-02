@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
       {/* Toggle Button for Mobile */}
       <button
         onClick={toggleSidebar}
-        className="fixed  left-4 z-50 text-textOne text-3xl md:hidden"
+        className="fixed  left-4 z-50 text-textOne text-3xl lg:hidden"
       >
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
@@ -30,7 +30,7 @@ const Sidebar: React.FC = () => {
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 z-40 w-64 h-screen bg-bgOne text-textOne shadow-lg transition-transform duration-300 ease-in-out
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
         <div className="p-4 text-2xl font-semibold border-b border-gray-300">
           Video Share
