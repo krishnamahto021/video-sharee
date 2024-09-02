@@ -11,7 +11,6 @@ import {
 import { AppDispatch } from "../redux/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Sidebar from "../components/Sidebar";
 
 const AllVideos: React.FC = () => {
   const publicVideos = useSelector(selectPublicVideos);
@@ -26,8 +25,7 @@ const AllVideos: React.FC = () => {
   return (
     <Layout>
       <div className="flex">
-        <Sidebar />
-        <main className="flex-1 lg:ml-64">
+        <main className="flex-1 ">
           <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
             Explore here
           </h1>

@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { FaUser, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa6";
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import { IoHomeOutline } from "react-icons/io5";
 
@@ -24,10 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <NavLink to={"/search-video"}>
             <FaSearch />
           </NavLink>
-          <NavLink to={"/user/upload-video"}>Upload</NavLink>
-          <NavLink to={"/user/profile"}>
-            <FaUser />
-          </NavLink>
+          <NavLink to={"/user/dashboard"}> Dashobard</NavLink>
         </div>
       </nav>
 
