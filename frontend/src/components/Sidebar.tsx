@@ -59,7 +59,7 @@ const Sidebar: React.FC = () => {
             </li>
             <li>
               <NavLink
-                to="/user/videos"
+                to="/user/edit/my-videos"
                 className="flex items-center p-3 hover:bg-bgTwo rounded-md"
                 onClick={toggleSidebar}
               >

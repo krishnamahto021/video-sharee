@@ -120,7 +120,6 @@ const authSlice = createSlice({
       if (state.loggedInUser?.downloadCount) {
         state.loggedInUser.downloadCount = newDownload;
       }
-      console.log(state.loggedInUser?.downloadCount, newDownload);
     },
     increaseUploadCount: (state) => {
       const newUpload = (state.loggedInUser?.uploadCount || 0) + 1;

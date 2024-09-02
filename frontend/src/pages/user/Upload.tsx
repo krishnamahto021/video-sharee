@@ -115,7 +115,7 @@ const Upload: React.FC = () => {
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-4 mt-7  ml-0 md:ml-64">
-          <section className="flex flex-col items-center md:w-[50vw]  lg:w-[75vw]">
+          <section className="flex flex-col items-center w-[75vw] ">
             <form
               className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
               onSubmit={handleSubmit}
@@ -201,7 +201,7 @@ const Upload: React.FC = () => {
             <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
               Uploaded Videos
             </h1>
-            <div className="w-fit grid grid-cols-1 gap-4 p-2 lg:grid-cols-3">
+            <div className=" grid grid-cols-1 gap-4 p-2 lg:grid-cols-3 items-center">
               {videos?.map((video, index) => (
                 <VideoCard
                   _id={video._id}

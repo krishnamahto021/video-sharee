@@ -22,14 +22,14 @@ const MyVideos: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex">
+      <div className="flex w-full gap-2 pr-2">
         <Sidebar />
         <main className="flex-1 p-4 mt-7 ml-0 md:ml-64">
           <section className="p-4 mt-7">
             <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
               My Uploaded Videos
             </h1>
-            <div className="w-fit grid grid-cols-1 gap-4  p-2 lg:grid-cols-3 ">
+            <div className="flex flex-col gap-2">
               {videos?.map((video, index) => (
                 <VideoCard
                   _id={video._id}

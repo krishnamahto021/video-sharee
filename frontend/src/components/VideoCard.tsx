@@ -5,9 +5,10 @@ import {
   FaPen,
   FaTrash,
   FaUnlock,
+  FaDownload,
+  FaPlay,
 } from "react-icons/fa6";
-import { FaShareAlt } from "react-icons/fa";
-
+import { FaExternalLinkAlt, FaShareAlt } from "react-icons/fa";
 import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../redux/store";
@@ -16,7 +17,7 @@ import {
   updateVideo,
   deleteVideo,
 } from "../redux/reducers/video/videoReducer";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import {
   increaseDownloadCount,
@@ -41,20 +42,32 @@ const VideoCard: React.FC<VideoCardProps> = ({
   uploadedBy,
   isPrivate,
 }) => {
+  const location = useLocation();
+  const isMyVideosPage = location.pathname.includes("/user/edit/my-videos");
   const dispatch = useDispatch<AppDispatch>();
   const loggedInUser = useSelector(selectLoggedInUser);
   const { configWithJWT } = useConfig();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [updatedTitle, setUpdatedTitle] = useState(title || "");
   const [updatedDescription, setUpdatedDescription] = useState(
     description || ""
   );
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [loading, setIsLoading] = useState<boolean>(false);
 
-  const handleDownload = () => {
-    if (loggedInUser?.token) {
-      dispatch(increaseDownloadCount());
+  const handleDownload = async () => {
+    try {
+      setIsLoading(true);
+      if (loggedInUser?.token) {
+        dispatch(increaseDownloadCount());
+      }
+      await dispatch(downloadVideo({ videoId: _id })).unwrap();
+    } catch (error) {
+      toast.error("Failed to download video");
+    } finally {
+      setIsLoading(false);
     }
-    dispatch(downloadVideo({ videoId: _id }));
   };
 
   const handleShare = () => {
@@ -103,8 +116,19 @@ const VideoCard: React.FC<VideoCardProps> = ({
     }
   };
 
+  const handlePlayPause = (isPlaying: boolean) => {
+    setIsPlaying(isPlaying);
+    if (!isPlaying) {
+      setIsHovered(true);
+    }
+  };
+
   return (
-    <div className="border border-gray-300 rounded-lg shadow-lg p-4 bg-white relative hover:shadow-xl transition-shadow duration-300 ease-in-out">
+    <div
+      className="border border-gray-300 rounded-lg shadow-lg p-4 bg-white relative hover:shadow-xl transition-shadow duration-300 ease-in-out"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Privacy Icon */}
       <div className="absolute z-10 top-4 left-4">
         {isPrivate ? (
@@ -126,8 +150,41 @@ const VideoCard: React.FC<VideoCardProps> = ({
       </div>
 
       {/* Video Player */}
-      <div className="rounded-lg overflow-hidden mb-4">
-        <ReactPlayer url={path} width={"100%"} controls />
+      <div className="rounded-lg overflow-hidden mb-4 relative">
+        <ReactPlayer
+          url={path}
+          width={"100%"}
+          controls={isPlaying}
+          playing={isPlaying}
+          onPause={() => handlePlayPause(false)}
+          onPlay={() => handlePlayPause(true)}
+        />
+        {!isPlaying && isHovered && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center transition-opacity duration-300">
+            <FaPlay
+              size={50}
+              className="text-white cursor-pointer hover:text-gray-300 transition duration-200"
+              onClick={() => handlePlayPause(true)}
+            />
+            {loading ? (
+              <p className="text-white cursor-pointer absolute bottom-4 left-4 hover:text-gray-300 transition duration-200">
+                Downloading ....
+              </p>
+            ) : (
+              <FaDownload
+                size={30}
+                className="text-white cursor-pointer absolute bottom-4 left-4 hover:text-gray-300 transition duration-200"
+                onClick={handleDownload}
+              />
+            )}
+            <Link to={`/video/${_id}`}>
+              <FaExternalLinkAlt
+                size={30}
+                className="text-white cursor-pointer absolute top-4 right-4 hover:text-gray-300 transition duration-200"
+              />
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Video Details */}
@@ -161,22 +218,8 @@ const VideoCard: React.FC<VideoCardProps> = ({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col space-y-2">
-        <button
-          type="button"
-          className="bg-blue-500 text-white rounded-md p-3 text-lg hover:bg-blue-600 transition duration-200"
-          onClick={handleDownload}
-        >
-          Download
-        </button>
-        <Link
-          to={`/video/${_id}`}
-          className="border border-blue-500 text-blue-500 rounded-md p-3 text-lg text-center hover:bg-blue-500 hover:text-white transition duration-200"
-        >
-          See Video Page
-        </Link>
-
-        {loggedInUser?.email === uploadedBy && (
+      <div className="flex gap-2 justify-end">
+        {isMyVideosPage && loggedInUser?.email === uploadedBy && (
           <>
             {isEditing ? (
               <>

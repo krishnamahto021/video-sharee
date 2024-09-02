@@ -9,7 +9,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex w-full gap-2 pr-2">
+      <div className="flex w-full gap-2 pr-2 h-full">
         <Sidebar />
         <main className="flex-1 p-4 mt-7 bg-white shadow-lg rounded-lg ml-0 md:ml-64">
           <h1 className="text-center font-semibold text-xl text-gray-700 mb-5">
