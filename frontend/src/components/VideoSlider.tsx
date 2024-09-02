@@ -11,14 +11,14 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ videos }) => {
   const sliderSettings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 5,
           slidesToScroll: 1,
         },
       },

@@ -27,7 +27,7 @@ const AllVideos: React.FC = () => {
     <Layout>
       <div className="flex">
         <Sidebar />
-        <main className="flex-1 ">
+        <main className="flex-1 lg:ml-64">
           <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
             Explore here
           </h1>

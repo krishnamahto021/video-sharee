@@ -1,5 +1,5 @@
 // src/pages/Home.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import VideoSlider from "../components/VideoSlider";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,11 +12,12 @@ import {
 import { AppDispatch } from "../redux/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Sidebar from "../components/Sidebar";
+import ReactPlayer from "react-player";
 
 const Home: React.FC = () => {
   const publicVideos = useSelector(selectPublicVideos);
   const isLoading = useSelector(selectVideoLoading);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const error = useSelector(selectVideoError);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -26,29 +27,67 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-4 mt-7 w-[95vw]">
-          <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
-            Recently added
-          </h1>
-          {isLoading ? (
-            // Display skeleton loaders when data is loading
-            <div className="w-full flex justify-center">
-              <Skeleton height={300} width={800} />
-            </div>
-          ) : error ? (
-            // Display error message if there is an error
-            <p className="text-red-500 text-center">Error: {error}</p>
-          ) : publicVideos?.length === 0 ? (
-            <p className="text-center">No videos available</p>
-          ) : (
-            <div className="lg:ml-64">
-              <VideoSlider videos={publicVideos} />
-            </div>
-          )}
-        </main>
+      <div className="relative w-full  h-[80vh]">
+        {/* Overlay */}
+        {!isPlaying && (
+          <div
+            className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black to-gray-700 flex flex-col justify-center items-center p-8"
+            style={{ zIndex: 5 }}
+          >
+            <h1 className="text-4xl font-bold mb-4 md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-300 to-yellow-800">
+              Job Ready MERN Stack Course with AWS
+            </h1>
+            <p className="text-lg mb-6 md:text-xl font-extralight text-white">
+              Enhance your skills with our comprehensive MERN Stack course,
+              including AWS deployment and real-world projects. Get ready for a
+              career in web development.
+            </p>
+            <button
+              className="bg-white text-black px-6 py-3 rounded mt-4 shadow-lg hover:bg-gray-200 transition duration-300"
+              onClick={() => setIsPlaying(true)}
+            >
+              Watch Now
+            </button>
+          </div>
+        )}
+        {/* Video Player */}
+        <div
+          className={`absolute top-0 left-0 w-full h-full ${
+            isPlaying ? "block" : "hidden"
+          }`}
+          style={{ zIndex: isPlaying ? 0 : 1 }}
+        >
+          <ReactPlayer
+            url={"https://www.youtube.com/watch?v=_4CPp670fK4"}
+            controls
+            width="100%"
+            height="100%"
+            className="absolute top-0 left-0"
+            playing={isPlaying}
+          />
+        </div>
       </div>
+
+      <main className=" w-[95vw]">
+        <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
+          Recently added
+        </h1>
+        {isLoading ? (
+          // Display skeleton loaders when data is loading
+          <div className="w-full flex justify-center">
+            <Skeleton height={300} width={800} />
+          </div>
+        ) : error ? (
+          // Display error message if there is an error
+          <p className="text-red-500 text-center">Error: {error}</p>
+        ) : publicVideos?.length === 0 ? (
+          <p className="text-center">No videos available</p>
+        ) : (
+          <div className="p-4">
+            <VideoSlider videos={publicVideos} />
+          </div>
+        )}
+      </main>
     </Layout>
   );
 };
