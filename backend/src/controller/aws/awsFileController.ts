@@ -13,27 +13,31 @@ const s3 = new AWS.S3({
 
 export const uploadFile: RequestHandler = async (req, res) => {
   try {
-    if (req.file) {
+    if (req.files && (req.files as any).video) {
       let { title, description, isPrivate } = req.body;
 
       let baseName;
+      const videoFile = (req.files as any).video[0];
+      const thumbnailFile = (req.files as any).thumbnail
+        ? (req.files as any).thumbnail[0]
+        : null;
+
       if (!title) {
-        const extension = path.extname(req.file.originalname);
-        baseName = path.basename(req.file.originalname, extension);
+        const extension = path.extname(videoFile.originalname);
+        baseName = path.basename(videoFile.originalname, extension);
       }
-      if (!description) {
-        description = "default descritpion";
-      }
+
       if (req.user instanceof User) {
-        if ("location" in req.file) {
-          if ("key" in req.file) {
+        if ("location" in videoFile) {
+          if ("key" in videoFile) {
             const newVideo = await Video.create({
               title: title || baseName,
-              description,
+              description: description ? description : undefined,
               uploadedBy: req.user._id,
-              path: req.file.location,
-              key: req.file.key,
+              path: videoFile.location,
+              key: videoFile.key,
               isPrivate,
+              thumbNail: thumbnailFile ? thumbnailFile.location : undefined, 
             });
             const user = await User.findById(req.user._id);
             if (user) {
@@ -46,6 +50,7 @@ export const uploadFile: RequestHandler = async (req, res) => {
                 path: newVideo.path,
                 title: newVideo.title,
                 description: newVideo.description,
+                thumbNail: newVideo.thumbNail, // Return the thumbnail URL
                 uploadedBy: {
                   email: user?.email,
                 },

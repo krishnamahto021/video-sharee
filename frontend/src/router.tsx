@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
     element: <ProtectedRouteHome element={<UserProfile />} />,
   },
   {
-    path: "/user/edit/my-videos",
+    path: "/user/edit/my-videos", 
     element: <ProtectedRouteHome element={<MyVideos />} />,
   },
   {

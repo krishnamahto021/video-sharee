@@ -8,6 +8,7 @@ export interface Ivideo extends Document {
   updatedAt: Date;
   key: string;
   isPrivate: boolean;
+  thumbNail?: string;
 }
 
 const videoSchema: Schema = new Schema(
@@ -21,7 +22,12 @@ const videoSchema: Schema = new Schema(
       ref: "User",
       required: true,
     },
-    isPrivate: { type: Boolean, default: false},
+    isPrivate: { type: Boolean, default: false },
+    thumbNail: {
+      type: String,
+      default:
+        "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg",
+    },
   },
   { timestamps: true }
 );

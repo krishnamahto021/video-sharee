@@ -26,9 +26,14 @@ export const upload = multer({
       const folder = "video-share";
       const extension = path.extname(file.originalname);
       const baseName = path.basename(file.originalname, extension);
-      const fileName = `${baseName}-${Date.now()}-video-share${extension}`;
+      const fileName = `${baseName}-${Date.now()}-${
+        file.fieldname
+      }${extension}`;
       const filePath = `${folder}/${fileName}`;
       cb(null, filePath);
     },
   }),
-});
+}).fields([
+  { name: "video", maxCount: 1 },
+  { name: "thumbnail", maxCount: 1 },
+]);

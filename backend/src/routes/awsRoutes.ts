@@ -7,7 +7,7 @@ import {
 } from "../controller/aws/awsFileController";
 const router = express.Router();
 
-router.post("/upload", upload.single("file"), uploadFile);
+router.post("/upload", upload, uploadFile);
 
 router.put("/video/update/:videoId", updateVideo);
 router.delete("/video/delete/:videoId", deleteVideo);
