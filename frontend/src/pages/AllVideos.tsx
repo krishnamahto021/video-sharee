@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Layout from "../components/Layout";
+import VideoCard from "../components/VideoCard";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchVideoForPublic,
@@ -10,7 +11,6 @@ import {
 import { AppDispatch } from "../redux/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import HeroVideoCard from "../components/HeroVideoCard";
 
 const AllVideos: React.FC = () => {
   const publicVideos = useSelector(selectPublicVideos);
@@ -24,12 +24,12 @@ const AllVideos: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex">
+      <div className="flex w-full p-4">
         <main className="flex-1 ">
           <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
             Explore here
           </h1>
-          <div className="w">
+          <div className="">
             {isLoading ? (
               // Display skeleton loaders when data is loading
               Array.from({ length: 6 }).map((_, index) => (
@@ -45,7 +45,16 @@ const AllVideos: React.FC = () => {
               <p className="text-center">No videos available</p>
             ) : (
               publicVideos?.map((video, index) => (
-                <HeroVideoCard key={index} video={video} />
+                <VideoCard
+                  key={index}
+                  _id={video._id}
+                  title={video.title}
+                  description={video.description}
+                  path={video.path}
+                  uploadedBy={video.uploadedBy.email}
+                  isPrivate={video.isPrivate}
+                  thumbnail={video.thumbNail}
+                />
               ))
             )}
           </div>

@@ -25,7 +25,7 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
           light={video.thumbNail}
           width={"100%"}
           height={"100%"}
-          playing={isPlaying} // Control playback
+          playing={isPlaying} 
         />
       </div>
       <div className="detailsContainer mt-2">
