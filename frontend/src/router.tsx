@@ -14,7 +14,6 @@ import {
   ProtectedRouteHome,
 } from "./components/ProtectedRoute";
 import MyVideos from "./pages/user/MyVideos";
-import HelpPage from "./pages/user/HelpPage";
 import Dashboard from "./pages/user/Dashboard";
 import AllVideos from "./pages/AllVideos";
 
@@ -44,10 +43,6 @@ export const router = createBrowserRouter([
   {
     path: "/user/edit/my-videos", 
     element: <ProtectedRouteHome element={<MyVideos />} />,
-  },
-  {
-    path: "/user/help",
-    element: <ProtectedRouteHome element={<HelpPage />} />,
   },
 
   {

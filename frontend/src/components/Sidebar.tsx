@@ -5,7 +5,6 @@ import {
   FaUpload,
   FaVideo,
   FaCog,
-  FaQuestionCircle,
   FaBars,
   FaTimes,
 } from "react-icons/fa";
@@ -74,17 +73,7 @@ const Sidebar: React.FC = () => {
                 onClick={toggleSidebar}
               >
                 <FaCog className="mr-3" />
-                <span>Settings</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/user/help"
-                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
-                onClick={toggleSidebar}
-              >
-                <FaQuestionCircle className="mr-3" />
-                <span>Help</span>
+                <span>User profile</span>
               </NavLink>
             </li>
           </ul>

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Layout from "../components/Layout";
-import VideoCard from "../components/VideoCard";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchVideoForPublic,
@@ -11,6 +10,7 @@ import {
 import { AppDispatch } from "../redux/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import VideoSlider from "../components/VideoSlider";
 
 const AllVideos: React.FC = () => {
   const publicVideos = useSelector(selectPublicVideos);
@@ -24,11 +24,12 @@ const AllVideos: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex w-full p-4">
-        <main className="flex-1 ">
+      <div className="w-full p-4">
+        <main className="w-[95vw]">
           <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
             Explore here
           </h1>
+
           <div className="">
             {isLoading ? (
               // Display skeleton loaders when data is loading
@@ -44,18 +45,31 @@ const AllVideos: React.FC = () => {
             ) : publicVideos?.length === 0 ? (
               <p className="text-center">No videos available</p>
             ) : (
-              publicVideos?.map((video, index) => (
-                <VideoCard
-                  key={index}
-                  _id={video._id}
-                  title={video.title}
-                  description={video.description}
-                  path={video.path}
-                  uploadedBy={video.uploadedBy.email}
-                  isPrivate={video.isPrivate}
-                  thumbnail={video.thumbNail}
-                />
-              ))
+              <>
+                {/* Section 1: Displaying the same public videos */}
+                <div className="p-4">
+                  <h2 className="capitalize text-textTwo text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
+                    Most Liked
+                  </h2>
+                  <VideoSlider videos={publicVideos} />
+                </div>
+
+                {/* Section 2: Displaying the same public videos */}
+                <div className="p-4">
+                  <h2 className="capitalize text-textTwo text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
+                    Trending Now
+                  </h2>
+                  <VideoSlider videos={publicVideos} />
+                </div>
+
+                {/* Section 3: Displaying the same public videos */}
+                <div className="p-4">
+                  <h2 className="capitalize text-textTwo text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
+                    Recently Added
+                  </h2>
+                  <VideoSlider videos={publicVideos} />
+                </div>
+              </>
             )}
           </div>
         </main>
