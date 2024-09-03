@@ -139,15 +139,16 @@ const Upload: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex">
+      <div className="flex w-full">
         <Sidebar />
-        <main className="flex-1 p-4 mt-7">
+        <main className="flex-1 p-4 mt-7 lg:ml-64">
           <section className="flex flex-col items-center">
             <form
               className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
               onSubmit={handleSubmit}
             >
               <div className="mb-4">
+                <p className="text-textOne font-semibold">Select your video</p>
                 <div className="flex items-center justify-center p-6 border-dotted border-2 border-gray-300 rounded-lg w-full">
                   <input
                     type="file"
@@ -253,7 +254,7 @@ const Upload: React.FC = () => {
             <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
               Uploaded Videos
             </h1>
-            <div className="grid grid-cols-1 gap-4 p-2 md:grid-cols-2 lg:grid-cols-3 items-center">
+            <div className="grid grid-cols-1 gap-4 p-2  items-center">
               {videos?.map((video, index) => (
                 <VideoCard
                   isPrivate={video.isPrivate}
