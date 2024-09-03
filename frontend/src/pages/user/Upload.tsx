@@ -29,12 +29,15 @@ const Upload: React.FC = () => {
   const videos = useSelector(selectVideos);
   const dispatch = useDispatch<AppDispatch>();
   const fileRef = useRef<HTMLInputElement>(null);
+  const thumbnailRef = useRef<HTMLInputElement>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const [thumbnailSrc, setThumbnailSrc] = useState<string | null>(null);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [isPrivate, setIsPrivate] = useState<string>("false");
 
   const [fileError, setFileError] = useState<string | null>(null);
+  const [thumbnailError, setThumbnailError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const { configWithJWT } = useConfig();
   const loggedInUser = useSelector(selectLoggedInUser);
@@ -57,6 +60,22 @@ const Upload: React.FC = () => {
     }
   };
 
+  const handleThumbnailChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith("image/")) {
+        setThumbnailError(null);
+        const thumbnailUrl = URL.createObjectURL(file);
+        setThumbnailSrc(thumbnailUrl);
+      } else {
+        setThumbnailError("Please select a valid image file.");
+        setThumbnailSrc(null);
+      }
+    }
+  };
+
   const handlePrivacyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setIsPrivate(event.target.value);
   };
@@ -65,6 +84,7 @@ const Upload: React.FC = () => {
     event.preventDefault();
 
     const file = fileRef.current?.files?.[0];
+    const thumbnail = thumbnailRef.current?.files?.[0];
     if (!file) {
       setUploadError("Please upload a video.");
       return;
@@ -73,8 +93,12 @@ const Upload: React.FC = () => {
     const formData = new FormData();
     formData.append("title", title || "");
     formData.append("description", description || "");
-    formData.append("file", file);
+    formData.append("video", file);
     formData.append("isPrivate", isPrivate);
+    if (thumbnail) {
+      formData.append("thumbnail", thumbnail);
+    }
+
     try {
       const { data } = await backendApi.post<AuthResponse>(
         "/api/v1/aws/upload",
@@ -88,9 +112,12 @@ const Upload: React.FC = () => {
         }
       );
       if (data.success) {
+        console.log(data.video);
+
         setTitle("");
         setDescription("");
         setVideoSrc(null);
+        setThumbnailSrc(null);
         if (loggedInUser?.token) {
           dispatch(increaseUploadCount());
         }
@@ -114,8 +141,8 @@ const Upload: React.FC = () => {
     <Layout>
       <div className="flex">
         <Sidebar />
-        <main className="flex-1 p-4 mt-7  ">
-          <section className="flex flex-col items-center ">
+        <main className="flex-1 p-4 mt-7">
+          <section className="flex flex-col items-center">
             <form
               className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
               onSubmit={handleSubmit}
@@ -146,6 +173,31 @@ const Upload: React.FC = () => {
                   />
                 </div>
               )}
+
+              {/* Thumbnail Upload Section */}
+              <label htmlFor="thumbnail" className="text-textOne font-semibold">
+                Thumbnail (Optional)
+              </label>
+              <input
+                type="file"
+                ref={thumbnailRef}
+                accept="image/*"
+                onChange={handleThumbnailChange}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
+              />
+              {thumbnailError && (
+                <p className="text-red-500 mt-2">{thumbnailError}</p>
+              )}
+              {thumbnailSrc && (
+                <div className="mt-4 flex flex-col items-center">
+                  <img
+                    src={thumbnailSrc}
+                    alt="Thumbnail Preview"
+                    className="w-32 h-32 object-cover rounded-md shadow-md"
+                  />
+                </div>
+              )}
+
               <label htmlFor="title" className="text-textOne font-semibold">
                 Title (Optional)
               </label>
@@ -201,16 +253,17 @@ const Upload: React.FC = () => {
             <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
               Uploaded Videos
             </h1>
-            <div className=" grid grid-cols-1 gap-4 p-2 md:grid-cols-2  lg:grid-cols-3 items-center">
+            <div className="grid grid-cols-1 gap-4 p-2 md:grid-cols-2 lg:grid-cols-3 items-center">
               {videos?.map((video, index) => (
                 <VideoCard
+                  isPrivate={video.isPrivate}
                   _id={video._id}
                   key={index}
-                  title={video.title}
                   description={video.description}
                   path={video.path}
+                  title={video.title}
                   uploadedBy={video.uploadedBy.email}
-                  isPrivate={video.isPrivate}
+                  thumbnail={video.thumbNail}
                 />
               ))}
             </div>

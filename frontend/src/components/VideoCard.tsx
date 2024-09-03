@@ -32,6 +32,7 @@ interface VideoCardProps {
   path: string;
   uploadedBy: string;
   isPrivate: boolean;
+  thumbnail: string;
 }
 
 const VideoCard: React.FC<VideoCardProps> = ({
@@ -41,6 +42,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   path,
   uploadedBy,
   isPrivate,
+  thumbnail,
 }) => {
   const location = useLocation();
   const isMyVideosPage = location.pathname.includes("/user/edit/my-videos");
@@ -156,6 +158,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
       >
         <ReactPlayer
           url={path}
+          light={thumbnail}
           width={"100%"}
           height={"100%"}
           controls={isPlaying}

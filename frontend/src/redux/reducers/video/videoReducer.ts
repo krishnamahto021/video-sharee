@@ -13,6 +13,7 @@ export interface IVideo {
     email: string;
   };
   isPrivate: boolean;
+  thumbNail: string;
 }
 
 // State interface
