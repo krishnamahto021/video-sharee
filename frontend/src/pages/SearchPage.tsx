@@ -40,8 +40,7 @@ const SearchPage: React.FC = () => {
       </h1>
       <div className="w-fit grid grid-cols-1 gap-2 sm:grid-cols-2 p-2 md:grid-cols-3 lg:grid-cols-4">
         {isLoading
-          ? 
-            Array.from({ length: 6 }).map((_, index) => (
+          ? Array.from({ length: 6 }).map((_, index) => (
               <div key={index} className="p-4">
                 <Skeleton height={200} width={150} />
                 <Skeleton height={30} width={150} className="mt-2" />
@@ -56,6 +55,7 @@ const SearchPage: React.FC = () => {
                 path={video.path}
                 uploadedBy={video.uploadedBy.email}
                 isPrivate={video.isPrivate}
+                thumbnail={video.thumbNail}
               />
             ))}
       </div>
