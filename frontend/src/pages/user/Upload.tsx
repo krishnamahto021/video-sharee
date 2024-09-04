@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import Layout from "../../components/Layout";
 import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
@@ -7,11 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchVideoForUser,
   IVideo,
-  selectVideos,
   setVideos,
 } from "../../redux/reducers/video/videoReducer";
 import { AppDispatch } from "../../redux/store";
-import VideoCard from "../../components/VideoCard";
 import {
   increaseUploadCount,
   selectLoggedInUser,
@@ -27,7 +24,6 @@ interface AuthResponse {
 }
 
 const Upload: React.FC = () => {
-  const videos = useSelector(selectVideos);
   const dispatch = useDispatch<AppDispatch>();
   const fileRef = useRef<HTMLInputElement>(null);
   const thumbnailRef = useRef<HTMLInputElement>(null);
@@ -133,132 +129,105 @@ const Upload: React.FC = () => {
   }, [dispatch, configWithJWT]);
 
   return (
-    <Layout>
-      <div className="flex w-full">
-        <Sidebar />
-        <main className="flex-1 p-4 mt-7 lg:ml-64">
-          <section className="flex flex-col items-center">
-            <form
-              className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
-              onSubmit={handleSubmit}
-            >
-              {/* Video Upload Section */}
-              <label htmlFor="video" className="text-textOne font-semibold">
-                Video
-              </label>
-              <input
-                type="file"
-                ref={fileRef}
-                accept="video/*"
-                onChange={handleFileChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
-              />
-              {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
-              {videoSrc && (
-                <div className="mt-4 flex flex-col items-center">
-                  <video
-                    src={videoSrc}
-                    controls
-                    className="w-32 h-32 object-cover rounded-md shadow-md"
-                  />
-                </div>
-              )}
-
-              {/* Thumbnail Upload Section */}
-              <label htmlFor="thumbnail" className="text-textOne font-semibold">
-                Thumbnail (Optional)
-              </label>
-              <input
-                type="file"
-                ref={thumbnailRef}
-                accept="image/*"
-                onChange={handleThumbnailChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
-              />
-              {thumbnailError && (
-                <p className="text-red-500 mt-2">{thumbnailError}</p>
-              )}
-              {thumbnailSrc && (
-                <div className="mt-4 flex flex-col items-center">
-                  <img
-                    src={thumbnailSrc}
-                    alt="Thumbnail Preview"
-                    className="w-32 h-32 object-cover rounded-md shadow-md"
-                  />
-                </div>
-              )}
-
-              <label htmlFor="title" className="text-textOne font-semibold">
-                Title (Optional)
-              </label>
-              <input
-                name="title"
-                type="text"
-                placeholder="Enter title of your video"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
-              />
-              <label
-                htmlFor="description"
-                className="text-textOne font-semibold"
-              >
-                Description (Optional)
-              </label>
-              <ReactQuill
-                theme="snow"
-                value={description}
-                onChange={setDescription}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
-              />
-              <label htmlFor="privacy" className="text-textOne font-semibold">
-                Privacy
-              </label>
-              <select
-                name="privacy"
-                value={isPrivate}
-                onChange={handlePrivacyChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
-              >
-                <option value="false">Public</option>
-                <option value="true">Private</option>
-              </select>
-              {uploadError && (
-                <p className="text-red-500 mt-2">{uploadError}</p>
-              )}
-              <div className="flex items-center justify-center">
-                <button
-                  type="submit"
-                  className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-full md:w-fit"
-                >
-                  Upload video
-                </button>
-              </div>
-            </form>
-          </section>
-
-          <section className="p-4 mt-7">
-            <h2 className="capitalize text-textTwo  text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6 p-2">
-              Uploaded Videos
-            </h2>
-            <div className="grid grid-cols-1 gap-4 p-2  items-center">
-              {videos?.map((video, index) => (
-                <VideoCard
-                  isPrivate={video.isPrivate}
-                  _id={video._id}
-                  key={index}
-                  description={video.description}
-                  path={video.path}
-                  title={video.title}
-                  uploadedBy={video.uploadedBy.email}
-                  thumbnail={video.thumbNail}
+    <div className="flex w-full">
+      <Sidebar />
+      <main className="flex-1 p-4 mt-7 lg:ml-64">
+        <section className="flex flex-col items-center">
+          <form
+            className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
+            onSubmit={handleSubmit}
+          >
+            {/* Video Upload Section */}
+            <label htmlFor="video" className="text-textOne font-semibold">
+              Video
+            </label>
+            <input
+              type="file"
+              ref={fileRef}
+              accept="video/*"
+              onChange={handleFileChange}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
+            />
+            {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
+            {videoSrc && (
+              <div className="mt-4 flex flex-col items-center">
+                <video
+                  src={videoSrc}
+                  controls
+                  className="w-32 h-32 object-cover rounded-md shadow-md"
                 />
-              ))}
+              </div>
+            )}
+
+            {/* Thumbnail Upload Section */}
+            <label htmlFor="thumbnail" className="text-textOne font-semibold">
+              Thumbnail (Optional)
+            </label>
+            <input
+              type="file"
+              ref={thumbnailRef}
+              accept="image/*"
+              onChange={handleThumbnailChange}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
+            />
+            {thumbnailError && (
+              <p className="text-red-500 mt-2">{thumbnailError}</p>
+            )}
+            {thumbnailSrc && (
+              <div className="mt-4 flex flex-col items-center">
+                <img
+                  src={thumbnailSrc}
+                  alt="Thumbnail Preview"
+                  className="w-32 h-32 object-cover rounded-md shadow-md"
+                />
+              </div>
+            )}
+
+            <label htmlFor="title" className="text-textOne font-semibold">
+              Title (Optional)
+            </label>
+            <input
+              name="title"
+              type="text"
+              placeholder="Enter title of your video"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
+            />
+            <label htmlFor="description" className="text-textOne font-semibold">
+              Description (Optional)
+            </label>
+            <ReactQuill
+              theme="snow"
+              value={description}
+              onChange={setDescription}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
+            />
+            <label htmlFor="privacy" className="text-textOne font-semibold">
+              Privacy
+            </label>
+            <select
+              name="privacy"
+              value={isPrivate}
+              onChange={handlePrivacyChange}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
+            >
+              <option value="false">Public</option>
+              <option value="true">Private</option>
+            </select>
+            {uploadError && <p className="text-red-500 mt-2">{uploadError}</p>}
+            <div className="flex items-center justify-center">
+              <button
+                type="submit"
+                className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-full md:w-fit"
+              >
+                Upload video
+              </button>
             </div>
-          </section>
-        </main>
-      </div>
-    </Layout>
+          </form>
+        </section>
+      </main>
+    </div>
   );
 };
 

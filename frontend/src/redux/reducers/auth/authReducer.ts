@@ -82,11 +82,13 @@ export const signInUser = createAsyncThunk<
     );
     if (data.success) {
       if (data.user) {
+        toast.success(data.message);
         localStorage.setItem("loggedInUser", JSON.stringify(data.user));
       }
       navigate("/user/profile");
       return data.user || null;
     } else {
+      toast.error(data.message);
       return thunkApi.rejectWithValue(data.message);
     }
   } catch (error: any) {

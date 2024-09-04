@@ -8,6 +8,7 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
+import { FaUser } from "react-icons/fa6";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -42,7 +43,7 @@ const Sidebar: React.FC = () => {
                 className="flex items-center p-3 hover:bg-bgTwo rounded-md"
                 onClick={toggleSidebar}
               >
-                <FaHome className="mr-3" />
+                <FaUser className="mr-3" />
                 <span>Dashboard</span>
               </NavLink>
             </li>
@@ -76,6 +77,16 @@ const Sidebar: React.FC = () => {
                 <span>User profile</span>
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/"
+                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
+                onClick={toggleSidebar}
+              >
+                <FaHome size={20} className="mr-3" />
+                <span>Home</span>
+              </NavLink>
+            </li>r
           </ul>
         </nav>
       </div>

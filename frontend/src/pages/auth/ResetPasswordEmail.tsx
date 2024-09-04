@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import backendApi from "../../api/axios";
 import { toast } from "sonner";
 
-interface ResetPasswordEmail {
+interface ResetPasswordEmailResponse {
   success: true;
   message: string;
 }
@@ -11,16 +11,16 @@ interface ResetPasswordEmail {
 const ResetPasswordEmail: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { data } = await backendApi.post<ResetPasswordEmail>(
+    const { data } = await backendApi.post<ResetPasswordEmailResponse>(
       "/api/v1/auth/send-reset-password-email",
-      {
-        email,
-      }
+      { email }
     );
     if (data.success) {
       toast.success(data.message);
@@ -28,40 +28,48 @@ const ResetPasswordEmail: React.FC = () => {
       navigate("/sign-in");
     }
   };
+
   return (
-    <div className="w-screen h-screen flex items-center justify-center p-4 bg-bgOne">
-      <form className=" w-screen sm:w-1/2  p-5 z-10" onSubmit={handleSubmit}>
-        <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl  my-7">
-          Reset your password
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-200">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Reset Your Password
         </h1>
-        <label htmlFor="email">
-          <div className="text-textOne my-2">Email *</div>
-          <input
-            type="text"
-            name="email"
-            required
-            className="w-full p-4 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] "
-            placeholder="Enter your email "
-            value={email}
-            onChange={handleChange}
-          />
-        </label>
-        <button
-          type="submit"
-          className="bg-bgFive mt-3 rounded-md p-2 text-white text-lg w-full hover:bg-opacity-90 duration-300 capitalize  "
-        >
-          Reset your password
-        </button>
-        <p className="mt-3">
-          Not a member yet ?
-          <Link
-            to={"/sign-up"}
-            className="font-bold underline mx-3 text-textTwo cursor-pointer "
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              required
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Enter your email"
+              value={email}
+              onChange={handleChange}
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md hover:bg-opacity-90 transition duration-300"
           >
-            Sign up for free
-          </Link>
-        </p>
-      </form>
+            Reset Password
+          </button>
+          <div className="text-center mt-4">
+            <span className="text-sm text-gray-600">Not a member yet?</span>{" "}
+            <Link
+              to="/sign-up"
+              className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Sign up for free
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
