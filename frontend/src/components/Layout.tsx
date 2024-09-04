@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import { IoHomeOutline } from "react-icons/io5";
+import { selectLoggedInUser } from "../redux/reducers/auth/authReducer";
+import { useSelector } from "react-redux";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,7 +12,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const currentYear = new Date().getFullYear();
-
+  const loggedInUser = useSelector(selectLoggedInUser);
   return (
     <div className="min-h-screen bg-bgTwo flex flex-col">
       <nav className="flex items-center bg-bgFive p-4 justify-between md:text-lg border-b-black border-b-[1px] fixed top-0 z-50 w-full text-white">
@@ -24,7 +26,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <NavLink to={"/search-video"}>
             <FaSearch />
           </NavLink>
-          <NavLink to={"/user/dashboard"}> Dashobard</NavLink>
+          {loggedInUser?.token ? (
+            <NavLink to={"/user/dashboard"}> Dashobard</NavLink>
+          ) : (
+            <NavLink to={"/sign-in"}>Sign In</NavLink>
+          )}
         </div>
       </nav>
 
