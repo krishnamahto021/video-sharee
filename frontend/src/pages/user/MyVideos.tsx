@@ -26,9 +26,6 @@ const MyVideos: React.FC = () => {
         <Sidebar />
         <main className="flex-1 p-4 mt-7 lg:ml-64">
           <section className="p-4 mt-7">
-            <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
-              My Uploaded Videos
-            </h1>
             <div className="grid gap-2 grid-cols-1 ">
               {videos?.map((video, index) => (
                 <VideoCard

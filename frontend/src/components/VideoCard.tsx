@@ -126,14 +126,10 @@ const VideoCard: React.FC<VideoCardProps> = ({
   };
 
   return (
-    <div
-      className="border border-gray-300 rounded-lg shadow-sm p-2 bg-white relative hover:shadow-md transition-shadow duration-300 ease-in-out m-2 w-full h-auto flex flex-col sm:flex-row gap-4"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="border border-gray-300 rounded-lg shadow-sm p-2 bg-white relative hover:shadow-md transition-shadow duration-300 ease-in-out m-2 w-full h-auto flex flex-col sm:flex-row gap-4">
       <div className="leftContainer w-full sm:w-1/3 relative">
         {/* Privacy Icon */}
-        <div className="absolute z-10 top-2 left-2">
+        <div className="absolute z-10 top-2 left-2 hidden">
           {isPrivate ? (
             <FaLock size={16} className="text-red-500" />
           ) : (
@@ -141,21 +137,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
           )}
         </div>
 
-        {/* Share Icon */}
-        <div
-          className="absolute z-10 top-2 right-2 cursor-pointer"
-          onClick={handleShare}
-        >
-          <FaShareAlt
-            size={16}
-            className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
-          />
-        </div>
-
         {/* Video Player */}
         <div
           className="rounded-lg overflow-hidden relative"
           style={{ width: "100%", height: "180px" }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <ReactPlayer
             url={path}
@@ -191,6 +178,16 @@ const VideoCard: React.FC<VideoCardProps> = ({
                   className="text-white cursor-pointer absolute top-2 right-2 hover:text-gray-300 transition duration-200"
                 />
               </Link>
+              {/* Share Icon */}
+              <div
+                className="absolute z-10 top-2 left-2 cursor-pointer"
+                onClick={handleShare}
+              >
+                <FaShareAlt
+                  size={24}
+                  className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
+                />
+              </div>
             </div>
           )}
         </div>

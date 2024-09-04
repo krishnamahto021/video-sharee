@@ -26,10 +26,6 @@ const AllVideos: React.FC = () => {
     <Layout>
       <div className="w-full p-4">
         <main className="w-[95vw]">
-          <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
-            Explore here
-          </h1>
-
           <div className="">
             {isLoading ? (
               // Display skeleton loaders when data is loading
