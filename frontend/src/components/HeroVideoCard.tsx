@@ -51,7 +51,7 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
 
   return (
     <div
-      className="heroVideoCard flex flex-col gap-2 p-2 relative"
+      className="heroVideoCard flex flex-col gap-2 p-2 relative bg-white rounded-md m-2"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
