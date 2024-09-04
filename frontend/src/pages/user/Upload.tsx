@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/Layout";
-import { FaUpload } from "react-icons/fa";
 import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
@@ -41,10 +40,6 @@ const Upload: React.FC = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const { configWithJWT } = useConfig();
   const loggedInUser = useSelector(selectLoggedInUser);
-
-  const handleUploadClick = () => {
-    fileRef.current?.click();
-  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -147,23 +142,17 @@ const Upload: React.FC = () => {
               className="container flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg"
               onSubmit={handleSubmit}
             >
-              <div className="mb-4">
-                <p className="text-textOne font-semibold">Select your video</p>
-                <div className="flex items-center justify-center p-6 border-dotted border-2 border-gray-300 rounded-lg w-full">
-                  <input
-                    type="file"
-                    hidden
-                    ref={fileRef}
-                    accept="video/*"
-                    onChange={handleFileChange}
-                  />
-                  <FaUpload
-                    className="text-9xl cursor-pointer hover:scale-110 duration-300"
-                    onClick={handleUploadClick}
-                  />
-                </div>
-              </div>
-
+              {/* Video Upload Section */}
+              <label htmlFor="video" className="text-textOne font-semibold">
+                Video
+              </label>
+              <input
+                type="file"
+                ref={fileRef}
+                accept="video/*"
+                onChange={handleFileChange}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
+              />
               {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
               {videoSrc && (
                 <div className="mt-4 flex flex-col items-center">
