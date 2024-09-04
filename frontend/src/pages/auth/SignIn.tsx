@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { AuthFormData } from "../../types";
 import { Link, useNavigate } from "react-router-dom";
+
 const SignIn: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
@@ -20,65 +21,80 @@ const SignIn: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(signInUser({ ...formData, navigate }));
   };
-  return (
-    <div className="w-screen h-screen flex items-center justify-center p-4 bg-bgOne">
-      <form className=" w-screen sm:w-1/2  p-5 z-10" onSubmit={handleSubmit}>
-        <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl  my-7">
-          Login to Video Share
-        </h1>
-        <label htmlFor="email">
-          <div className="text-textOne my-2">Email / Username *</div>
-          <input
-            type="text"
-            name="email"
-            required
-            className="w-full p-4 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] "
-            placeholder="Enter your email or username"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </label>
-        <label htmlFor="password">
-          <div className="text-textOne my-2">Password *</div>
-          <input
-            type="password"
-            name="password"
-            required
-            className="w-full p-4 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] "
-            placeholder="Enter your password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </label>
-        <p className="my-3">
-          <Link
-            to={"/reset-password"}
-            className="font-bold underline mt-12 text-textTwo cursor-pointer"
-          >
-            I forgot my password
-          </Link>
-        </p>
 
-        <button
-          type="submit"
-          className="bg-bgFive  rounded-md p-2 text-white text-lg w-full hover:bg-opacity-90 duration-300 capitalize  "
-        >
-          Sign In
-        </button>
-        <p className="mt-3">
-          Not a member yet ?
-          <Link
-            to={"/sign-up"}
-            className="font-bold underline mx-3 text-textTwo cursor-pointer "
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-200">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Welcome Back
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              required
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Enter your email "
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              required
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex justify-between items-center">
+            <Link
+              to="/reset-password"
+              className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Forgot your password?
+            </Link>
+          </div>
+          <button
+            type="submit"
+            className="w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md hover:bg-opacity-90 transition duration-300"
           >
-            Sign up for free
-          </Link>
-        </p>
-      </form>
+            Sign In
+          </button>
+          <div className="text-center mt-4">
+            <span className="text-sm text-gray-600">
+              Don't have an account?
+            </span>{" "}
+            <Link
+              to="/sign-up"
+              className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Sign up for free
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
