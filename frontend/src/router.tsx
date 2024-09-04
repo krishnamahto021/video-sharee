@@ -7,7 +7,6 @@ import ResetPasswordEmail from "./pages/auth/ResetPasswordEmail";
 import ResetPassword from "./pages/auth/ResetPassword";
 import Upload from "./pages/user/Upload";
 import Home from "./pages/Home";
-import SearchPage from "./pages/SearchPage";
 import SingleVideoPage from "./pages/SingleVideoPage";
 import {
   ProtectedRoute,
@@ -19,7 +18,6 @@ import AllVideos from "./pages/AllVideos";
 
 export const router = createBrowserRouter([
   // public routes
-  { path: "/search-video", element: <SearchPage /> },
   { path: "/video/:videoId", element: <SingleVideoPage /> },
   { path: "/verify-user/:token", element: <VerifyUser /> },
   { path: "/reset-password", element: <ResetPasswordEmail /> },

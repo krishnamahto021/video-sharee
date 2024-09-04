@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa6";
-import { FaSearch } from "react-icons/fa";
 import { IoHomeOutline } from "react-icons/io5";
 import { selectLoggedInUser } from "../redux/reducers/auth/authReducer";
 import { useSelector } from "react-redux";
@@ -28,9 +27,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
         <div className="flex items-center gap-3 md:gap-5 lg:gap-7 capitalize">
           <NavLink to={"/all-videos"}>All videos</NavLink>
-          <NavLink to={"/search-video"}>
-            <FaSearch />
-          </NavLink>
           {loggedInUser?.token ? (
             <NavLink to={"/user/dashboard"}>Dashboard</NavLink>
           ) : (
