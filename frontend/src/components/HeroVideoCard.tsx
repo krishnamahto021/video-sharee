@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactPlayer from "react-player";
 import { downloadVideo, IVideo } from "../redux/reducers/video/videoReducer";
-import { FaDownload, FaPlay } from "react-icons/fa6";
+import { FaDownload, FaPlay, FaShareAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,13 +21,13 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const loggedInUser = useSelector(selectLoggedInUser);
-  const handlePlayPause = (isPlaying: boolean) => {
-    setIsPlaying(isPlaying);
-    if (!isPlaying) {
-      setIsHovered(true);
-    }
-  };
   const dispatch = useDispatch<AppDispatch>();
+
+  const handlePlayPause = () => {
+    setIsPlaying(!isPlaying);
+    setIsHovered(true); 
+  };
+
   const handleDownload = async () => {
     try {
       setIsLoading(true);
@@ -41,6 +41,14 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
       setIsLoading(false);
     }
   };
+
+  const handleShare = () => {
+    const videoLink = `https://video-sharee-flame.vercel.app/video/${video._id}`;
+    navigator.clipboard.writeText(videoLink).then(() => {
+      toast.success("Link copied to clipboard!");
+    });
+  };
+
   return (
     <div
       className="heroVideoCard flex flex-col gap-2 p-2 relative"
@@ -56,17 +64,17 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
           light={video.thumbNail}
           width={"100%"}
           height={"100%"}
-          controls={isPlaying}
+          controls={isPlaying} // Only show controls when playing
           playing={isPlaying}
-          onPause={() => handlePlayPause(false)}
-          onPlay={() => handlePlayPause(true)}
+          onPause={() => setIsPlaying(false)}
+          onPlay={() => setIsPlaying(true)}
         />
         {!isPlaying && isHovered && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center transition-opacity duration-300">
             <FaPlay
               size={30}
               className="text-white cursor-pointer hover:text-gray-300 transition duration-200"
-              onClick={() => handlePlayPause(true)}
+              onClick={handlePlayPause}
             />
             {isLoading ? (
               <p className="text-white cursor-pointer absolute bottom-2 left-2 hover:text-gray-300 transition duration-200">
@@ -74,17 +82,26 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
               </p>
             ) : (
               <FaDownload
-                size={24}
+                size={20}
                 className="text-white cursor-pointer absolute bottom-2 left-2 hover:text-gray-300 transition duration-200"
                 onClick={handleDownload}
               />
             )}
             <Link to={`/video/${video._id}`}>
               <FaExternalLinkAlt
-                size={24}
+                size={20}
                 className="text-white cursor-pointer absolute top-2 right-2 hover:text-gray-300 transition duration-200"
               />
             </Link>
+            <div
+              className="absolute z-10 top-2 left-2 cursor-pointer"
+              onClick={handleShare}
+            >
+              <FaShareAlt
+                size={20}
+                className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
+              />
+            </div>
           </div>
         )}
       </div>
