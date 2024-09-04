@@ -17,6 +17,8 @@ import {
   selectLoggedInUser,
 } from "../../redux/reducers/auth/authReducer";
 import Sidebar from "../../components/Sidebar";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 interface AuthResponse {
   success: boolean;
@@ -107,8 +109,6 @@ const Upload: React.FC = () => {
         }
       );
       if (data.success) {
-        console.log(data.video);
-
         setTitle("");
         setDescription("");
         setVideoSrc(null);
@@ -151,7 +151,7 @@ const Upload: React.FC = () => {
                 ref={fileRef}
                 accept="video/*"
                 onChange={handleFileChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
               />
               {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
               {videoSrc && (
@@ -173,7 +173,7 @@ const Upload: React.FC = () => {
                 ref={thumbnailRef}
                 accept="image/*"
                 onChange={handleThumbnailChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
               />
               {thumbnailError && (
                 <p className="text-red-500 mt-2">{thumbnailError}</p>
@@ -197,7 +197,7 @@ const Upload: React.FC = () => {
                 placeholder="Enter title of your video"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
               />
               <label
                 htmlFor="description"
@@ -205,13 +205,11 @@ const Upload: React.FC = () => {
               >
                 Description (Optional)
               </label>
-              <textarea
-                rows={3}
-                name="description"
-                placeholder="Enter description of your video"
+              <ReactQuill
+                theme="snow"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne resize-none"
+                onChange={setDescription}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
               />
               <label htmlFor="privacy" className="text-textOne font-semibold">
                 Privacy
@@ -220,7 +218,7 @@ const Upload: React.FC = () => {
                 name="privacy"
                 value={isPrivate}
                 onChange={handlePrivacyChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive bg-bgOne"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
               >
                 <option value="false">Public</option>
                 <option value="true">Private</option>
@@ -240,9 +238,9 @@ const Upload: React.FC = () => {
           </section>
 
           <section className="p-4 mt-7">
-            <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl mb-7">
+            <h2 className="capitalize text-textTwo  text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6 p-2">
               Uploaded Videos
-            </h1>
+            </h2>
             <div className="grid grid-cols-1 gap-4 p-2  items-center">
               {videos?.map((video, index) => (
                 <VideoCard

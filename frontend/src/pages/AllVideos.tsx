@@ -44,7 +44,7 @@ const AllVideos: React.FC = () => {
               <>
                 {/* Section 1: Displaying the same public videos */}
                 <div className="p-4">
-                  <h2 className="capitalize text-textTwo text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
+                  <h2 className="capitalize text-textTwo  text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
                     Most Liked
                   </h2>
                   <VideoSlider videos={publicVideos} />
@@ -52,7 +52,7 @@ const AllVideos: React.FC = () => {
 
                 {/* Section 2: Displaying the same public videos */}
                 <div className="p-4">
-                  <h2 className="capitalize text-textTwo text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
+                  <h2 className="capitalize text-textTwo  text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
                     Trending Now
                   </h2>
                   <VideoSlider videos={publicVideos} />
@@ -60,7 +60,7 @@ const AllVideos: React.FC = () => {
 
                 {/* Section 3: Displaying the same public videos */}
                 <div className="p-4">
-                  <h2 className="capitalize text-textTwo text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
+                  <h2 className="capitalize text-textTwo  text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
                     Recently Added
                   </h2>
                   <VideoSlider videos={publicVideos} />

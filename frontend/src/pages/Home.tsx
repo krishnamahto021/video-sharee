@@ -69,9 +69,9 @@ const Home: React.FC = () => {
       </div>
 
       <main className=" w-[95vw]">
-        <h1 className="capitalize text-textOne text-center text-xl sm:text-3xl md:text-4xl lg:text-6xl my-7">
-          Recently added
-        </h1>
+        <h2 className="capitalize text-textTwo  text-lg sm:text-2xl md:text-3xl lg:text-4xl  mt-2 p-4">
+          Recently Added
+        </h2>
         {isLoading ? (
           // Display skeleton loaders when data is loading
           <div className="w-full flex justify-center">

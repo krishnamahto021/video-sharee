@@ -24,6 +24,7 @@ import {
 } from "../redux/reducers/auth/authReducer";
 import { useConfig } from "../customHooks/useConfigHook";
 import { FaChalkboardUser } from "react-icons/fa6";
+import parse from "html-react-parser";
 
 interface VideoCardProps {
   _id: string;
@@ -214,7 +215,13 @@ const VideoCard: React.FC<VideoCardProps> = ({
           ) : (
             <>
               <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-              <p className="text-gray-600 text-xs mb-1">{description}</p>
+              {description ? (
+                <p className="text-gray-600 text-xs mb-1">
+                  {parse(description.substring(0, 100))}
+                </p>
+              ) : (
+                <p>default</p>
+              )}
             </>
           )}
           <div className="flex items-center text-gray-500 text-xs">
