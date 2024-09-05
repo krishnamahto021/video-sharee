@@ -11,6 +11,7 @@ import {
   selectLoggedInUser,
 } from "../redux/reducers/auth/authReducer";
 import { toast } from "sonner";
+import parse from "html-react-parser";
 
 interface HeroVideoCardProps {
   video: IVideo;
@@ -25,7 +26,7 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
-    setIsHovered(true); 
+    setIsHovered(true);
   };
 
   const handleDownload = async () => {
@@ -51,7 +52,7 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
 
   return (
     <div
-      className="heroVideoCard flex flex-col gap-2 p-2 relative bg-white rounded-md m-2"
+      className="heroVideoCard flex flex-col gap-2  relative bg-white rounded-md m-2 max-h-fit"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -105,15 +106,16 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
           </div>
         )}
       </div>
-      <div className="detailsContainer mt-2">
+      <div className="detailsContainer  px-2">
         <h2 className="text-lg font-semibold">{video.title}</h2>
         <div className="userContainer flex text-gray-400 items-center">
-          <img
-            className="w-4 h-4 rounded-full mr-2"
-            src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png"
-            alt="User Icon"
-          />
-          <p className="text-sm">{video.uploadedBy.email}</p>
+          {video?.description ? (
+            <p className="text-gray-600 text-xs mb-1">
+              {parse(video?.description.substring(0, 100))}
+            </p>
+          ) : (
+            <p>default</p>
+          )}
         </div>
       </div>
     </div>

@@ -17,6 +17,7 @@ import VideoCard from "../components/VideoCard";
 
 const AllVideos: React.FC = () => {
   const [query, setQuery] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>(""); // New state for search term
   const dispatch = useDispatch<AppDispatch>();
   const publicVideos = useSelector(selectPublicVideos);
   const searchResults = useSelector(selectSearchVideos);
@@ -24,26 +25,36 @@ const AllVideos: React.FC = () => {
   const error = useSelector(selectVideoError);
 
   useEffect(() => {
-    if (query) {
-      dispatch(getSearchResults(query));
+    if (searchTerm) {
+      dispatch(getSearchResults(searchTerm));
     } else {
       dispatch(fetchVideoForPublic());
     }
-  }, [query]);
+  }, [searchTerm]);
+
+  const handleSearch = () => {
+    setSearchTerm(query); // Trigger search when the button is clicked
+  };
 
   return (
     <Layout>
       <div className="w-full p-4">
         <main className="w-[95vw]">
           {/* Search Bar */}
-          <div className="mt-3 px-3 w-full">
+          <div className="mt-3 px-3 w-full flex justify-center">
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] bg-bgOne"
+              className="w-8/12 block rounded-full p-2 focus:outline-none border border-black focus:border-none focus:outline-[#3a10e5] bg-bgOne"
               type="search"
               placeholder="What are you looking for?"
             />
+            <button
+              onClick={handleSearch}
+              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full"
+            >
+              Search
+            </button>
           </div>
 
           {/* Main Content */}
@@ -58,9 +69,9 @@ const AllVideos: React.FC = () => {
             ) : error ? (
               // Display error message if there is an error
               <p className="text-red-500 text-center">Error: {error}</p>
-            ) : query ? (
-              // Display search results if a query is present
-              <div className="w-full grid grid-cols-1 gap-2 sm:grid-cols-2 p-2 md:grid-cols-3 lg:grid-cols-4">
+            ) : searchTerm ? (
+              // Display search results if a searchTerm is present
+              <div className="w-full grid grid-cols-1 gap-2  p-2 ">
                 {searchResults ? (
                   searchResults.map((video, index) => (
                     <VideoCard
@@ -79,7 +90,7 @@ const AllVideos: React.FC = () => {
                 )}
               </div>
             ) : (
-              // Display default sections if no query is present
+              // Display default sections if no searchTerm is present
               <>
                 <div className="p-4">
                   <h2 className="capitalize text-textTwo text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
