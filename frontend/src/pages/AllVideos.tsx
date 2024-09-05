@@ -13,7 +13,7 @@ import { AppDispatch } from "../redux/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import VideoSlider from "../components/VideoSlider";
-import VideoCard from "../components/VideoCard";
+import HeroVideoCard from "../components/HeroVideoCard";
 
 const AllVideos: React.FC = () => {
   const [query, setQuery] = useState<string>("");
@@ -71,19 +71,10 @@ const AllVideos: React.FC = () => {
               <p className="text-red-500 text-center">Error: {error}</p>
             ) : searchTerm ? (
               // Display search results if a searchTerm is present
-              <div className="w-full grid grid-cols-1 gap-2  p-2 ">
+              <div className="w-full grid grid-cols-1 gap-2  p-2 md:grid-cols-2 lg:grid-cols-3 ">
                 {searchResults ? (
                   searchResults.map((video, index) => (
-                    <VideoCard
-                      key={index}
-                      _id={video._id}
-                      title={video.title}
-                      description={video.description}
-                      path={video.path}
-                      uploadedBy={video.uploadedBy.email}
-                      isPrivate={video.isPrivate}
-                      thumbnail={video.thumbNail}
-                    />
+                    <HeroVideoCard key={index} video={video} />
                   ))
                 ) : (
                   <p className="text-center">No videos found</p>

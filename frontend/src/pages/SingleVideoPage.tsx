@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
-
+import parse from "html-react-parser";
 interface Video {
   _id: string;
   title: string;
@@ -58,9 +58,13 @@ const SingleVideoPage: React.FC = () => {
             <h1 className="text-3xl font-bold text-white mb-4">
               {video.title}
             </h1>
-            <p className="text-lg text-white">{video.description}</p>
+            {video?.description ? (
+              <p className="text-gray-400">{parse(video?.description.substring(0, 100))}</p>
+            ) : (
+              <p>default</p>
+            )}
             <button
-              className="bg-white text-black px-4 py-2 rounded mt-4"
+              className="bg-white text-black px-4 py-2 rounded mt-4 hover:bg-gray-600 hover:text-white duration-200"
               onClick={() => setIsPlaying(true)}
             >
               Play

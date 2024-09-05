@@ -52,12 +52,12 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
 
   return (
     <div
-      className="heroVideoCard flex flex-col gap-2  relative bg-white rounded-md m-2 max-h-fit"
+      className="heroVideoCard flex flex-col gap-2  relative bg-white rounded-md m-2 h-52"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className="rounded-lg overflow-hidden mb-2 relative"
+        className="overflow-hidden mb-2 relative"
         style={{ width: "100%", height: "180px", cursor: "pointer" }}
       >
         <ReactPlayer
