@@ -18,6 +18,11 @@ import AllVideos from "./pages/AllVideos";
 
 export const router = createBrowserRouter([
   // public routes
+  { path: "/", element: <Home /> },
+  {
+    path: "/all-videos",
+    element: <AllVideos />,
+  },
   { path: "/video/:videoId", element: <SingleVideoPage /> },
   { path: "/verify-user/:token", element: <VerifyUser /> },
   { path: "/reset-password", element: <ResetPasswordEmail /> },
@@ -28,11 +33,6 @@ export const router = createBrowserRouter([
   { path: "/sign-in", element: <ProtectedRoute element={<SignIn />} /> },
 
   // show these pages only when user is logged in
-  { path: "/", element: <ProtectedRouteHome element={<Home />} /> },
-  {
-    path: "/all-videos",
-    element: <ProtectedRouteHome element={<AllVideos />} />,
-  },
   {
     path: "/user/dashboard",
     element: <ProtectedRouteHome element={<Dashboard />} />,
