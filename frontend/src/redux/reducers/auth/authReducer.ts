@@ -15,6 +15,8 @@ interface User {
 
 export interface AuthState {
   loggedInUser: User | null;
+  loading: boolean;
+  error: string | null;
 }
 
 // Define the payload and response types
@@ -40,6 +42,8 @@ interface AuthResponse {
 const storedUser = localStorage.getItem("loggedInUser");
 const initialState: AuthState = {
   loggedInUser: storedUser ? JSON.parse(storedUser) : null,
+  loading: false,
+  error: null,
 };
 
 // Async thunk for signing up a user
@@ -106,6 +110,7 @@ const authSlice = createSlice({
   reducers: {
     logOutUser: (state, action: PayloadAction<NavigateFunction>) => {
       state.loggedInUser = null;
+      state.error = null;
       const navigate = action.payload;
       localStorage.removeItem("loggedInUser");
       toast.warning("We will miss you");
@@ -131,15 +136,42 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      signInUser.fulfilled,
-      (state, action: PayloadAction<User | null>) => {
-        state.loggedInUser = action.payload;
-        if (action.payload?.token) {
-          localStorage.setItem("token", action.payload.token);
+    builder
+      .addCase(signInUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        signInUser.fulfilled,
+        (state, action: PayloadAction<User | null>) => {
+          state.loading = false;
+          state.loggedInUser = action.payload;
+          if (action.payload?.token) {
+            localStorage.setItem("token", action.payload.token);
+          }
         }
-      }
-    );
+      )
+      .addCase(
+        signInUser.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.loading = false;
+          state.error = action.payload || "Error logging in";
+        }
+      )
+      .addCase(signUpUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signUpUser.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(
+        signUpUser.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.loading = false;
+          state.error = action.payload || "Error signing up";
+        }
+      );
   },
 });
 
@@ -151,3 +183,5 @@ export const {
   increaseUploadCount,
 } = authSlice.actions;
 export const selectLoggedInUser = (state: RootState) => state.auth.loggedInUser;
+export const selectAuthLoading = (state: RootState) => state.auth.loading;
+export const selectAuthError = (state: RootState) => state.auth.error;

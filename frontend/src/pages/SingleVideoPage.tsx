@@ -59,12 +59,17 @@ const SingleVideoPage: React.FC = () => {
               {video.title}
             </h1>
             {video?.description ? (
-              <p className="text-gray-400">{parse(video?.description.substring(0, 100))}</p>
+              <p className="text-gray-400">
+                {parse(video?.description.substring(0, 100))}
+              </p>
             ) : (
               <p>default</p>
             )}
             <button
-              className="bg-white text-black px-4 py-2 rounded mt-4 hover:bg-gray-600 hover:text-white duration-200"
+              className="bg-white text-black px-4 py-2 rounded mt-4 
+             transition duration-300 ease-in-out 
+             hover:bg-gradient-to-r hover:from-green-400 hover:to-blue-500 
+             hover:text-white hover:shadow-lg hover:scale-105 transform"
               onClick={() => setIsPlaying(true)}
             >
               Play

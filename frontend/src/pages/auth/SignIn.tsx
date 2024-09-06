@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { signInUser } from "../../redux/reducers/auth/authReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { AuthFormData } from "../../types";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "../../components/Layout";
+import {
+  selectAuthLoading,
+  selectAuthError,
+} from "../../redux/reducers/auth/authReducer"; // Import selectors
 
 const SignIn: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
@@ -22,6 +26,9 @@ const SignIn: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  const loading = useSelector(selectAuthLoading); // Get loading state from Redux
+  const error = useSelector(selectAuthError); // Get error state from Redux
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,6 +77,11 @@ const SignIn: React.FC = () => {
                 onChange={handleChange}
               />
             </div>
+
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p> // Display error message
+            )}
+
             <div className="flex justify-between items-center">
               <Link
                 to="/reset-password"
@@ -78,12 +90,15 @@ const SignIn: React.FC = () => {
                 Forgot your password?
               </Link>
             </div>
+
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md hover:bg-opacity-90 transition duration-300"
+              className="w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md hover:bg-opacity-90 transition duration-300 disabled:bg-gray-400"
+              disabled={loading} // Disable button when loading
             >
-              Sign In
+              {loading ? "Verfiying you ..." : "Sign In"}{" "}
             </button>
+
             <div className="text-center mt-4">
               <span className="text-sm text-gray-600">
                 Don't have an account?

@@ -1,16 +1,24 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { signUpUser } from "../../redux/reducers/auth/authReducer";
 import { AuthFormData } from "../../types";
 import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
+import {
+  selectAuthLoading,
+  selectAuthError,
+} from "../../redux/reducers/auth/authReducer"; // Import selectors
 
 const SignUp: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
     password: "",
   });
+
+  const dispatch = useDispatch<AppDispatch>();
+  const loading = useSelector(selectAuthLoading); // Get loading state from Redux
+  const error = useSelector(selectAuthError); // Get error state from Redux
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -19,8 +27,6 @@ const SignUp: React.FC = () => {
       [name]: value,
     }));
   };
-
-  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +57,7 @@ const SignUp: React.FC = () => {
                 name="email"
                 required
                 className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                placeholder="Enter your email or username"
+                placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -73,12 +79,25 @@ const SignUp: React.FC = () => {
                 onChange={handleChange}
               />
             </div>
+
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p> // Display error message
+            )}
+
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md hover:bg-opacity-95 transition duration-300"
+              className="w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md hover:bg-opacity-95 transition duration-300 disabled:bg-gray-400"
+              disabled={loading} // Disable button when loading
             >
-              Sign Up
+              {loading ? ( // Show loader if loading
+                <span className="flex justify-center items-center">
+                  Signing Up...
+                </span>
+              ) : (
+                "Sign Up"
+              )}
             </button>
+
             <div className="text-center mt-4">
               <span className="text-sm text-gray-600">
                 Already have an account?
