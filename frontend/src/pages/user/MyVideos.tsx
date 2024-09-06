@@ -10,8 +10,8 @@ import VideoCard from "../../components/VideoCard";
 import Sidebar from "../../components/Sidebar";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { AppDispatch } from "../../redux/store";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Loader from "../../components/Laoder";
 
 const MyVideos: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,15 +31,7 @@ const MyVideos: React.FC = () => {
         <section className="p-4 mt-3">
           {isLoading ? (
             // Display skeleton loaders when data is loading
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {[...Array(6)].map((_, index) => (
-                <Skeleton
-                  key={index}
-                  height={200}
-                  className="w-full rounded-lg"
-                />
-              ))}
-            </div>
+            <Loader />
           ) : error ? (
             // Display error message if there is an error
             <p className="text-red-500 text-center">Error: {error}</p>
