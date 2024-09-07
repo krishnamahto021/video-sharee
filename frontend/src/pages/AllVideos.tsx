@@ -61,7 +61,7 @@ const AllVideos: React.FC = () => {
           <div className="mt-6">
             {isLoading ? (
               // Display skeleton loaders when data is loading
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                 {[...Array(6)].map((_, index) => (
                   <Skeleton key={index} height={200} width={150} />
                 ))}

@@ -66,7 +66,7 @@ const SingleVideoPage: React.FC = () => {
               <p>default</p>
             )}
             <button
-              className="bg-white text-black px-4 py-2 rounded mt-4 
+              className="bg-white w-1/3 md:w-1/4 lg:w-1/5 text-black px-4 py-2 rounded mt-4 
              transition duration-300 ease-in-out 
              hover:bg-gradient-to-r hover:from-green-400 hover:to-blue-500 
              hover:text-white hover:shadow-lg hover:scale-105 transform"
