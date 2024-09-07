@@ -53,7 +53,7 @@ const SingleVideoPage: React.FC = () => {
         {/* Video Player */}
         {video && !isPlaying && (
           <div
-            className="absolute top-0 left-0 w-[100%]  h-full bg-gradient-to-r from-black flex flex-col justify-center items-start p-8 "
+            className="absolute top-0 left-0 w-[100%] h-full bg-gradient-to-r from-black flex flex-col justify-center items-start p-8"
             style={{ zIndex: 5 }}
           >
             <h1 className="text-3xl font-bold text-white mb-4">
@@ -67,13 +67,11 @@ const SingleVideoPage: React.FC = () => {
               <p>default</p>
             )}
             <button
-              className="bg-white w-1/3 md:w-1/4 lg:w-1/5  px-4 py-2 rounded mt-4 text-blue-500
-             transition duration-300 ease-in-out 
-             hover:bg-gradient-to-r hover:from-green-400 hover:to-blue-500 
-             hover:text-black hover:shadow-lg hover:scale-105 transform"
+              className="bg-blue-500 text-white w-16 h-16 rounded-full flex justify-center items-center mt-4
+              transition duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform"
               onClick={() => setIsPlaying(true)}
             >
-              <FaPlay className="text-3xl block m-auto " />
+              <FaPlay className="text-4xl" />
             </button>
           </div>
         )}
