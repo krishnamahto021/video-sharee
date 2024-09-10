@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaUpload,
@@ -9,6 +9,9 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
+import { IoIosLogOut } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { logOutUser } from "../redux/reducers/auth/authReducer";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -16,9 +19,11 @@ const Sidebar: React.FC = () => {
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
-    <div>
+    <div className="fixed top-0 z-50">
       {/* Toggle Button for Mobile */}
       <button
         onClick={toggleSidebar}
@@ -37,6 +42,16 @@ const Sidebar: React.FC = () => {
         </div>
         <nav className="mt-6">
           <ul className="space-y-2">
+            <li>
+              <NavLink
+                to="/"
+                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
+                onClick={toggleSidebar}
+              >
+                <FaHome size={20} className="mr-3" />
+                <span>Home</span>
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 to="/user/dashboard"
@@ -78,14 +93,15 @@ const Sidebar: React.FC = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/"
-                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
+              <div
+                className="flex items-center p-3 hover:bg-bgTwo rounded-md cursor-pointer"
                 onClick={toggleSidebar}
               >
-                <FaHome size={20} className="mr-3" />
-                <span>Home</span>
-              </NavLink>
+                <IoIosLogOut size={20} className="mr-3" />
+                <span onClick={() => dispatch(logOutUser(navigate))}>
+                  Log out
+                </span>
+              </div>
             </li>
           </ul>
         </nav>

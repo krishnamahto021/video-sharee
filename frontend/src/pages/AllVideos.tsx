@@ -11,12 +11,11 @@ import {
 import { AppDispatch } from "../redux/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import VideoSlider from "../components/VideoSlider";
 import HeroVideoCard from "../components/HeroVideoCard";
 
 const AllVideos: React.FC = () => {
   const [query, setQuery] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>(""); // New state for search term
+  const [searchTerm, setSearchTerm] = useState<string>(""); // State for search term
   const dispatch = useDispatch<AppDispatch>();
   const publicVideos = useSelector(selectPublicVideos);
   const searchResults = useSelector(selectSearchVideos);
@@ -55,11 +54,11 @@ const AllVideos: React.FC = () => {
             </button>
           </div>
 
-          {/* Main Content */}
+          {/* Videos Grid */}
           <div className="mt-6">
             {searchTerm ? (
               searchResults && searchResults.length > 0 ? (
-                <div className="w-full grid grid-cols-1 gap-2 p-2 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-2 p-2 md:grid-cols-2 lg:grid-cols-4">
                   {searchResults.map((video, index) => (
                     <HeroVideoCard key={index} video={video} />
                   ))}
@@ -67,71 +66,23 @@ const AllVideos: React.FC = () => {
               ) : (
                 <p className="text-center">No videos found</p>
               )
+            ) : isLoading ? (
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {[...Array(8)].map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    height={300}
+                    width={200}
+                    className="rounded-lg"
+                  />
+                ))}
+              </div>
             ) : (
-              <>
-                {/* Section: Most Liked */}
-                <div className="p-4">
-                  <h2 className="capitalize text-textTwo text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
-                    Most Liked
-                  </h2>
-                  {isLoading ? (
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
-                      {[...Array(5)].map((_, index) => (
-                        <Skeleton
-                          key={index}
-                          height={300}
-                          width={200}
-                          className="rounded-lg"
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <VideoSlider videos={publicVideos} />
-                  )}
-                </div>
-
-                {/* Section: Trending Now */}
-                <div className="p-4">
-                  <h2 className="capitalize text-textTwo text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
-                    Trending Now
-                  </h2>
-                  {isLoading ? (
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
-                      {[...Array(5)].map((_, index) => (
-                        <Skeleton
-                          key={index}
-                          height={300}
-                          width={200}
-                          className="rounded-lg"
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <VideoSlider videos={publicVideos} />
-                  )}
-                </div>
-
-                {/* Section: Recently Added */}
-                <div className="p-4">
-                  <h2 className="capitalize text-textTwo text-lg sm:text-2xl md:text-3xl lg:text-4xl mb-6">
-                    Recently Added
-                  </h2>
-                  {isLoading ? (
-                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                      {[...Array(5)].map((_, index) => (
-                        <Skeleton
-                          key={index}
-                          height={300}
-                          width={200}
-                          className="rounded-lg"
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <VideoSlider videos={publicVideos} />
-                  )}
-                </div>
-              </>
+              <div className="grid grid-cols-1 gap-2 p-2 md:grid-cols-2 lg:grid-cols-4">
+                {publicVideos?.map((video, index) => (
+                  <HeroVideoCard key={index} video={video} />
+                ))}
+              </div>
             )}
           </div>
         </main>

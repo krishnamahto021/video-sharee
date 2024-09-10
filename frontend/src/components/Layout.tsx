@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa6";
-import { IoHomeOutline } from "react-icons/io5";
 import { selectLoggedInUser } from "../redux/reducers/auth/authReducer";
 import { useSelector } from "react-redux";
 
@@ -18,14 +17,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const isUserRoute = location.pathname.includes("/user");
 
   return (
-    <div className="min-h-screen bg-bgTwo flex flex-col">
-      <nav className="flex items-center bg-bgFive p-4 justify-between md:text-lg border-b-black border-b-[1px] fixed top-0 z-50 w-full text-white">
-        <div>
-          <NavLink to={"/"}>
-            <IoHomeOutline size={30} />
-          </NavLink>
-        </div>
+    <div className="min-h-screen bg-bgTwo flex flex-col ">
+      <nav className="flex items-center bg-bgFive p-4 justify-end md:text-lg border-b-black border-b-[1px] fixed top-0 z-50 w-full text-white">
         <div className="flex items-center gap-3 md:gap-5 lg:gap-7 capitalize">
+          <NavLink to={"/"}>Home</NavLink>
           <NavLink to={"/all-videos"}>All videos</NavLink>
           {loggedInUser?.token ? (
             <NavLink to={"/user/dashboard"}>Dashboard</NavLink>

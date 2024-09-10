@@ -32,6 +32,7 @@ const Upload: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [isPrivate, setIsPrivate] = useState<string>("false");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [fileError, setFileError] = useState<string | null>(null);
   const [thumbnailError, setThumbnailError] = useState<string | null>(null);
@@ -75,11 +76,12 @@ const Upload: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
+    setLoading(true);
     const file = fileRef.current?.files?.[0];
     const thumbnail = thumbnailRef.current?.files?.[0];
     if (!file) {
       setUploadError("Please upload a video.");
+      setLoading(false);
       return;
     }
 
@@ -121,6 +123,8 @@ const Upload: React.FC = () => {
       const errorMessage =
         error.response?.data?.message || "Something went wrong";
       toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -219,9 +223,36 @@ const Upload: React.FC = () => {
             <div className="flex items-center justify-center">
               <button
                 type="submit"
-                className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-full md:w-fit"
+                className="bg-bgFour rounded-md p-2 text-white text-lg mt-5 hover:bg-opacity-90 duration-300 capitalize w-full md:w-fit flex items-center justify-center disabled:cursor-not-allowed"
+                disabled={loading}
               >
-                Upload video
+                {loading ? (
+                  <>
+                    <svg
+                      className="animate-spin mr-2 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                      ></path>
+                    </svg>
+                    uploading...
+                  </>
+                ) : (
+                  "Upload video"
+                )}
               </button>
             </div>
           </form>

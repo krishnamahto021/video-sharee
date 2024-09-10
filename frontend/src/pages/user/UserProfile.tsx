@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  logOutUser,
   selectLoggedInUser,
   updateUser,
 } from "../../redux/reducers/auth/authReducer";
-import { useNavigate } from "react-router-dom";
 import { FaPencilAlt, FaSave } from "react-icons/fa";
 import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
@@ -20,7 +18,6 @@ interface AuthResponse {
 
 const UserProfile: React.FC = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const loggedInUser = useSelector(selectLoggedInUser);
   const { configWithJWT } = useConfig();
 
@@ -57,10 +54,10 @@ const UserProfile: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full gap-2 pr-2">
+    <div className="flex w-full h-screen justify-center items-center">
       <Sidebar />
-      <main className="flex-1 p-4 mt-3 ml-0 md:ml-64">
-        <section className="p-4 bg-white shadow-lg rounded-lg ">
+      <main className="flex-1 flex justify-center items-center lg:ml-64 z-10">
+        <section className="p-8 bg-white shadow-lg rounded-lg w-10/12">
           <h1 className="text-center font-semibold text-xl text-gray-700 mb-5">
             Personal Details
           </h1>
@@ -110,15 +107,6 @@ const UserProfile: React.FC = () => {
                 disabled
               />
             </div>
-          </div>
-          <div className="flex items-center justify-center mt-7">
-            <button
-              type="button"
-              className="bg-red-500 rounded-md p-3 text-white text-lg hover:bg-red-600 duration-300 w-1/2"
-              onClick={() => dispatch(logOutUser(navigate))}
-            >
-              Log out
-            </button>
           </div>
         </section>
       </main>

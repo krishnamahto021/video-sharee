@@ -13,6 +13,7 @@ import { AppDispatch } from "../redux/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ReactPlayer from "react-player";
+import { FaPlay } from "react-icons/fa6";
 
 const Home: React.FC = () => {
   const publicVideos = useSelector(selectPublicVideos);
@@ -43,7 +44,14 @@ const Home: React.FC = () => {
               career in web development.
             </p>
             <button
-              className="bg-white text-black px-6 py-3 rounded mt-4 shadow-lg hover:bg-gray-200 transition duration-300"
+              className="bg-blue-500 text-white w-16 h-16 rounded-full flex justify-center items-center mt-4
+              transition duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform"
+              onClick={() => setIsPlaying(true)}
+            >
+              <FaPlay className="text-4xl" />
+            </button>
+            <button
+              className="bg-blue-500 text-black px-6 py-3 rounded mt-4 shadow-lg hover:bg-blue-200 transition duration-300"
               onClick={() => setIsPlaying(true)}
             >
               Watch Now
