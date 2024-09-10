@@ -3,6 +3,31 @@ import User from "../../models/userModel";
 import Video from "../../models/videoModel";
 import { sendResponse } from "../../utils/sendResponse";
 
+export const getUserDetails: AuthenticatedRequestHandler = async (req, res) => {
+  try {
+    if (req.user instanceof User) {
+      const userId = req.user._id;
+      if (!userId) {
+        return sendResponse(res, 400, false, "Please sign in to continue");
+      }
+
+      // Find the user by their ID, exclude the password field
+      const user = await User.findById(userId).select("-password");
+
+      if (!user) {
+        return sendResponse(res, 404, false, "User not found");
+      }
+
+      sendResponse(res, 200, true, "User details fetched successfully", {
+        user,
+      });
+    }
+  } catch (error) {
+    console.error(`Error in getting user details: ${error}`);
+    sendResponse(res, 500, false, "Internal server error");
+  }
+};
+
 export const updateUser: AuthenticatedRequestHandler = async (req, res) => {
   try {
     const { name } = req.body;
