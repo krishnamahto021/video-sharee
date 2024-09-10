@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
-import { selectLoggedInUser } from "../../redux/reducers/auth/authReducer";
-import { useSelector } from "react-redux";
+import {
+  fetchUserDetails,
+  selectLoggedInUser,
+} from "../../redux/reducers/auth/authReducer";
+import { useDispatch, useSelector } from "react-redux";
 import { FaUser, FaEnvelope, FaUserTag } from "react-icons/fa";
+import { AppDispatch } from "../../redux/store";
 
 const Dashboard: React.FC = () => {
   const loggedInUser = useSelector(selectLoggedInUser);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetchUserDetails());
+    }
+  }, []);
 
   return (
     <div className="flex w-full gap-2 pr-2 h-full m-2">

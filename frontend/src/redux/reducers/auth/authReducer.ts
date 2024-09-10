@@ -39,13 +39,11 @@ interface AuthResponse {
 }
 
 // Initialize state from local storage
-const storedUser = localStorage.getItem("loggedInUser");
 const initialState: AuthState = {
-  loggedInUser: storedUser ? JSON.parse(storedUser) : null,
+  loggedInUser: null,
   loading: false,
   error: null,
 };
-
 // Async thunk for signing up a user
 export const signUpUser = createAsyncThunk<
   void,
@@ -71,7 +69,7 @@ export const signUpUser = createAsyncThunk<
 
 // Async thunk for signing in a user
 export const signInUser = createAsyncThunk<
-  User | null,
+  string | null,
   SignInPayload,
   { rejectValue: string }
 >("auth/signInUser", async (payload, thunkApi) => {
@@ -84,13 +82,13 @@ export const signInUser = createAsyncThunk<
         password,
       }
     );
-    if (data.success) {
+    if (data.success && data.user?.token) {
       if (data.user) {
         toast.success(data.message);
-        localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+        localStorage.setItem("token", data.user.token);
+        navigate("/user/profile");
       }
-      navigate("/user/profile");
-      return data.user || null;
+      return data.user.token || null;
     } else {
       toast.error(data.message);
       return thunkApi.rejectWithValue(data.message);
@@ -99,6 +97,38 @@ export const signInUser = createAsyncThunk<
     const errorMessage =
       error.response?.data?.message || "Something went wrong";
     toast.error(errorMessage);
+    return thunkApi.rejectWithValue(errorMessage);
+  }
+});
+
+export const fetchUserDetails = createAsyncThunk<
+  User | null,
+  void,
+  { rejectValue: string }
+>("auth/fetchUserDetails", async (_, thunkApi) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return thunkApi.rejectWithValue("No token found");
+    }
+
+    const { data } = await backendApi.get<AuthResponse>(
+      "/api/v1/user/details",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass the token in the header
+        },
+      }
+    );
+
+    if (data.success && data.user) {
+      return data.user; // Return the user details
+    } else {
+      return thunkApi.rejectWithValue(data.message);
+    }
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to fetch user details";
     return thunkApi.rejectWithValue(errorMessage);
   }
 });
@@ -112,7 +142,7 @@ const authSlice = createSlice({
       state.loggedInUser = null;
       state.error = null;
       const navigate = action.payload;
-      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("token");
       toast.warning("We will miss you");
       navigate("/sign-in");
     },
@@ -141,21 +171,26 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        signInUser.fulfilled,
-        (state, action: PayloadAction<User | null>) => {
-          state.loading = false;
-          state.loggedInUser = action.payload;
-          if (action.payload?.token) {
-            localStorage.setItem("token", action.payload.token);
-          }
-        }
-      )
+      .addCase(signInUser.fulfilled, (state) => {
+        state.loading = false;
+      })
       .addCase(
         signInUser.rejected,
         (state, action: PayloadAction<string | undefined>) => {
           state.loading = false;
           state.error = action.payload || "Error logging in";
+        }
+      )
+      .addCase(
+        fetchUserDetails.fulfilled,
+        (state, action: PayloadAction<User | null>) => {
+          state.loggedInUser = action.payload;
+        }
+      )
+      .addCase(
+        fetchUserDetails.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.error = action.payload || "Failed to fetch user details";
         }
       )
       .addCase(signUpUser.pending, (state) => {

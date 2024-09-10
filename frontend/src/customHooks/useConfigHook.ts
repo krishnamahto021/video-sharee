@@ -1,13 +1,11 @@
-import { useSelector } from "react-redux";
-import { selectLoggedInUser } from "../redux/reducers/auth/authReducer";
 import { ConfigWithJWT, ConfigWithoutJWT } from "../types";
 
 export const useConfig = () => {
-  const loggedInUser = useSelector(selectLoggedInUser);
+  const token = localStorage.getItem("token");
   const configWithJWT: ConfigWithJWT = {
     headers: {
       "Content-type": "application/json",
-      Authorization: `Bearer ${loggedInUser?.token || ""}`,
+      Authorization: `Bearer ${token || ""}`,
     },
   };
 

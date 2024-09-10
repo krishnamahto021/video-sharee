@@ -1,8 +1,6 @@
 import React, { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa6";
-import { selectLoggedInUser } from "../redux/reducers/auth/authReducer";
-import { useSelector } from "react-redux";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,7 +8,8 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const currentYear = new Date().getFullYear();
-  const loggedInUser = useSelector(selectLoggedInUser);
+  const token = localStorage.getItem("token");
+
   const location = useLocation();
 
   // Check if the current route contains '/user'
@@ -22,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="flex items-center gap-3 md:gap-5 lg:gap-7 capitalize">
           <NavLink to={"/"}>Home</NavLink>
           <NavLink to={"/all-videos"}>All videos</NavLink>
-          {loggedInUser?.token ? (
+          {token ? (
             <NavLink to={"/user/dashboard"}>Dashboard</NavLink>
           ) : (
             <NavLink to={"/sign-in"}>Sign In</NavLink>

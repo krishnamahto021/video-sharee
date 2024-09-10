@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaHome,
@@ -11,7 +11,11 @@ import {
 import { FaUser } from "react-icons/fa6";
 import { IoIosLogOut } from "react-icons/io";
 import { useDispatch } from "react-redux";
-import { logOutUser } from "../redux/reducers/auth/authReducer";
+import {
+  fetchUserDetails,
+  logOutUser,
+} from "../redux/reducers/auth/authReducer";
+import { AppDispatch } from "../redux/store";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -20,7 +24,11 @@ const Sidebar: React.FC = () => {
     setIsOpen(!isOpen);
   };
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchUserDetails());
+  }, []);
 
   return (
     <div className="fixed top-0 z-50">

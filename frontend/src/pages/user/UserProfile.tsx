@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  fetchUserDetails,
   selectLoggedInUser,
   updateUser,
 } from "../../redux/reducers/auth/authReducer";
@@ -9,6 +10,7 @@ import backendApi from "../../api/axios";
 import { useConfig } from "../../customHooks/useConfigHook";
 import { toast } from "sonner";
 import Sidebar from "../../components/Sidebar";
+import { AppDispatch } from "../../redux/store";
 
 interface AuthResponse {
   success: boolean;
@@ -17,12 +19,19 @@ interface AuthResponse {
 }
 
 const UserProfile: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const loggedInUser = useSelector(selectLoggedInUser);
   const { configWithJWT } = useConfig();
 
-  const [name, setName] = useState<string>(loggedInUser?.name || "");
+  const [name, setName] = useState<string>(""); // Start with an empty string
   const [edit, setEdit] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Update the name state when loggedInUser changes
+    if (loggedInUser?.name) {
+      setName(loggedInUser.name);
+    }
+  }, [loggedInUser]);
 
   const handleEditClick = () => {
     setEdit(true);
@@ -52,6 +61,13 @@ const UserProfile: React.FC = () => {
 
     setEdit(false);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetchUserDetails());
+    }
+  }, [dispatch]);
 
   return (
     <div className="flex w-full h-screen justify-center items-center">
