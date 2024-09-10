@@ -120,7 +120,7 @@ export const resetPassword: RequestHandler = async (req, res) => {
     if (!user) {
       return sendResponse(res, 400, false, "Not a valid email");
     }
-    user.password = user.password;
+    user.password = await hashPassword(password);
     user.token = crypto.randomBytes(16).toString("hex");
     await user.save();
     sendResponse(res, 200, true, "Password reset successully ");

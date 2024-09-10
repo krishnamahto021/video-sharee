@@ -95,12 +95,10 @@ const Sidebar: React.FC = () => {
             <li>
               <div
                 className="flex items-center p-3 hover:bg-bgTwo rounded-md cursor-pointer"
-                onClick={toggleSidebar}
+                onClick={() => dispatch(logOutUser(navigate))}
               >
                 <IoIosLogOut size={20} className="mr-3" />
-                <span onClick={() => dispatch(logOutUser(navigate))}>
-                  Log out
-                </span>
+                <span>Log out</span>
               </div>
             </li>
           </ul>
