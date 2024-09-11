@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { downloadVideo, IVideo } from "../redux/reducers/video/videoReducer";
 import { FaDownload, FaPlay, FaShareAlt } from "react-icons/fa";
@@ -12,6 +12,7 @@ import {
 } from "../redux/reducers/auth/authReducer";
 import { toast } from "sonner";
 import parse from "html-react-parser";
+import { MdAccessTime } from "react-icons/md";
 
 interface HeroVideoCardProps {
   video: IVideo;
@@ -21,8 +22,24 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [duration, setDuration] = useState<number>(0); // State to store video duration
   const loggedInUser = useSelector(selectLoggedInUser);
   const dispatch = useDispatch<AppDispatch>();
+
+  // Reference for hidden video element
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    // Preload video metadata to get the duration before playing
+    if (video.path) {
+      const videoElement = videoRef.current;
+      if (videoElement) {
+        videoElement.onloadedmetadata = () => {
+          setDuration(videoElement.duration); // Set duration once metadata is loaded
+        };
+      }
+    }
+  }, [video.path]);
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -50,12 +67,27 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
     });
   };
 
+  // Helper function to format the duration to mm:ss
+  const formatDuration = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
   return (
     <div
       className="heroVideoCard flex flex-col gap-2  relative bg-white rounded-md m-2 h-52"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Hidden video element to preload metadata */}
+      <video
+        ref={videoRef}
+        src={video.path}
+        style={{ display: "none" }}
+        preload="metadata"
+      />
+
       <div
         className="overflow-hidden mb-2 relative"
         style={{ width: "100%", height: "180px", cursor: "pointer" }}
@@ -106,15 +138,21 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
           </div>
         )}
       </div>
-      <div className="detailsContainer  px-2">
+      <div className="detailsContainer px-2">
         <h2 className="text-lg font-semibold">{video.title}</h2>
-        <div className="userContainer flex text-gray-400 items-center">
-          {video?.description ? (
-            <p className="text-gray-600 text-xs mb-1">
-              {parse(video?.description.substring(0, 100))}
-            </p>
-          ) : (
-            <p>default</p>
+        <div className="userContainer flex justify-between items-center">
+          <div className="text-gray-600 text-xs mb-1">
+            {video?.description ? (
+              <p>{parse(video?.description.substring(0, 100))}</p>
+            ) : (
+              <p>default</p>
+            )}
+          </div>
+          {duration > 0 && (
+            <div className="text-gray-500 text-xs flex items-center gap-2 pb-2">
+              <MdAccessTime className="text-lg" />
+              <p>{formatDuration(duration)}</p>
+            </div>
           )}
         </div>
       </div>

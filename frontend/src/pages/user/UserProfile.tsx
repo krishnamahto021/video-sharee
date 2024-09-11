@@ -70,10 +70,10 @@ const UserProfile: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="flex w-full h-screen justify-center items-center">
+    <div className="flex w-full h-screen">
       <Sidebar />
-      <main className="flex-1 flex justify-center items-center lg:ml-64 z-10">
-        <section className="p-8 bg-white shadow-lg rounded-lg w-10/12">
+      <main className="flex-1 lg:ml-64 z-10">
+        <section className="p-8 bg-white shadow-lg rounded-lg w-10/12 mx-auto mt-8">
           <h1 className="text-center font-semibold text-xl text-gray-700 mb-5">
             Personal Details
           </h1>

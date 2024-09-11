@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import parse from "html-react-parser";
 import { FaPlay } from "react-icons/fa6";
+
 interface Video {
   _id: string;
   title: string;
@@ -49,11 +50,11 @@ const SingleVideoPage: React.FC = () => {
 
   return (
     <Layout>
-      <div className="relative w-full">
-        {/* Video Player */}
+      <div className="relative w-full h-[69vh]">
+        {/* Video Overlay */}
         {video && !isPlaying && (
           <div
-            className="absolute top-0 left-0 w-[100%] h-full bg-gradient-to-r from-black flex flex-col justify-center items-start p-8"
+            className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black flex flex-col justify-center items-start p-8"
             style={{ zIndex: 5 }}
           >
             <h1 className="text-3xl font-bold text-white mb-4">
@@ -79,8 +80,8 @@ const SingleVideoPage: React.FC = () => {
         {/* Video Player */}
         {video && (
           <div
-            className={`relative pb-[56.25%] h-0 ${
-              isPlaying ? "absolute top-0 left-0 w-full h-full" : "pt-1/2"
+            className={`relative w-full h-full ${
+              isPlaying ? "flex justify-center items-center" : "pt-1/2"
             }`}
             style={{ zIndex: isPlaying ? 0 : 1 }}
           >
