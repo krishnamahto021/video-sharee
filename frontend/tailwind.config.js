@@ -13,6 +13,15 @@ export default {
         bgFour: "#333333", // Dark Gray for headers or footers
         bgFive: "#000000", // Pure Black for high-contrast elements
       },
+      animation: {
+        "scale-pulse": "scalePulse 2s infinite ease-in-out",
+      },
+      keyframes: {
+        scalePulse: {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.2)" },
+        },
+      },
     },
   },
   plugins: [],

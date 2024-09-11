@@ -44,7 +44,7 @@ const Home: React.FC = () => {
               career in web development.
             </p>
             <button
-              className="bg-blue-500 text-white w-16 h-16 rounded-full flex justify-center items-center mt-4
+              className="bg-blue-500 text-white w-16 h-16 rounded-full flex  animate-scale-pulse justify-center items-center mt-4
               transition duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform"
               onClick={() => setIsPlaying(true)}
             >

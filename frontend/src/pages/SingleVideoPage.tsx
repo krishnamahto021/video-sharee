@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import parse from "html-react-parser";
 import { FaPlay } from "react-icons/fa6";
+import Loader from "../components/Laoder";
 
 interface Video {
   _id: string;
@@ -45,7 +46,7 @@ const SingleVideoPage: React.FC = () => {
     }
   }, [videoId]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
   if (error) return <div>{error}</div>;
 
   return (
@@ -69,7 +70,7 @@ const SingleVideoPage: React.FC = () => {
             )}
             <button
               className="bg-blue-500 text-white w-16 h-16 rounded-full flex justify-center items-center mt-4
-              transition duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform"
+              transition duration-300 animate-scale-pulse ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform"
               onClick={() => setIsPlaying(true)}
             >
               <FaPlay className="text-4xl" />
