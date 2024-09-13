@@ -146,12 +146,17 @@ const authSlice = createSlice({
       toast.warning("We will miss you");
       navigate("/sign-in");
     },
-    updateUser: (state, action: PayloadAction<string>) => {
+    updateUser: (
+      state,
+      action: PayloadAction<{ name: string; email: string }>
+    ) => {
       if (state.loggedInUser) {
-        state.loggedInUser.name = action.payload;
-        toast.success("User name updated successfully");
+        state.loggedInUser.name = action.payload.name;
+        state.loggedInUser.email = action.payload.email;
+        toast.success("User details updated successfully");
       }
     },
+
     increaseDownloadCount: (state) => {
       const newDownload = (state.loggedInUser?.downloadCount || 0) + 1;
       if (state.loggedInUser?.downloadCount) {

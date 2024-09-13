@@ -30,7 +30,7 @@ export const getUserDetails: AuthenticatedRequestHandler = async (req, res) => {
 
 export const updateUser: AuthenticatedRequestHandler = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, email } = req.body;
     if (!name) {
       return sendResponse(res, 400, false, "Name is required");
     }
@@ -39,7 +39,9 @@ export const updateUser: AuthenticatedRequestHandler = async (req, res) => {
       if (!userId) {
         return sendResponse(res, 400, false, "Please sign in to continue");
       }
-      const user = await User.findByIdAndUpdate(userId, { name });
+      console.log(email);
+
+      const user = await User.findByIdAndUpdate(userId, { name, email });
       if (!user) {
         return sendResponse(res, 400, false, "User not updated");
       }

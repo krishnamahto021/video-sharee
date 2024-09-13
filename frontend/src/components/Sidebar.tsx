@@ -35,17 +35,17 @@ const Sidebar: React.FC = () => {
       {/* Toggle Button for Mobile */}
       <button
         onClick={toggleSidebar}
-        className="fixed  left-4 z-50 text-textOne text-3xl lg:hidden"
+        className="fixed text-gray-700  left-4 z-50 lg:text-textOne text-3xl lg:hidden"
       >
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 z-40 w-64 h-screen bg-bgOne text-textOne shadow-lg transition-transform duration-300 ease-in-out
+        className={`fixed top-0 left-0 z-40 w-64 h-screen bg-black text-white lg:bg-bgOne lg:text-textOne  shadow-lg transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
-        <div className="p-4 text-2xl font-semibold border-b border-gray-300">
+        <div className="p-4 mt-7 text-2xl font-semibold border-b border-gray-300">
           Video Share
         </div>
         <nav className="mt-6">
@@ -53,7 +53,7 @@ const Sidebar: React.FC = () => {
             <li>
               <NavLink
                 to="/"
-                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
+                className="flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md"
                 onClick={toggleSidebar}
               >
                 <FaHome size={20} className="mr-3" />
@@ -63,7 +63,7 @@ const Sidebar: React.FC = () => {
             <li>
               <NavLink
                 to="/user/dashboard"
-                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
+                className="flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md"
                 onClick={toggleSidebar}
               >
                 <FaUser className="mr-3" />
@@ -73,7 +73,7 @@ const Sidebar: React.FC = () => {
             <li>
               <NavLink
                 to="/user/upload-video"
-                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
+                className="flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md"
                 onClick={toggleSidebar}
               >
                 <FaUpload className="mr-3" />
@@ -83,7 +83,7 @@ const Sidebar: React.FC = () => {
             <li>
               <NavLink
                 to="/user/edit/my-videos"
-                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
+                className="flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md"
                 onClick={toggleSidebar}
               >
                 <FaVideo className="mr-3" />
@@ -93,7 +93,7 @@ const Sidebar: React.FC = () => {
             <li>
               <NavLink
                 to="/user/profile"
-                className="flex items-center p-3 hover:bg-bgTwo rounded-md"
+                className="flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md"
                 onClick={toggleSidebar}
               >
                 <FaCog className="mr-3" />
@@ -102,7 +102,7 @@ const Sidebar: React.FC = () => {
             </li>
             <li>
               <div
-                className="flex items-center p-3 hover:bg-bgTwo rounded-md cursor-pointer"
+                className="flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md cursor-pointer"
                 onClick={() => dispatch(logOutUser(navigate))}
               >
                 <IoIosLogOut size={20} className="mr-3" />
