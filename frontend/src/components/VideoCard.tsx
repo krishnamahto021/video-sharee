@@ -127,7 +127,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   };
 
   return (
-    <div className="border border-gray-300 rounded-lg shadow-sm p-2 bg-white relative hover:shadow-md transition-shadow duration-300 ease-in-out m-2 w-full h-auto flex flex-col sm:flex-row gap-4">
+    <div className="border border-gray-300 rounded-lg shadow-sm  bg-white relative hover:shadow-md transition-shadow duration-300 ease-in-out m-2 w-full h-auto flex flex-col sm:flex-row gap-4">
       <div className="leftContainer w-full sm:w-1/3 relative">
         {/* Privacy Icon */}
         <div className="absolute z-10 top-2 left-2 hidden">
@@ -140,7 +140,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
         {/* Video Player */}
         <div
-          className="rounded-lg overflow-hidden relative"
+          className=" overflow-hidden relative"
           style={{ width: "100%", height: "180px" }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -193,7 +193,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
           )}
         </div>
       </div>
-      <div className="rightContainer flex flex-col justify-between w-full sm:w-2/3">
+      <div className="rightContainer flex flex-col justify-between w-full sm:w-2/3 p-2">
         {/* Video Details */}
         <div className="flex flex-col mb-2 ">
           {isEditing ? (
@@ -230,7 +230,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
           </div>
         </div>
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-end">
+        <div className="flex flex-col p-2 sm:flex-row gap-2 flex-wrap">
           {isMyVideosPage && loggedInUser?.email === uploadedBy && (
             <>
               {isEditing ? (

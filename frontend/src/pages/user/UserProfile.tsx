@@ -78,7 +78,7 @@ const UserProfile: React.FC = () => {
     <div className="flex w-full pr-2 h-screen">
       <Sidebar />
       <main className="flex-1 ml-4 lg:ml-[17rem] pr-2 z-10">
-        <section className="p-4 bg-white shadow-lg rounded-lg w-full mt-8">
+        <section className="p-4 bg-white shadow-lg rounded-lg w-full border border-gray-500 mt-7">
           <h1 className="text-center font-semibold text-xl text-gray-700 mb-5">
             Personal Details
           </h1>
