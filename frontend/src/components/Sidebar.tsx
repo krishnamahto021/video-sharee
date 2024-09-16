@@ -37,10 +37,10 @@ const Sidebar: React.FC = () => {
         className={`fixed top-0 left-0 z-40 w-64 h-screen bg-black text-white lg:bg-bgOne lg:text-textOne shadow-lg transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
-        <div className="p-4 mt-7 text-2xl font-semibold border-b border-gray-300">
+        <div className="p-4  text-2xl font-semibold border-b border-gray-300 hidden md:block">
           Video Share
         </div>
-        <nav className="mt-6">
+        <nav className="mt-10 md:mt-7">
           <ul className="space-y-2">
             <li>
               <NavLink
@@ -116,13 +116,9 @@ const Sidebar: React.FC = () => {
         </button>
 
         {/* Navbar Content */}
-        <div className="ml-auto w-1/2 flex  gap-4 items-center justify-between ">
+        <div className=" w-full flex items-center justify-center ">
           <NavLink to="/" className="text-lg font-semibold ">
-            Home
-          </NavLink>
-          <NavLink to={"/user/dashboard"} className="text-lg font-semibold">
-            {" "}
-            Dashboard
+            Video Share
           </NavLink>
         </div>
       </div>
