@@ -38,7 +38,7 @@ const MyVideos: React.FC = () => {
           ) : videos?.length === 0 ? (
             <p className="text-center">No videos available</p>
           ) : (
-            <div className="grid gap-4 grid-cols-2 ">
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 ">
               {videos?.map((video, index) => (
                 <VideoCard
                   _id={video._id}

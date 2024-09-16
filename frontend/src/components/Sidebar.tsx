@@ -28,21 +28,13 @@ const Sidebar: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchUserDetails());
-  }, []);
+  }, [dispatch]);
 
   return (
-    <div className="fixed top-0 z-50">
-      {/* Toggle Button for Mobile */}
-      <button
-        onClick={toggleSidebar}
-        className="fixed text-gray-700  left-4 z-50 lg:text-textOne text-3xl lg:hidden"
-      >
-        {isOpen ? <FaTimes /> : <FaBars />}
-      </button>
-
+    <>
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 z-40 w-64 h-screen bg-black text-white lg:bg-bgOne lg:text-textOne  shadow-lg transition-transform duration-300 ease-in-out
+        className={`fixed top-0 left-0 z-40 w-64 h-screen bg-black text-white lg:bg-bgOne lg:text-textOne shadow-lg transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
         <div className="p-4 mt-7 text-2xl font-semibold border-b border-gray-300">
@@ -112,7 +104,29 @@ const Sidebar: React.FC = () => {
           </ul>
         </nav>
       </div>
-    </div>
+
+      {/* Top Navbar */}
+      <div className="fixed top-0 left-0 right-0 bg-black lg:hidden text-white h-12 flex items-center px-4 shadow-md z-50">
+        {/* Toggle Button for Mobile */}
+        <button
+          onClick={toggleSidebar}
+          className="lg:hidden text-white text-2xl"
+        >
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        {/* Navbar Content */}
+        <div className="ml-auto w-1/2 flex  gap-4 items-center justify-between ">
+          <NavLink to="/" className="text-lg font-semibold ">
+            Home
+          </NavLink>
+          <NavLink to={"/user/dashboard"} className="text-lg font-semibold">
+            {" "}
+            Dashboard
+          </NavLink>
+        </div>
+      </div>
+    </>
   );
 };
 

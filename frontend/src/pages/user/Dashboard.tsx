@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex  gap-2 pr-2 h-full m-2">
       <Sidebar />
-      <main className="flex-1 p-4 mt-7 bg-white shadow-lg rounded-lg ml-0 md:ml-64">
+      <main className="flex-1 p-4 mt-7 bg-white shadow-lg rounded-lg ml-0 lg:ml-64">
         <h1 className="text-center font-semibold text-xl text-gray-700 mb-5">
           Dashboard
         </h1>
@@ -47,7 +47,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-1">Email</h3>
-                  <p className="text-gray-700">{loggedInUser?.email}</p>
+                  <p className="text-gray-700 ">{loggedInUser?.email}</p>
                 </div>
               </div>
               <div className="bg-white p-4 rounded-lg shadow-md flex items-center">
