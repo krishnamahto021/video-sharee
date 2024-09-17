@@ -4,8 +4,12 @@ import ReactPlayer from "react-player";
 import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import parse from "html-react-parser";
-import { FaPlay } from "react-icons/fa6";
+import { FaPlay, FaDownload } from "react-icons/fa6";
 import Loader from "../components/Laoder";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { downloadVideo } from "../redux/reducers/video/videoReducer";
+import { toast } from "sonner";
 
 interface Video {
   _id: string;
@@ -24,6 +28,8 @@ const SingleVideoPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isDownloading, setIsDownloading] = useState<boolean>(false); // Track downloading state
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -45,6 +51,20 @@ const SingleVideoPage: React.FC = () => {
       fetchVideo();
     }
   }, [videoId]);
+
+  const handleDownload = async () => {
+    setIsDownloading(true); // Set downloading state
+    try {
+      if (videoId) {
+        await dispatch(downloadVideo({ videoId })).unwrap();
+        toast.success("Video downloaded");
+      }
+    } catch (error) {
+      toast.error("Failed to download video");
+    } finally {
+      setIsDownloading(false); // Reset downloading state
+    }
+  };
 
   if (loading) return <Loader />;
   if (error) return <div>{error}</div>;
@@ -68,13 +88,53 @@ const SingleVideoPage: React.FC = () => {
             ) : (
               <p>default</p>
             )}
-            <button
-              className="bg-blue-500 text-white w-16 h-16 rounded-full flex justify-center items-center mt-4
-              transition duration-300 animate-scale-pulse ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform"
-              onClick={() => setIsPlaying(true)}
-            >
-              <FaPlay className="text-4xl" />
-            </button>
+            <div className="flex space-x-4 mt-4">
+              <button
+                className="bg-blue-500 text-white w-16 h-16 rounded-full flex justify-center items-center
+                transition duration-300 animate-scale-pulse ease-in-out hover:bg-blue-700 hover:shadow-lg hover:scale-105 transform"
+                onClick={() => setIsPlaying(true)}
+              >
+                <FaPlay className="text-4xl" />
+              </button>
+
+              {/* Download Button */}
+              <button
+                className={`bg-green-500 text-white w-16 h-16 rounded-full flex justify-center items-center transition duration-300 ease-in-out transform ${
+                  isDownloading
+                    ? "cursor-not-allowed opacity-50"
+                    : "hover:bg-green-700 hover:shadow-lg hover:scale-105"
+                }`}
+                onClick={handleDownload}
+                disabled={isDownloading} // Disable button while downloading
+              >
+                {isDownloading ? (
+                  <>
+                    <svg
+                      className="animate-spin mr-2 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                      ></path>
+                    </svg>
+                  </>
+                ) : (
+                  <FaDownload className="text-4xl" />
+                )}
+              </button>
+            </div>
           </div>
         )}
 
