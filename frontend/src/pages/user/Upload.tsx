@@ -130,7 +130,7 @@ const Upload: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchVideoForUser({ configWithJwt: configWithJWT }));
-  }, [dispatch, configWithJWT]);
+  }, []);
 
   return (
     <div className="flex w-full">
