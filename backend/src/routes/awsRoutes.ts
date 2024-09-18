@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post("/upload", upload, uploadFile);
 
-router.put("/video/update/:videoId", updateVideo);
+router.put("/video/update/:videoId", upload, updateVideo);
 router.delete("/video/delete/:videoId", deleteVideo);
 
 export default router;

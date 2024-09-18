@@ -169,9 +169,31 @@ export const updateVideo: RequestHandler = async (req, res) => {
       return sendResponse(res, 404, false, "Video not found");
     }
 
+    // Update title, description, etc.
     Object.assign(video, req.body);
-    await video.save();
 
+    // Check if a new video file is uploaded
+    if (req.files && (req.files as any).video) {
+      const videoFile = (req.files as any).video[0];
+      if ("location" in videoFile && "key" in videoFile) {
+        // Update video path and key
+        video.path = videoFile.location;
+        video.key = videoFile.key;
+      }
+    }
+
+    // Check if a new thumbnail file is uploaded
+    if (req.files && (req.files as any).thumbnail) {
+      const thumbnailFile = (req.files as any).thumbnail[0];
+
+      if ("location" in thumbnailFile && "key" in thumbnailFile) {
+        // Update thumbnail path
+        video.thumbNail = thumbnailFile.location;
+      }
+    }
+
+    // Save the updated video document
+    await video.save();
     sendResponse(res, 200, true, "Video updated successfully", { video });
   } catch (error) {
     console.error(`Error in updating video: ${error}`);

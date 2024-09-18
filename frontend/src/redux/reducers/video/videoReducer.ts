@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ConfigWithJWT } from "../../../types";
 import backendApi from "../../../api/axios";
 import { RootState } from "../../store";
+import { toast } from "sonner";
 
 // Video interface
 export interface IVideo {
@@ -16,6 +17,18 @@ export interface IVideo {
   thumbNail: string;
 }
 
+export interface EditVideo {
+  _id: string;
+  path: File;
+  title?: string;
+  description?: string;
+  uploadedBy: {
+    email: string;
+  };
+  isPrivate: boolean;
+  thumbNail: File;
+}
+
 // State interface
 export interface VideoState {
   videos: IVideo[] | null;
@@ -23,6 +36,7 @@ export interface VideoState {
   searchResults: IVideo[] | null;
   isLoading: boolean;
   error: string | null;
+  editVideo: IVideo | null;
 }
 
 // Payload types
@@ -49,6 +63,7 @@ const initialState: VideoState = {
   searchResults: [],
   isLoading: false,
   error: null,
+  editVideo: null,
 };
 
 // Fetch videos for logged in user
@@ -156,19 +171,42 @@ export const updateVideo = createAsyncThunk<
   IVideo,
   {
     videoId: string;
-    updateData: Partial<IVideo>;
+    updateData: Partial<EditVideo>; // Use EditVideo for file handling
     configWithJwt: ConfigWithJWT;
   },
   { rejectValue: string }
 >("video/update", async ({ videoId, updateData, configWithJwt }, thunkAPI) => {
   try {
+    const formData = new FormData();
+
+    // Append form data if files are present
+    if (updateData.path instanceof File) {
+      formData.append("video", updateData.path);
+    }
+    if (updateData.thumbNail instanceof File) {
+      formData.append("thumbnail", updateData.thumbNail);
+    }
+
+    // Append other data if present
+    if (updateData.title) formData.append("title", updateData.title);
+    if (updateData.description)
+      formData.append("description", updateData.description);
+    formData.append("isPrivate", String(updateData.isPrivate));
+
     const { data } = await backendApi.put<SingleFileResponse>(
       `/api/v1/aws/video/update/${videoId}`,
-      updateData,
-      configWithJwt
+      formData,
+      {
+        ...configWithJwt,
+        headers: {
+          ...configWithJwt.headers,
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
 
     if (data.success && data.video) {
+      toast.success(data.message);
       return data.video;
     }
     return thunkAPI.rejectWithValue(data.message);
@@ -206,6 +244,9 @@ const videoSlice = createSlice({
   reducers: {
     setVideos: (state, action: PayloadAction<IVideo>) => {
       state.videos?.unshift(action.payload);
+    },
+    setEditVideo: (state, action: PayloadAction<IVideo | null>) => {
+      state.editVideo = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -255,6 +296,7 @@ const videoSlice = createSlice({
           );
           if (index !== undefined && index !== -1 && state.videos) {
             state.videos[index] = action.payload;
+            state.editVideo = null;
           }
         }
       )
@@ -273,10 +315,11 @@ const videoSlice = createSlice({
 
 export const videoReducer = videoSlice.reducer;
 export const selectVideos = (state: RootState) => state.video.videos;
-export const { setVideos } = videoSlice.actions;
+export const { setVideos, setEditVideo } = videoSlice.actions;
 export const selectPublicVideos = (state: RootState) =>
   state.video.publicVideos;
 export const selectSearchVideos = (state: RootState) =>
   state.video.searchResults;
 export const selectVideoLoading = (state: RootState) => state.video.isLoading;
 export const selectVideoError = (state: RootState) => state.video.error;
+export const selectEditVideo = (state: RootState) => state.video.editVideo;

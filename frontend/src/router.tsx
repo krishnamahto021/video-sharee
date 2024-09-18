@@ -15,6 +15,7 @@ import {
 import MyVideos from "./pages/user/MyVideos";
 import Dashboard from "./pages/user/Dashboard";
 import AllVideos from "./pages/AllVideos";
+import UpdateVideo from "./pages/user/UpdateVideo";
 
 export const router = createBrowserRouter([
   // public routes
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
   {
     path: "/user/edit/my-videos",
     element: <ProtectedRouteHome element={<MyVideos />} />,
+  },
+  {
+    path: "/user/edit/my-video",
+    element: <ProtectedRouteHome element={<UpdateVideo />} />,
   },
 
   {

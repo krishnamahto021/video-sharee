@@ -6,6 +6,7 @@ import {
   FaUnlock,
   FaDownload,
   FaPlay,
+  FaEdit,
 } from "react-icons/fa";
 import { FaExternalLinkAlt, FaShareAlt } from "react-icons/fa";
 import ReactPlayer from "react-player";
@@ -15,8 +16,9 @@ import {
   downloadVideo,
   updateVideo,
   deleteVideo,
+  setEditVideo,
 } from "../redux/reducers/video/videoReducer";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   increaseDownloadCount,
@@ -59,7 +61,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [loading, setIsLoading] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   const handleDownload = async () => {
     try {
       setIsLoading(true);
@@ -129,6 +131,21 @@ const VideoCard: React.FC<VideoCardProps> = ({
     if (!isPlaying) {
       setIsHovered(true);
     }
+  };
+
+  const handleEditClick = () => {
+    dispatch(
+      setEditVideo({
+        _id,
+        title,
+        description,
+        path,
+        uploadedBy: { email: uploadedBy },
+        isPrivate,
+        thumbNail: thumbnail,
+      })
+    );
+    navigate("/user/edit/my-video");
   };
 
   return (
@@ -286,6 +303,13 @@ const VideoCard: React.FC<VideoCardProps> = ({
                 onClick={handleDelete}
               >
                 <FaTrash className="inline-block mr-1" /> Delete
+              </button>
+              <button
+                type="button"
+                className="bg-green-500 text-white rounded-md p-2 text-sm hover:bg-opacity-90 transition duration-200"
+                onClick={handleEditClick}
+              >
+                <FaEdit className="inline-block mr-1" /> Edit
               </button>
             </>
           )}
