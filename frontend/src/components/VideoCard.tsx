@@ -285,7 +285,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
               ) : (
                 <button
                   type="button"
-                  className="bg-yellow-500 text-white rounded-md p-2 text-sm hover:bg-yellow-600 transition duration-200"
+                  className="bg-yellow-500 text-white rounded-md p-2 text-sm hover:bg-yellow-600 transition duration-200 hidden"
                   onClick={() => setIsEditing(true)}
                 >
                   <FaPen className="inline-block mr-1" /> Update

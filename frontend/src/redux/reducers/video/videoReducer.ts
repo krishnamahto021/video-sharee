@@ -19,14 +19,14 @@ export interface IVideo {
 
 export interface EditVideo {
   _id: string;
-  path: File;
+  path: File | string;
   title?: string;
   description?: string;
   uploadedBy: {
     email: string;
   };
-  isPrivate: boolean;
-  thumbNail: File;
+  isPrivate: boolean | string;
+  thumbNail: File | string;
 }
 
 // State interface

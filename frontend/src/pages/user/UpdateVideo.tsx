@@ -8,14 +8,22 @@ import {
   updateVideo,
 } from "../../redux/reducers/video/videoReducer";
 import { AppDispatch } from "../../redux/store";
-
 import Sidebar from "../../components/Sidebar";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const UpdateVideo: React.FC = () => {
   const editVideo = useSelector(selectEditVideo);
   const dispatch = useDispatch<AppDispatch>();
   const fileRef = useRef<HTMLInputElement>(null);
   const thumbnailRef = useRef<HTMLInputElement>(null);
+  const [title, setTitle] = useState<string>(editVideo?.title || "");
+  const [description, setDescription] = useState<string>(
+    editVideo?.description || ""
+  );
+  const [isPrivate, setIsPrivate] = useState<string>(
+    editVideo?.isPrivate !== undefined ? String(editVideo.isPrivate) : "false"
+  );
   const [videoSrc, setVideoSrc] = useState<string | null>(
     editVideo?.path || null
   );
@@ -66,35 +74,29 @@ const UpdateVideo: React.FC = () => {
     const file = fileRef.current?.files?.[0];
     const thumbnail = thumbnailRef.current?.files?.[0];
 
-    if (!file) {
-      setUploadError("Please upload a video.");
-      setLoading(false);
-      return;
-    }
-
     const { configWithJWT } = useConfig();
     const formData = new FormData();
 
-    formData.append("video", file); // Append the video
-    if (thumbnail) {
-      formData.append("thumbnail", thumbnail); // Append thumbnail if present
+    if (file) {
+      formData.append("video", file);
     }
+    if (thumbnail) {
+      formData.append("thumbnail", thumbnail);
+    }
+
     try {
       if (editVideo?._id) {
         dispatch(
           updateVideo({
-            videoId: editVideo?._id,
+            videoId: editVideo._id,
             updateData: {
-              title: editVideo.title,
-              description: editVideo.description,
+              title: title || editVideo.title,
+              description: description || editVideo.description,
               _id: editVideo._id,
               uploadedBy: { email: editVideo.uploadedBy.email },
-              isPrivate: editVideo.isPrivate,
-              // Safely cast or handle undefined/null for video and thumbnail paths
-              path: file ? (formData.get("video") as File) : undefined, // Ensure it's a File
-              thumbNail: thumbnail
-                ? (formData.get("thumbnail") as File)
-                : undefined, // Ensure it's a File
+              isPrivate: isPrivate || editVideo.isPrivate,
+              path: file || editVideo.path,
+              thumbNail: thumbnail || editVideo.thumbNail,
             },
             configWithJwt: configWithJWT,
           })
@@ -109,6 +111,10 @@ const UpdateVideo: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePrivacyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setIsPrivate(event.target.value);
   };
 
   useEffect(() => {
@@ -126,7 +132,7 @@ const UpdateVideo: React.FC = () => {
           >
             {/* Video Upload Section */}
             <label htmlFor="video" className="text-textOne font-semibold">
-              Video
+              Video (Optional - Leave empty to keep the current video)
             </label>
             <input
               type="file"
@@ -169,6 +175,40 @@ const UpdateVideo: React.FC = () => {
                 />
               </div>
             )}
+
+            {/* Other form fields remain the same */}
+            <label htmlFor="title" className="text-textOne font-semibold">
+              Title (Optional)
+            </label>
+            <input
+              name="title"
+              type="text"
+              placeholder="Enter title of your video"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
+            />
+            <label htmlFor="description" className="text-textOne font-semibold">
+              Description (Optional)
+            </label>
+            <ReactQuill
+              theme="snow"
+              value={description}
+              onChange={setDescription}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
+            />
+            <label htmlFor="privacy" className="text-textOne font-semibold">
+              Privacy
+            </label>
+            <select
+              name="privacy"
+              value={isPrivate}
+              onChange={handlePrivacyChange}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bgFive"
+            >
+              <option value="false">Public</option>
+              <option value="true">Private</option>
+            </select>
             {uploadError && <p className="text-red-500 mt-2">{uploadError}</p>}
             <div className="flex items-center justify-center">
               <button
@@ -198,10 +238,10 @@ const UpdateVideo: React.FC = () => {
                         d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
                       ></path>
                     </svg>
-                    updating...
+                    Updating...
                   </>
                 ) : (
-                  "Update video"
+                  "Update Video"
                 )}
               </button>
             </div>
