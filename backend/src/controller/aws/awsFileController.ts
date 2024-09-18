@@ -37,7 +37,7 @@ export const uploadFile: RequestHandler = async (req, res) => {
               path: videoFile.location,
               key: videoFile.key,
               isPrivate,
-              thumbNail: thumbnailFile ? thumbnailFile.location : undefined, 
+              thumbNail: thumbnailFile ? thumbnailFile.location : undefined,
             });
             const user = await User.findById(req.user._id);
             if (user) {
@@ -159,21 +159,17 @@ export const getVideo: RequestHandler = async (req, res) => {
 export const updateVideo: RequestHandler = async (req, res) => {
   try {
     const { videoId } = req.params;
-    const { title, description, isPrivate } = req.body;
 
     if (!videoId) {
       return sendResponse(res, 400, false, "Invalid video ID");
     }
 
-    const video = await Video.findById(videoId);
+    const video = await Video.findById(videoId).populate("uploadedBy", "email");
     if (!video) {
       return sendResponse(res, 404, false, "Video not found");
     }
 
-    if (title) video.title = title;
-    if (description) video.description = description;
-    if (typeof isPrivate === "boolean") video.isPrivate = isPrivate;
-
+    Object.assign(video, req.body);
     await video.save();
 
     sendResponse(res, 200, true, "Video updated successfully", { video });

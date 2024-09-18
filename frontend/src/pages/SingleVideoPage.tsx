@@ -28,7 +28,7 @@ const SingleVideoPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [isDownloading, setIsDownloading] = useState<boolean>(false); // Track downloading state
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const SingleVideoPage: React.FC = () => {
   }, [videoId]);
 
   const handleDownload = async () => {
-    setIsDownloading(true); // Set downloading state
+    setIsDownloading(true);
     try {
       if (videoId) {
         await dispatch(downloadVideo({ videoId })).unwrap();
@@ -62,7 +62,7 @@ const SingleVideoPage: React.FC = () => {
     } catch (error) {
       toast.error("Failed to download video");
     } finally {
-      setIsDownloading(false); // Reset downloading state
+      setIsDownloading(false);
     }
   };
 
@@ -105,7 +105,7 @@ const SingleVideoPage: React.FC = () => {
                     : "hover:bg-green-700 hover:shadow-lg hover:scale-105"
                 }`}
                 onClick={handleDownload}
-                disabled={isDownloading} // Disable button while downloading
+                disabled={isDownloading}
               >
                 {isDownloading ? (
                   <>
@@ -154,6 +154,44 @@ const SingleVideoPage: React.FC = () => {
               className="absolute top-0 left-0"
               playing={isPlaying}
             />
+
+            {/* New Download Button (Top Right) */}
+            {isPlaying && (
+              <button
+                className={`absolute top-4 right-4 bg-green-500 text-white p-2 rounded-full flex justify-center items-center transition duration-300 ease-in-out transform z-10 ${
+                  isDownloading
+                    ? "cursor-not-allowed opacity-50"
+                    : "hover:bg-green-700 hover:shadow-lg hover:scale-105"
+                }`}
+                onClick={handleDownload}
+                disabled={isDownloading}
+              >
+                {isDownloading ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                    ></path>
+                  </svg>
+                ) : (
+                  <FaDownload className="text-xl" />
+                )}
+              </button>
+            )}
           </div>
         )}
       </div>

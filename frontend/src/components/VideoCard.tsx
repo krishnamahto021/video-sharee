@@ -55,6 +55,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   const [updatedDescription, setUpdatedDescription] = useState(
     description || ""
   );
+  const [updatedPrivacy, setUpdatedPrivacy] = useState<boolean>(isPrivate);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [loading, setIsLoading] = useState<boolean>(false);
@@ -89,6 +90,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
     const updateData = {
       title: updatedTitle,
       description: updatedDescription,
+      isPrivate: updatedPrivacy,
     };
     try {
       await dispatch(
@@ -97,11 +99,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
           updateData,
           configWithJwt: configWithJWT,
         })
-      ).unwrap();
+      );
       toast.success("Video updated successfully!");
-      setIsEditing(false);
     } catch (error) {
-      toast.error("Failed to update video: " + error);
+      toast.error("Failed to update video: ");
+    } finally {
+      setIsEditing(false);
     }
   };
 
@@ -116,6 +119,8 @@ const VideoCard: React.FC<VideoCardProps> = ({
       toast.success("Video deleted successfully!");
     } catch (error) {
       toast.error("Failed to delete video: " + error);
+    } finally {
+      setIsEditing(false);
     }
   };
 
@@ -211,6 +216,16 @@ const VideoCard: React.FC<VideoCardProps> = ({
                 onChange={(e) => setUpdatedDescription(e.target.value)}
                 placeholder="Updated Description"
               />
+              <select
+                className="border border-gray-300 rounded-md p-1 mb-1 text-gray-800"
+                value={updatedPrivacy ? "private" : "public"}
+                onChange={(e) =>
+                  setUpdatedPrivacy(e.target.value === "private")
+                }
+              >
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+              </select>
             </>
           ) : (
             <>
