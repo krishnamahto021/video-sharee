@@ -35,7 +35,6 @@ const UpdateVideo: React.FC = () => {
 
   const [fileError, setFileError] = useState<string | null>(null);
   const [thumbnailError, setThumbnailError] = useState<string | null>(null);
-  const [uploadError, setUploadError] = useState<string | null>(null);
   const { configWithJWT } = useConfig();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,7 +208,6 @@ const UpdateVideo: React.FC = () => {
               <option value="false">Public</option>
               <option value="true">Private</option>
             </select>
-            {uploadError && <p className="text-red-500 mt-2">{uploadError}</p>}
             <div className="flex items-center justify-center">
               <button
                 type="submit"
