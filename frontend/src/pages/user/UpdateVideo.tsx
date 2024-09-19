@@ -36,7 +36,6 @@ const UpdateVideo: React.FC = () => {
   const [fileError, setFileError] = useState<string | null>(null);
   const [thumbnailError, setThumbnailError] = useState<string | null>(null);
   const { configWithJWT } = useConfig();
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -69,11 +68,10 @@ const UpdateVideo: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setLoading(true);
+    setLoading(true); // Set loading to true at the beginning
+
     const file = fileRef.current?.files?.[0];
     const thumbnail = thumbnailRef.current?.files?.[0];
-
-    const { configWithJWT } = useConfig();
     const formData = new FormData();
 
     if (file) {
@@ -85,7 +83,8 @@ const UpdateVideo: React.FC = () => {
 
     try {
       if (editVideo?._id) {
-        dispatch(
+        // Await the dispatch action to ensure it completes before proceeding
+        await dispatch(
           updateVideo({
             videoId: editVideo._id,
             updateData: {
@@ -101,14 +100,18 @@ const UpdateVideo: React.FC = () => {
           })
         );
       }
+
+      // Reset the form state (optional)
       setVideoSrc(null);
       setThumbnailSrc(null);
+      setTitle("");
+      setDescription("");
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message || "Something went wrong";
       toast.error(errorMessage);
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading to false after the async action completes
     }
   };
 
