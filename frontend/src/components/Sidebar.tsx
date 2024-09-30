@@ -38,7 +38,7 @@ const Sidebar: React.FC = () => {
         ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
         <div className="p-4  text-2xl font-semibold border-b border-gray-300 hidden md:block">
-          Video Share
+          My Video Hub
         </div>
         <nav className="mt-10 md:mt-7">
           <ul className="space-y-2">
@@ -118,7 +118,7 @@ const Sidebar: React.FC = () => {
         {/* Navbar Content */}
         <div className=" w-full flex items-center justify-center ">
           <NavLink to="/" className="text-lg font-semibold ">
-            Video Share
+            My Video Hub
           </NavLink>
         </div>
       </div>

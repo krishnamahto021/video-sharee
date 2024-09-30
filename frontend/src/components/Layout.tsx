@@ -65,7 +65,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             Sharing the joy of videos with the world.
           </p>
           <p className="text-sm text-gray-400">
-            Copyright © {currentYear} VideoShare. All rights reserved.
+            Copyright © {currentYear} My Video Hub. All rights reserved.
           </p>
         </footer>
       )}
