@@ -82,7 +82,6 @@ export const fetch6LatestVideos: RequestHandler = async (req, res) => {
     const offset = (page - 1) * limit;
     const videos = await Video.find({ isPrivate: false })
       .sort({ createdAt: -1 })
-      .limit(limit)
       .populate("uploadedBy", "email");
     sendResponse(res, 200, true, "Fetched latest videos sucessfully", {
       videos,
